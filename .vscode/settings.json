@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "ios": "cpp",
+        "type_traits": "cpp",
+        "xiosbase": "cpp",
+        "xlocnum": "cpp",
+        "string": "cpp",
+        "ostream": "cpp",
+        "iomanip": "cpp",
+        "iostream": "cpp",
+        "xstring": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}
