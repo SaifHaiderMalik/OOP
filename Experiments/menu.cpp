@@ -6,7 +6,7 @@
 using namespace std;
 
 int main(){
-    int numMenu, maxString, borderGap = 3, indexGap = -4, indexType, xPos = 0, yPos = 0, indexE = 0, indexB;
+    int numMenu, maxString, borderGap = 3, indexGap = 0, indexType, xPos = 0, yPos = 0, indexE = 0, indexB;
     char s = 254;
     string menuTitle;
     //string* menuItems = new string[5]{};
@@ -134,10 +134,10 @@ int main(){
     for(int i = 1; i <= numMenu; i++){
         cout << "\tSetColor(cfg" << i << ", cbg" << i << ");" << endl;
         cout << "\tcout << string(" << borderGap << ", ' ') << ";
-        if(indexGap >= 4){
-            cout << "char(" << indexB << ") << \"" << i << "\" << char(" << indexB + indexE << ") << ";
+        if(indexGap != 0){
+            cout << "char(" << indexB << ") << \"" << i << "\" << char(" << indexB + indexE << ") << \" \" << ";
         }
-        cout << "\"" << menuItems[i] << "\" << string(" << maxString + 1 - (borderGap + indexGap + menuItems[i].length()) << ", ' ');" << endl;
+        cout << "\"" << menuItems[i] << "\" << string(" << maxString - (borderGap + indexGap + menuItems[i].length()) << ", ' ');" << endl;
         cout << "\tgotoxy(" << xPos + 1 << ", " << yPos + (i*2) + 3  << ");" << endl;
     }
 
