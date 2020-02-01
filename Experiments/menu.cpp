@@ -28,11 +28,11 @@ int main(){
             maxString = menuItems[i].length();
         }
     }
-    cout << "Do you wnat to have Number Index with Menu Options?: ";
+    cout << "Do you wnat to have Number Index with Menu Options?: " << endl;
     if(tolower(getch()) == 'y'){
         indexGap = 4;
         maxString += indexGap;
-        cout << "Choose Index Style 1=(#), 2={#}, 3=[#], 4=<#>, 5=" << char(174) << "#" << char(175) << ": ";
+        cout << "Choose Index Style 0=#, 1=" << char(124) << "#" << char(124) << ", 2='#', 3=\"#\", 4=-#-, 5==#=, 6=~#~, 7=" << char(247) << "#" << char(247) << ", 8=(#), 9={#}, 10=[#], 11=<#>, 12=" << char(174) << "#" << char(174) << ": ";
         cin >> indexType;
         if(indexType == 0){
             indexB = 32;
@@ -130,33 +130,33 @@ int main(){
     cout << "gotoxy(" << xPos << ", " << yPos + ((numMenu + 1) * 2) << ");" << endl;
     cout << "cout << char(200) << string(" << maxString << ", char(205)) << char(188) << endl;" << endl;
 
-    cout << "while (keyPressed != 13){" << endl << "\tSetColor(cfg0, cbg0);" << endl << "\tgotoxy(" << xPos + 1 << ", " << yPos + 3 << ");" << endl;
+    cout << "while (keyPressed != 13){" << endl << "SetColor(cfg0, cbg0);" << endl << "gotoxy(" << xPos + 1 << ", " << yPos + 3 << ");" << endl;
     for(int i = 1; i <= numMenu; i++){
-        cout << "\tSetColor(cfg" << i << ", cbg" << i << ");" << endl;
-        cout << "\tcout << string(" << borderGap << ", ' ') << ";
+        cout << "SetColor(cfg" << i << ", cbg" << i << ");" << endl;
+        cout << "cout << string(" << borderGap << ", ' ') << ";
         if(indexGap != 0){
             cout << "char(" << indexB << ") << \"" << i << "\" << char(" << indexB + indexE << ") << \" \" << ";
         }
         cout << "\"" << menuItems[i] << "\" << string(" << maxString - (borderGap + indexGap + menuItems[i].length()) << ", ' ');" << endl;
-        cout << "\tgotoxy(" << xPos + 1 << ", " << yPos + (i*2) + 3  << ");" << endl;
+        cout << "gotoxy(" << xPos + 1 << ", " << yPos + (i*2) + 3  << ");" << endl;
     }
 
-    cout << "\tkeyPressed = getche();" << endl;
-    cout << "\tif(keyPressed == 80 && keyPosition != " << numMenu <<"){" << endl << "\t\tkeyPosition++;" << endl << "\t}" << endl;
-    cout << "\telse if(keyPressed == 72 && keyPosition != 1){" << endl << "\t\tkeyPosition--;" << endl << "\t}" << endl;
-    cout << "\telse if(keyPressed > 48 && keyPressed < " << numMenu + 49 << "){" << endl << "\t\tkeyPosition = keyPressed - 48;" << endl << "\t}" << endl << "\t";
+    cout << "keyPressed = getche();" << endl;
+    cout << "if(keyPressed == 80 && keyPosition != " << numMenu <<"){" << endl << "keyPosition++;" << endl << "}" << endl;
+    cout << "else if(keyPressed == 72 && keyPosition != 1){" << endl << "keyPosition--;" << endl << "}" << endl;
+    cout << "else if(keyPressed > 48 && keyPressed < " << numMenu + 49 << "){" << endl << "keyPosition = keyPressed - 48;" << endl << "}" << endl << "";
 
     for(int i = 0; i <= numMenu; i++){
         cout << "cfg" << i << " = ";
     }
-    cout << "15;" << endl << "\t";
+    cout << "15;" << endl << "";
     for(int i = 0; i <= numMenu; i++){
         cout << "cbg" << i << " = ";
     }
     cout << "0;" << endl;
-    cout << "\tif(keyPosition == 1){" << endl << "\t\tswap(cfg1, cbg1);" << endl << "\t}" << endl;
+    cout << "if(keyPosition == 1){" << endl << "swap(cfg1, cbg1);" << endl << "}" << endl;
     for(int i = 2; i <= numMenu; i++){
-        cout << "\telse if(keyPosition == " << i << "){" << endl << "\t\tswap(cfg" << i << ", cbg" << i << ");" << endl << "\t}" << endl;
+        cout << "else if(keyPosition == " << i << "){" << endl << "swap(cfg" << i << ", cbg" << i << ");" << endl << "}" << endl;
     }
     cout << "}" << endl;
     
