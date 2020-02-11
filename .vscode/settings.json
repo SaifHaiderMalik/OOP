@@ -8,7 +8,10 @@
         "ostream": "cpp",
         "iomanip": "cpp",
         "iostream": "cpp",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "limits": "cpp",
+        "sstream": "cpp",
+        "xutility": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

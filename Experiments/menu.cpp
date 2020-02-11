@@ -8,7 +8,7 @@ using namespace std;
 int main(){
     int numMenu, maxString, borderGap = 3, indexGap = 0, indexType, xPos = 0, yPos = 0, indexE = 0, indexB;
     char s = 254;
-    string menuTitle;
+    string menuTitle, keyPosition, keyPressed, cfg, cbg;
     //string* menuItems = new string[5]{};
     cout << "Enter X,Y Cordinates for Menu: ";
     cin >> xPos >> yPos;
@@ -90,27 +90,36 @@ int main(){
 
     maxString += (borderGap * 2);
 
+    cout << "Variable name for 'Menu Position': ";
+    cin >> keyPosition;
+    cout << "Variable name for 'Key Pressed': ";
+    cin >> keyPressed;
+    cout << "Variable name for 'Foreground Color': ";
+    cin >> cfg;
+    cout << "Variable name for 'Background Color': ";
+    cin >> cbg;
+
     system("cls");
     cout << fixed;
-    cout << "int keyPosition, keyPressed";
+    cout << "int " << keyPosition << ", " << keyPressed;
     for(int i = 0; i <= numMenu; i++){
-        cout << ", cfg" << i << ", cbg" << i;
+        cout << ", " << cfg << i << ", " << cbg << i;
     }
-    cout << ";" << endl << "keyPosition = 1, keyPressed = 0;" << endl;
+    cout << ";" << endl << keyPosition << " = 1, " << keyPressed << " = 0;" << endl;
     for(int i = 0; i <= numMenu; i++){
         if(i == 1){
-            cout << "cbg" << i << " = ";
+            cout << cbg << i << " = ";
             continue;
         }
-        cout << "cfg" << i << " = ";
+        cout << cfg << i << " = ";
     }
     cout << "15;" << endl;
     for(int i = 0; i <= numMenu; i++){
         if(i == 1){
-            cout << "cfg" << i << " = ";
+            cout << cfg << i << " = ";
             continue;
         }
-        cout << "cbg" << i << " = ";
+        cout << cbg << i << " = ";
     }
     cout << "0;" << endl << "gotoxy(" << xPos << ", " << yPos << ");" << endl;
     cout << "cout << char(201) << string(" << maxString << ", char(205)) << char(187) << endl;" << endl;
@@ -130,9 +139,9 @@ int main(){
     cout << "gotoxy(" << xPos << ", " << yPos + ((numMenu + 1) * 2) << ");" << endl;
     cout << "cout << char(200) << string(" << maxString << ", char(205)) << char(188) << endl;" << endl;
 
-    cout << "while (keyPressed != 13){" << endl << "SetColor(cfg0, cbg0);" << endl << "gotoxy(" << xPos + 1 << ", " << yPos + 3 << ");" << endl;
+    cout << "while (" << keyPressed << " != 13){" << endl << "SetColor(" << cfg << "0, " << cbg << "0);" << endl << "gotoxy(" << xPos + 1 << ", " << yPos + 3 << ");" << endl;
     for(int i = 1; i <= numMenu; i++){
-        cout << "SetColor(cfg" << i << ", cbg" << i << ");" << endl;
+        cout << "SetColor(" << cfg << i << ", " << cbg << i << ");" << endl;
         cout << "cout << string(" << borderGap << ", ' ') << ";
         if(indexGap != 0){
             cout << "char(" << indexB << ") << \"" << i << "\" << char(" << indexB + indexE << ") << \" \" << ";
@@ -141,22 +150,24 @@ int main(){
         cout << "gotoxy(" << xPos + 1 << ", " << yPos + (i*2) + 3  << ");" << endl;
     }
 
-    cout << "keyPressed = getche();" << endl;
-    cout << "if(keyPressed == 80 && keyPosition != " << numMenu <<"){" << endl << "keyPosition++;" << endl << "}" << endl;
-    cout << "else if(keyPressed == 72 && keyPosition != 1){" << endl << "keyPosition--;" << endl << "}" << endl;
-    cout << "else if(keyPressed > 48 && keyPressed < " << numMenu + 49 << "){" << endl << "keyPosition = keyPressed - 48;" << endl << "}" << endl << "";
+    cout << "cout << \\b\"Option Selected: \";" << endl << keyPressed << " = getche();" << endl;
+    cout << "if(" << keyPressed << " == 80 && " << keyPosition << " != " << numMenu <<"){" << endl << keyPosition << "++;" << endl << "}" << endl;
+    cout << "else if(" << keyPressed << " == 72 && " << keyPosition << " != 1){" << endl << keyPosition << "--;" << endl << "}" << endl;
+    if(indexGap != 0){
+        cout << "else if(" << keyPressed << " > 48 && " << keyPressed << " < " << numMenu + 49 << "){" << endl << keyPosition << " = " << keyPressed << " - 48;" << endl << "}" << endl;
+    }
 
     for(int i = 0; i <= numMenu; i++){
-        cout << "cfg" << i << " = ";
+        cout << cfg << i << " = ";
     }
-    cout << "15;" << endl << "";
+    cout << "15;" << endl;
     for(int i = 0; i <= numMenu; i++){
-        cout << "cbg" << i << " = ";
+        cout << cbg << i << " = ";
     }
     cout << "0;" << endl;
-    cout << "if(keyPosition == 1){" << endl << "swap(cfg1, cbg1);" << endl << "}" << endl;
+    cout << "if(" << keyPosition << " == 1){" << endl << "swap(" << cfg << "1, " << cbg << "1);" << endl << "}" << endl;
     for(int i = 2; i <= numMenu; i++){
-        cout << "else if(keyPosition == " << i << "){" << endl << "swap(cfg" << i << ", cbg" << i << ");" << endl << "}" << endl;
+        cout << "else if(" << keyPosition << " == " << i << "){" << endl << "swap(" << cfg << i << ", " << cbg << i << ");" << endl << "}" << endl;
     }
     cout << "}" << endl;
     
