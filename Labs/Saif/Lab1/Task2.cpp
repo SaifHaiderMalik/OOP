@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 
 using namespace std;
@@ -16,23 +17,22 @@ int main(){
     float netAmount;
     float donated;
 
-    cout << "Enter Movie Name";
-    //cin >> movieName;
+    cout << "Enter Movie Name: ";
     getline(cin, movieName);
 
-    cout << "Enter Adult Ticket Price";
+    cout << "Enter Adult Ticket Price: ";
     cin >> adultTicketPrice;
 
-    cout << "Enter Child Ticket Price";
+    cout << "Enter Child Ticket Price: ";
     cin >> childTicketPrice;
 
-    cout << "Enter Number of Adult Ticket Sold";
+    cout << "Enter Number of Adult Ticket Sold: ";
     cin >> numberOfAdultTicketSold;
 
-    cout << "Enter Number of Children Ticket Sold";
+    cout << "Enter Number of Children Ticket Sold: ";
     cin >> numberOfChildTicketSold;
 
-    cout << "Percentage of gross amount to be donated to charity";
+    cout << "Percentage of gross amount to be donated to charity: ";
     cin >> percentage;
 
     grossAmount = (numberOfChildTicketSold * childTicketPrice) + (numberOfAdultTicketSold * adultTicketPrice);
@@ -41,14 +41,18 @@ int main(){
 
     netAmount = grossAmount - donated;
 
-    cout << "Movie Name ........................." << movieName << endl << "Number of Tickets Sold" << numberOfAdultTicketSold + numberOfChildTicketSold << endl; 
+    cout << fixed << setprecision(2); //Format output with two decimal places
 
-    cout << "Gross Amount" << grossAmount << endl;
+    cout << "Movie Name: " << movieName << endl;
 
-    cout << "Percentage of gross amount to be donated" << percentage << endl;
+    cout << "Number of Tickets Sold: " << numberOfAdultTicketSold + numberOfChildTicketSold << endl;
 
-    cout << "Amount Donated" << donated << endl;
+    cout << "Gross Amount: $" << grossAmount << endl;
 
-    cout << "Net Amount" << netAmount;
+    cout << "Percentage of Gross Amount Donated: " << percentage << "%" << endl;
+
+    cout << "Amount Donated: $" << donated << endl;
+
+    cout << "Net Sale: $" << netAmount;
 
 }

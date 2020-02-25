@@ -55,5 +55,6 @@ int main(){
     
     cout << fixed << setprecision(2) << endl << "TELEPHONE BILL" << endl << "Account Number: " << accountNumber << endl << "Type of Service: " << typeService << endl << "Number of Minutes the Telephone Service was used: " << minutes << endl << "Amount Due: $" << amountDue;
 
+    getch();
     return 0;
 }

@@ -8,8 +8,12 @@
             "args": [
                 "-g",
                 "${file}",
+                //"${fileDirname}\\${fileBasenameNoExtension}\\..\\**.cpp",
+                //"C:\\Users\\sohai\\Desktop\\Saif\\OOP\\C++ Tutorial\\Shape.cpp",
+                //"C:\\Users\\sohai\\Desktop\\Saif\\OOP\\C++ Tutorial\\Circle.cpp",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-lws2_32"
             ],
             "options": {
                 "cwd": "C:\\MinGW\\bin"

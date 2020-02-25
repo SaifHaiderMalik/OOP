@@ -7,11 +7,6 @@
 #include <numeric> //Sequences of Values
 #include <ctime>
 #include <cmath>
-#include "Shape.h"
-#include "Circle.h"
-#include "Shape.cpp"
-#include "Circle.cpp"
-//#include "shape.h"
 
 using namespace std;
 
@@ -59,11 +54,12 @@ private:
 
 int main(){
     Box box(10, 10, 10);
-    cout << box << endl;
+    cout << "Box1 = " << box << endl;
     ++box;
-    cout << box << endl;
+    cout << "++Box1 = " << box << endl;
     Box box2(5, 5, 5);
-    cout << "Box1 + Box2" << (box + box2) << endl;
+    cout << "Box2 = " << box2 << endl;
+    cout << "Box1 + Box2 = " << (box + box2) << endl;
     cout.setf(ios::boolalpha);
     cout << "Box1 == Box1 : " << (box == box) << endl;
     cout << "Box2 == Box2 : " << (box2 == box2) << endl;

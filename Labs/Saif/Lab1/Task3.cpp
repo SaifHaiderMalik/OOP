@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 
 using namespace std;
@@ -12,8 +13,9 @@ int main (){
     int i;
 
 
-    cout << "Enter Name and Test scores";
-    cin >> name;
+    cout << "Enter Name: ";
+    getline(cin, name);
+    cout << "5 Test scores: ";
 
     for(i=0;i<5;i++){
 
@@ -23,8 +25,9 @@ int main (){
 
     averageScore = totalScore/5;
 
-    cout << "Students Name" << name << endl;
-    cout << "Test Scores";
+    cout << fixed << setprecision(2); //Format output with two decimal places
+    cout << "Student's Name: " << name << endl;
+    cout << "Test Scores:";
     
     for(i=0;i<5;i++){
 
@@ -32,9 +35,6 @@ int main (){
     }
 
     cout << endl;
-    cout << "Average Score" << averageScore;
-
-
-
+    cout << "Average Score: " << averageScore;
 
 }

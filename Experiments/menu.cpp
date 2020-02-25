@@ -150,7 +150,7 @@ int main(){
         cout << "gotoxy(" << xPos + 1 << ", " << yPos + (i*2) + 3  << ");" << endl;
     }
 
-    cout << "cout << \\b\"Option Selected: \";" << endl << keyPressed << " = getche();" << endl;
+    cout << "cout << \"Option Selected: \";" << endl << keyPressed << " = getche();" << endl;
     cout << "if(" << keyPressed << " == 80 && " << keyPosition << " != " << numMenu <<"){" << endl << keyPosition << "++;" << endl << "}" << endl;
     cout << "else if(" << keyPressed << " == 72 && " << keyPosition << " != 1){" << endl << keyPosition << "--;" << endl << "}" << endl;
     if(indexGap != 0){

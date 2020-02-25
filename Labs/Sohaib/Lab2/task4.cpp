@@ -35,5 +35,6 @@ int main(){
     cout << "Circle's Circumference: " << circumference(radius(X1, Y1, X2, Y2)) << endl;
     cout << "Circle's Area: " << area(radius(X1, Y1, X2, Y2)) << endl;
 
+    getch();
     return 0;
 }

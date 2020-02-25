@@ -44,5 +44,6 @@ int main(){
 
     cout << endl << "Billing Amount: $" << tax(hourlyRate, consultingTime, lowIncome);
 
+    getch();
     return 0;
 }

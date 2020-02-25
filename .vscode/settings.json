@@ -11,7 +11,9 @@
         "xstring": "cpp",
         "limits": "cpp",
         "sstream": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "iosfwd": "cpp",
+        "numeric": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
