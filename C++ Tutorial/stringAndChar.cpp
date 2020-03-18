@@ -62,12 +62,17 @@ int main(){
     cout << "intToChar str4: " << intToChar << endl;
 
     char letterZ = 'z';
+    char letterX = 'X';
     char num5 = '5';
     char aSpace = ' ';
     cout << "Is z a letter or number? " << isalnum(letterZ) << endl;
     cout << "Is z a letter? " << isalpha(letterZ) << endl;
     cout << "Is z a number? " << isdigit(letterZ) << endl;
     cout << "Is z a space? " << isspace(letterZ) << endl;
+    cout << "Is z a Lower Case? " << islower(letterZ) << endl;
+    cout << "Is z a Upper Case? " << isupper(letterZ) << endl;
+    cout << "Is X a Lower Case? " << islower(letterX) << endl;
+    cout << "Is X a Upper Case? " << isupper(letterX) << endl;
     cout << "Is 5 a letter or number? " << isalnum(num5) << endl;
     cout << "Is 5 a letter? " << isalpha(num5) << endl;
     cout << "Is 5 a number? " << isdigit(num5) << endl;
