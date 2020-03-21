@@ -21,20 +21,12 @@ class Fruit{
 
 class Apple : public Fruit {
 
-    int numOfApples(){
-
-        return numberOfFruits;
-    }
-    
+   
 
 };
 
 class Mangoes : public Fruit{
 
-     int numOfApples(){
-
-        return numberOfFruits;
-    }
     
 };
 
@@ -49,9 +41,7 @@ int main(void){
 
     cout <<"Enter Number of Apple" <<endl;
     cin >> number;
-
-    cout << "The number of Apples are: " << A.CalculateNumberOfFruit(number) <<endl;
-
+   
     a = A.CalculateNumberOfFruit(number); 
 
     cout <<"Enter Number Of Mangoes" <<endl;
@@ -59,7 +49,9 @@ int main(void){
 
     b = M.CalculateNumberOfFruit(number);
 
-    cout << "The number of Mangoes are: " << M.CalculateNumberOfFruit(number) <<endl;
+
+    cout << "The number of Apples are: " << a <<endl;
+    cout << "The number of Mangoes are: " << b <<endl;
 
     cout <<"The Total Number of Fruits are: " << a+b <<endl;
 }

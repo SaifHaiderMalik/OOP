@@ -21,6 +21,12 @@ class Marks{
         
     }
 
+    Marks(){
+
+        name = "";
+        rollnumber = "";
+    }
+
     double CalculateMarks(double score){
 
         marks = score;
@@ -28,11 +34,26 @@ class Marks{
         return marks;
     }
 
-    double CalculateAverage(double score){
+    void setName(string _name){
 
-        
+        name = _name;
     }
 
+    void setRollNumber(string _rollnumber){
+
+        rollnumber = _rollnumber;
+
+    }
+
+    string getName(){
+
+        return name;
+    }
+
+    string getRollNumber(){
+
+        return rollnumber;
+    }
 
 
 };
@@ -52,12 +73,13 @@ class Chemistry : public Marks
 class Mathematics : public Marks
 {
    
+
 };
 
 int main(void){
 
     string name;
-    string rollnumber;
+    string rollnumber = "S";
     double marks;
     int numberOfStudents;
     double average;
@@ -69,17 +91,18 @@ int main(void){
     cout << "Enter Number of Students: " <<endl;
     cin >> numberOfStudents;
 
-    Marks ob[numberOfStudents];
+    Marks ob[numberOfStudents]; 
 
     for(auto i=0; i<numberOfStudents;i++){
 
         cout <<"Enter name Of students" <<endl;
         cin >> name;
 
-        cout <<"Enter Roll Number Of Student" <<endl;
-        cin >>rollnumber;
+        rollnumber = rollnumber + to_string(i+1000);
 
-        ob[i](name,rollnumber);
+        ob[i].setName(name);
+
+        ob[i].setRollNumber(rollnumber);
 
         cout << "Enter Marks of Student in Physics: " <<endl;
         cin >> marks;
@@ -88,12 +111,16 @@ int main(void){
 
         marksinPhysics = Phy.CalculateMarks(marks);
         
+        average = average + marksinPhysics;
+
         cout << "Enter Marks of Student in Chemistry: " <<endl;
         cin >> marks;
 
         Chemistry Ch;
 
-       marksinChemistry = Ch.CalculateMarks(marks);
+        marksinChemistry = Ch.CalculateMarks(marks);
+
+        average = average + marksinChemistry;
 
         cout << "Enter Marks of Student in Maths: " <<endl;
         cin >> marks;
@@ -102,21 +129,19 @@ int main(void){
 
         marksinMathematics = Math.CalculateMarks(marks);
 
+        average = average + marksinMathematics;
+
         totalMarks = marksinChemistry + marksinMathematics + marksinPhysics;
+
+        cout << "Name Of Student: " << ob[i].getName() <<endl;
+        cout << "Roll Number Of Student: " << ob[i].getRollNumber() <<endl;
 
         cout <<"The Total Marks of the Student is: " << totalMarks <<endl;
 
-        cout << "The Average Marks of the Student is: " << average <<endl; 
-
-
-
-
+        
     }
 
-
-    
-
-
+    cout <<endl << "The Average Marks of the class is: "<< average/numberOfStudents <<endl;
 
 
 }
