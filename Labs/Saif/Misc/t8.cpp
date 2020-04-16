@@ -28,7 +28,14 @@ class B :  virtual public A{
 
 class C :  virtual public A{
 
-        public:
+        /*public:
+    
+        void func(){
+
+            cout <<"This is Class C" <<endl;
+        }*/
+
+        protected:
     
         void func(){
 

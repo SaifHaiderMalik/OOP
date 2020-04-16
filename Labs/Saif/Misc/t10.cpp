@@ -21,7 +21,7 @@ class B : public A{
 
     public:
 
-    void func(){
+     void func(){
 
         cout <<"In B" <<endl;
     }

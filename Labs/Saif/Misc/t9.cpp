@@ -28,11 +28,17 @@ class B : public A{
 int main(void){
 
 //Early Binding if without new B
-// A* ob
+    
+  //  A* ob;
+
+   // ob->func();
+
 
    // A* ob = new B; //Upcasting
 
-    B* ob = (B*) new A; //downcasting Must use syntax  (Object*)
-    ob->func();
+   // B* ob = new A;
+
+    //B* ob = (B*) new A; //downcasting Must use syntax  (Object*)
+   // ob->func();
 
 }

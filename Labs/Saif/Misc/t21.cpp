@@ -3,6 +3,8 @@ using namespace std;
 
 //Stopping inheritance
 
+//incomplete definition
+
 
 class Dummy{
 
@@ -11,6 +13,12 @@ class Dummy{
     Dummy(){
 
     }
+
+    public:
+    int zzz;
+    /*Dummy(int _a){
+
+    }*/
 
     friend class A;
 };
@@ -35,6 +43,8 @@ class B : public A{
 int main(void){
 
     A ob;
+    ob.zzz = 222;
+
 
 
 }

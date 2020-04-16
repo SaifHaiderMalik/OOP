@@ -11,6 +11,8 @@ class A{
 
     A(){
 
+        cout << "\nA Default Constructor Called\n";
+
 
     }
 };
@@ -24,6 +26,7 @@ class B: public A{
     }
 
     B(){
+        cout << "\nB Default Constructor Called\n";
 
     }
 };
@@ -31,7 +34,12 @@ class B: public A{
 class C: public B{
 
     public:
-    C(int z):B(z){
+    /*C(int z):B(z){
+
+        cout << "IN C" <<endl;
+    }*/
+
+    C(int z){
 
         cout << "IN C" <<endl;
     }

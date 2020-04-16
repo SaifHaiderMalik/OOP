@@ -13,11 +13,14 @@ class A {
 };
 
 
+int zzz = 66;
+
 //Without friend private member of class is not accesible
 void func(){
 
     A ob;
-    ob.a = 20;
+    ob.a = 20 ;
+    
 
     cout << ob.a;
 }

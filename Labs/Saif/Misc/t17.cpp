@@ -8,6 +8,7 @@ class Employee {
     int empID;
 
     friend class HR;
+   
 };
 
 

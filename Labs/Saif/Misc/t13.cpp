@@ -50,14 +50,15 @@ int main(void){
     cout << "V2: ";
     v2.show(); 
 
-    Vector v3(3,2);
+    //Vector v3(3,2);
 
-    v3 = v1 + v2; // Implicit poerator overload call
-
-      v3 = v1.operator+(v2); //   Explicit overload call
-
+    Vector v3 = v1 + v2; // Implicit poerator overload call
     cout <<"V3: ";
     v3.show();
+    /*v3 = v1.operator+(v2); //   Explicit overload call
+
+    cout <<"V3: ";
+    v3.show();*/
 
     cout << "V1: ";
     v1.show();
