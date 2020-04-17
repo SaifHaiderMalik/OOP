@@ -21,14 +21,63 @@ protected:
     string catID;
     int price;
     bool taxApplicable;
+    int stock;
+    double taxPercent;
 
 private:
     static int tax;
-    static int stock;
     static int revenue;
     
 public:
 
+
+    void setCatID(string _catID){
+
+        catID = _catID;
+    }
+
+    void setPrice(int _price){
+
+        price = _price;
+    }
+
+    void setTaxApplicable(bool _taxApplicable){
+
+        taxApplicable = _taxApplicable;
+    }
+
+    void repStock(int _stock){
+        stock += _stock;
+    }
+
+    void setTaxPercentage(double _taxPercent){
+
+        taxPercent = _taxPercent;
+    }
+
+    void Sale(){
+
+        if(stock > 0){
+            stock--;
+            revenue += price;
+            if(taxApplicable == true){
+                tax += price * taxPercent;
+            }
+        }
+        else{
+            cout << "Stock has Depleted" << endl;
+            return ;
+        }
+
+
+
+    }
+
+    string getCatID(){return catID;}
+    int getPrice(){return price;}
+    bool getTaxApplicable(){return taxApplicable;}
+    int getStock(){return stock;}
+    double getTaxPercent(){return taxPercent;}
 
 };
 
@@ -36,41 +85,25 @@ class Flowers : public Gift{
 protected:
 private:
     string floralType;
-    string floralTypes[3] = {"Rose", "Tulip", "Daisy"};
-    int quantityOfRose;
-    int quantityOfTulip;
-    int quantityOfDaisy;
-    Flowers(){}
+    
 
 public:
 
     Flowers(string _floralType){
-        for(int i = 0; i < 3; i++){
-            if(_floralType == floralTypes[i]){
-                floralType = _floralType;
-                catID = "FL1";
-                price = 50;
-                taxApplicable = false;
-                break;
-            }
-            else if(i == 2){
-                throw invalid_argument("Invalid Floral Type!");
-                //this->~Flowers();
-            }
-        }
+        floralType = _floralType;
+        catID = "FL1";
+        price = 50;
+        taxApplicable = false;
     }
 
-    ~Flowers(){}
-
-    int getPrice(){return price;}
     string getFloralType(){return floralType;}
+
 };
 
 class Perfume : public Gift{
 protected:
 private:
     string brand;
-    //string brands[3] = {"GUCCI", "VERSACE", "CHANEL"};
     Perfume(){}
 
 public:
@@ -90,10 +123,16 @@ public:
         brand = _brand;
         catID = "PF1";
         taxApplicable = true;
+        taxPercent = 0.07;
     }
 
     string getBrand(){return brand;}
     int getPrice(){return price;}
+    void repStock(int _stock){
+        stock += _stock;
+    }
+
+    
 };
 
 class ChocolateCake : public Gift{
@@ -101,15 +140,36 @@ protected:
 private:
     int weight;
     string msgOnCake;
-    ChocolateCake(){}
+    //ChocolateCake(){}
 
 public:
-    ChocolateCake(int _weight, string _msgOnCake){
-        weight = _weight;
-        msgOnCake = _msgOnCake;
+    ChocolateCake(){
         catID = "CK1";
-        price = 700 * _weight;
         taxApplicable = true;
+        taxPercent = 0.04;
+    }
+
+    void repStock(int _stock){
+        stock += _stock;
+    }
+
+    void setWeight(int _weight){
+        weight = _weight;
+    }
+
+    void setMsgOnCake(string _msgOnCake){
+        msgOnCake = _msgOnCake;
+    }
+
+    void Sale(int _weight){
+        if(stock >= _weight){
+            stock = stock - _weight;
+        }
+
+        else{
+
+            cout << "Stock is Insufficient" <<endl;
+        }
     }
 };
 
@@ -127,6 +187,7 @@ class TaxationDept{
 protected:
 private:
 public:
+
 };
 
 /*bool checkFloralType(string _floralType){
@@ -139,6 +200,9 @@ public:
 
 int main(){
     Flowers fl1("Rose");
+    fl1.repStock(5);
+    cout << fl1.getStock() << endl;
+    cout << fl1.getStock() << endl;
     Perfume per1("GUCC");
     cout << per1.getPrice();
     HappyBundle hp1(fl1, per1);
