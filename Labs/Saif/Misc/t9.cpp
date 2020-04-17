@@ -38,7 +38,7 @@ int main(void){
 
    // B* ob = new A;
 
-    //B* ob = (B*) new A; //downcasting Must use syntax  (Object*)
-   // ob->func();
+    B* ob = (B*) new A; //downcasting Must use syntax  (Object*)
+    ob->func();
 
 }

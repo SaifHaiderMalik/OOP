@@ -50,11 +50,11 @@ class D : public B , public C {
 
         public:
       
-     //   void func(){
+        void func(){
 
-       //     cout <<"This is Class D" <<endl;
+            cout <<"This is Class D" <<endl;
 
-        //}
+        }
 };
 
 
