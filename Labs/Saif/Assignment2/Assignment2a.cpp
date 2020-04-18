@@ -21,14 +21,19 @@ protected:
     string catID;
     int price;
     bool taxApplicable;
-    int stock;
+    int stock = 0;
     double taxPercent;
 
 private:
     static int tax;
     static int revenue;
+    //int revenue;
+
+    friend int returnRevenue(Gift);
+    friend int returnTax(Gift);
     
 public:
+    //friend int returnRevenue(Gift);
 
 
     void setCatID(string _catID){
@@ -55,14 +60,22 @@ public:
         taxPercent = _taxPercent;
     }
 
+    static void calcRevTax(int _price, bool _taxApplicable, double _taxPercent){
+        revenue += _price;
+        if(_taxApplicable == true){
+            tax += (_price * _taxPercent);
+        }
+    }
+
     void Sale(){
 
         if(stock > 0){
             stock--;
-            revenue += price;
+            calcRevTax(price, taxApplicable, taxPercent);
+            /*revenue += price;
             if(taxApplicable == true){
                 tax += price * taxPercent;
-            }
+            }*/
         }
         else{
             cout << "Stock has Depleted" << endl;
@@ -78,6 +91,7 @@ public:
     bool getTaxApplicable(){return taxApplicable;}
     int getStock(){return stock;}
     double getTaxPercent(){return taxPercent;}
+
 
 };
 
@@ -190,6 +204,12 @@ public:
 
 };
 
+int Gift::revenue;
+int Gift::tax;
+
+int returnRevenue(Gift g){return g.revenue;}
+int returnTax(Gift g){return g.tax;}
+
 /*bool checkFloralType(string _floralType){
     transform(_floralType.begin(), _floralType.end(), _floralType.begin(), ::tolower);
     if(_floralType=="rose" || _floralType=="tulip" || _floralType=="daisy"){
@@ -199,13 +219,23 @@ public:
 }*/
 
 int main(){
+    Gift g1;
     Flowers fl1("Rose");
-    fl1.repStock(5);
+    //fl1.repStock(5);
     cout << fl1.getStock() << endl;
     cout << fl1.getStock() << endl;
-    Perfume per1("GUCC");
+    Perfume per1("GUCCI");
     cout << per1.getPrice();
     HappyBundle hp1(fl1, per1);
+    //fl1.repStock(10);
+    //fl1.Sale();
+    cout << per1.getPrice() << endl;
+    cout << per1.getStock();
+    per1.repStock(10);
+    cout << per1.getStock();
+    per1.Sale();
+    cout << per1.getStock();
+    cout << "Revenue: " << returnRevenue(g1) << " Tax: " << returnTax(g1);
     
     return 0;
 }
