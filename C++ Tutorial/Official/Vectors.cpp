@@ -17,6 +17,7 @@ int main(){
     for(int i = 0; i < myVec.size(); ++i){
         std::cout << myVec[i] << "\n";
     }
+    myVec.
     
     // An abbreviated for loop is also available
     // auto determines the data type based on the value

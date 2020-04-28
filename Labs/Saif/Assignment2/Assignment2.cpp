@@ -3,8 +3,11 @@
 
 using namespace std;
 
+//Task b 
+//Task c
 
 class Gift{
+    //inherited Gift class in flowers , perfume and cake.    
 protected:
     string catID;
     int price;
@@ -15,18 +18,13 @@ protected:
     int weight;
 
 private:
+    //static functions in order to calculate the total tax and revenue
     static int tax;
     static int revenue;
-    //friend class TaxationDept;
-    //int revenue;
-
-    //friend int returnRevenue(Gift);
-    //friend int returnTax(Gift);
     
 public:
-    //friend int returnRevenue(Gift);
-
-
+    
+    // setter and getter functions
     void setCatID(string _catID){
 
         catID = _catID;
@@ -90,10 +88,6 @@ public:
         return itemSold;
     }
 
-    
-
-
-
     string getCatID(){return catID;}
     int getPrice(){return price;}
     bool getTaxApplicable(){return taxApplicable;}
@@ -113,8 +107,6 @@ private:
 
 public:
     
-  
-
     Flowers(string _floralType){
         floralType = _floralType;
         catID = "FL1";
@@ -122,6 +114,7 @@ public:
         taxApplicable = false;
     }
 
+    //Task g
       Flowers(const Flowers &f){
         floralType = f.floralType ;
         catID = f.catID ;
@@ -129,15 +122,12 @@ public:
         taxApplicable = f.taxApplicable;
     }
 
+    //getter function
+
     string getFloralType(){return floralType;}
 
 };
 
-/*int Gift::revenue;
-int Gift::tax;
-
-int returnRevenue(Gift g){return g.revenue;}
-int returnTax(Gift g){return g.tax;}*/
 
 
 class Perfume : public Gift{
@@ -145,7 +135,6 @@ protected:
 private:
     string brand;
     
-
 public:
 
     Perfume(){}
@@ -169,6 +158,8 @@ public:
         taxPercent = 0.07;
     }
 
+    // setter and getter functions
+
     void setBrand(string _brand){
 
         if(_brand == "GUCCI"){
@@ -191,8 +182,6 @@ public:
     void repStock(int _stock){
         stock += _stock;
     }
-
-    
 };
 
 class ChocolateCake : public Gift{
@@ -200,7 +189,6 @@ protected:
 private:
     int weight;
     string msgOnCake;
-    //ChocolateCake(){}
 
 public:
     ChocolateCake(){
@@ -209,6 +197,9 @@ public:
         taxPercent = 0.04;
     }
 
+    // setter and getter functions
+
+    //replenish stocks
     void repStock(int _stock){
         stock += _stock;
     }
@@ -248,8 +239,6 @@ public:
     HappyBundle(){}
 
     HappyBundle(Flowers _flower, Perfume _perfume){
-       // cout << _flower.getFloralType() << endl;
-       // cout << _perfume.getBrand();
        catID = "HB1";
        totalPrice = _flower.getPrice() + _perfume.getPrice(); 
     }
@@ -264,9 +253,7 @@ public:
         totalPrice = _perfume.getPrice() + _cake.getPrice();
     }
 
-    void setSome(Flowers& _flower){
-        _flower.setPrice(500);
-    }
+    // setter and getter functions
 
     void Sale(Flowers& _flower, Perfume& _perfume){
         if(_flower.getStock() > 0 && _perfume.getStock() > 0)
@@ -318,6 +305,8 @@ class TaxationDept{
 protected:
 private:
 public:
+    // Getter function which return the value in gift class without inheriting gift to taxationDept
+    // Task h
     int getTax(){return Gift::getTax();}
     int getRevenue(){return Gift::getRevenue();}
 
@@ -333,6 +322,9 @@ private:
     string email;
 
 public:
+
+// setter and getter functions
+
     void setContact(string _contactNo){
         contactNo = _contactNo;
     }
@@ -355,19 +347,17 @@ public:
 int Gift::revenue = 0;
 int Gift::tax = 0;
 
-/*int returnRevenue(Gift g){return g.revenue;}
-int returnTax(Gift g){return g.tax;}*/
-
 
 int main(void){
+
     int choice,stock,weight;
-    string contact,address,email;
-    int inventoryChoice;
+    string contact,address,email,message;
     int flowerType;
     int perfumeBrand;
 
+ //Task a
     NineTails NT;
-
+    Gift g1;
     TaxationDept TD;
 
     Perfume Gucci("GUCCI");
@@ -407,7 +397,7 @@ int main(void){
 
     Cake.repStock(40);
 
-
+    // MENU label to come to the menu interface using goto MENU (similarly done for other labels)
     MENU:
     system("cls");
     cout << "\t1. Inventory Management\n\t2. Order Menu\n\t3. Taxation Department\n\t4. EXIT\n"
@@ -447,7 +437,7 @@ int main(void){
         break;
     }
 
-
+    //Task f
     INVENTORY:
     system("cls");
     cout << "\t1. Check Stock\n\t2. Replenish Stock\n\t3. Go To Main Menu\n\t4. EXIT\n"
@@ -614,7 +604,10 @@ int main(void){
     case 3:
         cout << "Enter weight of Cake in pounds: " <<endl;
         cin >> weight;
+        cout << "Enter Message on Cake" <<endl;
+        cin >> message;
 
+        Cake.setMsgOnCake(message);
         Cake.Sale(weight);
        
         system("pause");
