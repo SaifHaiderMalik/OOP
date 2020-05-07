@@ -12,8 +12,8 @@ int main(void){
     // random access
     // read pointer
     // seekg(how many steps to move, where to start from)
-    //is.seekg(6, ios::beg);
-    is.seekg(-2, ios::end);
+    is.seekg(6, ios::beg);
+    
     char * chArr = new char[10];
     is.read(chArr,10);
 
