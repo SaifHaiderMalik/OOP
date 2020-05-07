@@ -8,7 +8,7 @@
 #include <numeric> //Sequences of Values
 #include <ctime>
 #include <cmath>
-#include <bits/stdc++.h> //sort()
+#include <bits/stdc++.h> //sort() & function()
 #include <algorithm> //copy_if()
 
 using namespace std;

@@ -1,0 +1,127 @@
+Constant Pointers to Constant Data:
+Always points to the same memory location,
+and the data at that location cannot be modified via the pointer
+    "const int * const pVal = &val;"
+
+
+Constant Parameter:
+When a function parameter is declared as a constant,
+it cannot be modified inside that function
+    "void func(const int a, int b){
+        a = 10; //Gives Error
+        b = 20;
+    }"
+
+
+Constant Function:
+When const keyword is used as following,
+the function cannot make changes to any member variables of the class
+    "class A{
+        int x;
+    public:
+        void func() const{
+            x = 10; //Gives Error
+        }
+    };"
+
+    "class A{
+        int x;
+    public:
+        void func(int a) const{
+            a = 5;
+            x = 10; //Gives Error
+        }
+    };"
+
+
+Constant Object:
+When an object is declared as constant,
+it can only call constant functions i.e. such an object cannot,
+thus, make any changes to member variables
+    "const MyClass ob_name;"
+
+
+Member Initialization List:
+Const class members can only be initialized through constructor’s member initialization list
+
+
+Static Local Variables:
+When static local variables in a global function are used,
+they “remember” their values from previous function calls
+
+
+Static Class Variables:
+Static member variables are shared between all instances of a class.
+Value of a static variable modified through one object will be reflected for all other objects
+
+Static Member Functions:
+Just like static variables,
+static member functions are shared between all instances of a class.
+A non-static (instance) function can call other static functions (and use static variables).
+A static function cannot directly use instance members of the class.
+However, they can do it by either making a local object or taking object as an argument.
+Example 1:
+    class A{
+    public:
+        static void f(){
+            f2(); //Give Error
+        }
+
+        void f2(){}
+    };
+
+Example 2:
+    class A{
+    public:
+        static void f(){
+            A temp;
+            temp.f2();
+        }
+
+        void f2(){}
+    };
+
+Example 3:
+    class A{
+    public:
+        static void f(A myOb){
+            myOb.f2();
+        }
+
+        void f2(){}
+    };
+
+
+Mutable Variables:
+We can make a class member variable mutable by using the keyword mutable.
+When a variable is mutable, it is allowed to be modified inside a constant function.
+
+
+Inheritance:
+Public Inheritance>
+Parent      Child       GrandChild
+Private     No          No
+Protected   Protected   Protected
+Public      Public      Public
+
+Protected Inheritance>
+Parent      Child       GrandChild
+Private     No          No
+Protected   Protected   Protected
+Public      Protected   Protected
+
+Private Inheritance>
+Parent      Child       GrandChild
+Private     No          No
+Protected   Private     No
+Public      Private     No
+
+
+Virtual Functions:
+If we declare a function as virtual in the parent class and override it,
+the overridden versions in all of the derived classes are also implicitly considered as virtual.
+However, if we want, we can additionally use the virtual keyword with overridden functions in derived classes but that would just be needless.
+
+
+Diamond Problem:
+Virtual Inheritance (Lecture 8.1)

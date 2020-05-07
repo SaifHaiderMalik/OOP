@@ -19,6 +19,10 @@ int main(){
     int* orderList = new int[maxLimit]{};
     menuItemType* menuList = new menuItemType[maxLimit]{};
 
+    for(int i = 0; i < 5; i++){
+        cout << orderList[i];
+    }
+
     cout << fixed << setprecision(2) << string(41, '-') << endl << string(19, ' ') << "MENU" << endl << string(41, '-') << endl << " ITEM No | ITEM NAME" << string(12, ' ') << "|  PRICE" << endl << string(9, '-')<< "|" << string(22, '-') << "|" << string(8, '-');
 
     for(int32_t i = 0; i < maxLimit; i++){
