@@ -20,7 +20,7 @@ void showAll(){
     while(p != contacts.end()){
 
         cout << "Name: " << p->first <<endl;
-        cout << "Contac# " <<p->second <<endl;
+        cout << "Contac# " << p->second <<endl;
         cout << "\n\n";
         p++; 
     }
@@ -34,6 +34,8 @@ void searchContact(string name){
     if( p != contacts.end()){
 
         cout << "Contact# " << p->second <<endl;
+        cout << "Contact# " << contacts[name] <<endl;
+
     }
 
     else{
@@ -49,6 +51,7 @@ void removeContact(string name){
     if(p != contacts.end()){
 
         contacts.erase(p);
+        cout << "Erased: " << contacts["Bilal"] << endl;
     }
 
     else{

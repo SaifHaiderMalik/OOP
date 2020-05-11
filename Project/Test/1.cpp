@@ -57,10 +57,15 @@ void newTime(){
 
 
 class TIMENOW{
-    string tnDate = to_string(day)+"/"+to_string(month + 1)+"/"+to_string(year + 1900);
-    string tnTime = to_string(hours)+":"+to_string(minutes)+":"+to_string(seconds);
+    string tnDate;
+    string tnTime;
 
 public:
+    TIMENOW(){
+        tnDate = to_string(day)+"/"+to_string(month + 1)+"/"+to_string(year + 1900);
+        tnTime = to_string(hours)+":"+to_string(minutes)+":"+to_string(seconds);
+    }
+    
     string getDate(){return tnDate;}
     string getTime(){return tnTime;}
 };
