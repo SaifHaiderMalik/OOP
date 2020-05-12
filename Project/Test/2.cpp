@@ -1,11 +1,42 @@
+//
+// _WIN32_WINNT version constants
+//
+//#define _WIN32_WINNT_NT4                    0x0400 // Windows NT 4.0
+//#define _WIN32_WINNT_WIN2K                  0x0500 // Windows 2000
+//#define _WIN32_WINNT_WINXP                  0x0501 // Windows XP
+//#define _WIN32_WINNT_WS03                   0x0502 // Windows Server 2003
+//#define _WIN32_WINNT_WIN6                   0x0600 // Windows Vista
+//#define _WIN32_WINNT_VISTA                  0x0600 // Windows Vista
+//#define _WIN32_WINNT_WS08                   0x0600 // Windows Server 2008
+//#define _WIN32_WINNT_LONGHORN               0x0600 // Windows Vista
+//#define _WIN32_WINNT_WIN7                   0x0601 // Windows 7
+//#define _WIN32_WINNT_WIN8                   0x0602 // Windows 8
+//#define _WIN32_WINNT_WINBLUE                0x0603 // Windows 8.1
+//#define _WIN32_WINNT_WINTHRESHOLD           0x0A00 // Windows 10
+//#define _WIN32_WINNT_WIN10                  0x0A00 // Windows 10*/
+
+#define _WIN32_WINNT 0x0A00
 #include <iostream>
 #include <string>
+#include <iomanip>
 #include <ctime>
 #include <chrono>
 #include <vector>
 #include <map>
+#include <Windows.h>
+//#include <consoleapi3.h>
+//#include <stdlib.h>
+//#include <dos.h>
+//#include <stdio.h>
+//#include <conio.h>
+//#include <wchar.h>
+#include "color.h"
+#include "console.h"
+#include "font.h"
+#include "position.h"
 
 using namespace std;
+
 
 class PIZZA;
 class BURGER;
@@ -30,6 +61,7 @@ class TIMENOW;
 vector<string> cuisineTitle{"Pizza","Burgers","Sandwiches","Fast Food","Bar.B.Q","Pakistani","Chinese","International","Seafood","Desserts","Cakes & Bakery","Beverage"};
 vector<vector<string>> cities{{"Islamabad", "Area 1"}, {"Karachi", "Area 1", "Area 2", "Area 3", "Area 4", "Area 5"}, {"Lahore", "Area 1", "Area 2", "Area 3", "Area 4"}, {"Peshawar", "Area 1", "Area 2", "Area 3"}, {"Queta", "Area 1", "Area 2"}};
 vector<string> days{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+vector<vector<string>> menu{{"MAIN MENU", "Administrator", "Restaurant Management", "Customer"}, {"ADMINISTRATOR"},{"RESTAURANT MANAGER"}, {"CUSTOMER"}};
 
 auto nowTime = chrono::system_clock::now();
 time_t sleepTime = chrono::system_clock::to_time_t(nowTime);
@@ -790,10 +822,31 @@ class TAXDEPARTMENT{
 };
 
 //void replaceSpace(string& _string);
-
+void cleanArea(int _x1, int _y1, int _x2, int _y2);
 
 int main(){
-    string userName, passWord, managerID, managerPassword, restaurantCode, title, description, contactNumber, address, freeDeliver;
+    setConsoleSize(133, 45);
+    setFontSize(20, 500, L"Linux Libertine Mono");
+    SetConsoleTitle("Food-Panda");
+    cout << char(201) << string(131, char(205)) << char(187) << endl;
+    cout << char(186) << setw(70) << "FoodPanda" << setw(62) << char(186) << endl;
+    cout << char(204) << string(131, char(205)) << char(185) << endl;
+    cout << char(186) << "\\" << setw(130) << "/" << char(186) << endl;
+    cout << char(186) << " \\" << string(127, '_') << "/ " << char(186) << endl;
+    for(int i = 2; i < 41; i++){
+        cout << char(186) << setw(132) << char(186) << endl;
+    }
+    gotoxy((135-menu[0][0].length())/2, 4);
+    cout << menu[0][0] << endl;
+    for(int i = 1; i < menu[0].size(); i++){
+        gotoxy((132-menu[0][2].length())/2, 5+(i*2));
+        cout << i << "> " << menu[0][i];
+    }
+    gotoxy(20, 20);
+    system("pause");
+    
+    
+    /*string userName, passWord, managerID, managerPassword, restaurantCode, title, description, contactNumber, address, freeDeliver;
     int choice, openTime, closeTime, minimumOrder = 0, deliveryCharges, area, city;
     bool freeDelivery = false;
     cout << "Administrator ID: ";
@@ -899,7 +952,7 @@ int main(){
     }
 
     RestMenu:
-    system("cls");
+    system("cls");*/
 
 
 
@@ -935,6 +988,13 @@ int main(){
     cout << "Date: " << day << "/" << (month + 1) << "/" << (year + 1900) << endl;
     cout << "Time: " << hours << ":" << minutes << ":" << seconds << endl;*/
     return 0;
+}
+
+void cleanArea(int _x1, int _y1, int _x2, int _y2){
+    for(int i = _y1; i <= _y2; i++){
+        gotoxy(_x1, _y1++);
+        cout << string((_x2 - _x1 + 1), ' ') << endl;
+    }
 }
 
 /*void replaceSpace(string& _string){

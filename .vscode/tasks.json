@@ -6,14 +6,15 @@
             "label": "g++.exe build active file",
             "command": "C:\\MinGW\\bin\\g++.exe",
             "args": [
+                "-std=c++17",
                 "-g",
                 "${file}",
                 //"${fileDirname}\\${fileBasenameNoExtension}\\..\\**.cpp",
                 //"C:\\Users\\sohai\\Desktop\\Saif\\OOP\\C++ Tutorial\\Shape.cpp",
                 //"C:\\Users\\sohai\\Desktop\\Saif\\OOP\\C++ Tutorial\\Circle.cpp",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                "-lws2_32"
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                //"-lws2_32"
             ],
             "options": {
                 "cwd": "C:\\MinGW\\bin"
