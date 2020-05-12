@@ -15,6 +15,9 @@
 //#define _WIN32_WINNT_WINTHRESHOLD           0x0A00 // Windows 10
 //#define _WIN32_WINNT_WIN10                  0x0A00 // Windows 10*/
 
+//#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+
 #define _WIN32_WINNT 0x0A00
 #include <iostream>
 #include <string>
@@ -28,7 +31,7 @@
 //#include <stdlib.h>
 //#include <dos.h>
 //#include <stdio.h>
-//#include <conio.h>
+#include <conio.h>
 //#include <wchar.h>
 #include "color.h"
 #include "console.h"
@@ -825,23 +828,53 @@ class TAXDEPARTMENT{
 void cleanArea(int _x1, int _y1, int _x2, int _y2);
 
 int main(){
+    bool scrSizeCheck;
+    int fontSize = 19;
     setConsoleSize(133, 45);
-    setFontSize(20, 500, L"Linux Libertine Mono");
+    setFontSize(fontSize, 500, L"Linux Libertine Mono");
     SetConsoleTitle("Food-Panda");
+
     cout << char(201) << string(131, char(205)) << char(187) << endl;
     cout << char(186) << setw(70) << "FoodPanda" << setw(62) << char(186) << endl;
     cout << char(204) << string(131, char(205)) << char(185) << endl;
-    cout << char(186) << "\\" << setw(130) << "/" << char(186) << endl;
+    //cout << char(186) << "\\" << setw(130) << "/" << char(186) << endl;
+    cout << char(186) << setw(132) << char(186) << endl;
     cout << char(186) << " \\" << string(127, '_') << "/ " << char(186) << endl;
+
     for(int i = 2; i < 41; i++){
         cout << char(186) << setw(132) << char(186) << endl;
     }
+
+    do{
+        gotoxy(25, 7);
+        cout << "Can you See complete Double-:Lined Border inlined with you screen? (y/n): ";
+        if(tolower(getche()) == 'n'){
+            gotoxy(25, 9);
+            cout << "You want it bigger or smaller? (b/s): ";
+            if(tolower(getche()) == 'b'){
+                setFontSize(++fontSize, 500, L"Linux Libertine Mono");
+            } else{
+                setFontSize(--fontSize, 500, L"Linux Libertine Mono");
+            }
+            scrSizeCheck = false;
+        } else{
+            scrSizeCheck = true;
+        }
+        cleanArea(25, 7, 132, 9);
+    } while(scrSizeCheck == false);
+
     gotoxy((135-menu[0][0].length())/2, 4);
     cout << menu[0][0] << endl;
+
     for(int i = 1; i < menu[0].size(); i++){
         gotoxy((132-menu[0][2].length())/2, 5+(i*2));
         cout << i << "> " << menu[0][i];
+        if(i == (menu[0].size() - 1)){
+            gotoxy((132-menu[0][2].length())/2, 5+((i+1)*2));
+            cout << "0> EXIT";
+        }
     }
+
     gotoxy(20, 20);
     system("pause");
     
