@@ -21,6 +21,8 @@
 #define _WIN32_WINNT 0x0A00
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
 #include <iomanip>
 #include <ctime>
 #include <chrono>
@@ -828,8 +830,10 @@ class TAXDEPARTMENT{
 void cleanArea(int _x1, int _y1, int _x2, int _y2);
 
 int main(){
+    string userName, passWord;
     bool scrSizeCheck;
     int fontSize = 19;
+    fstream file;
     setConsoleSize(133, 45);
     setFontSize(fontSize, 500, L"Linux Libertine Mono");
     SetConsoleTitle("Food-Panda");
@@ -837,13 +841,15 @@ int main(){
     cout << char(201) << string(131, char(205)) << char(187) << endl;
     cout << char(186) << setw(70) << "FoodPanda" << setw(62) << char(186) << endl;
     cout << char(204) << string(131, char(205)) << char(185) << endl;
-    //cout << char(186) << "\\" << setw(130) << "/" << char(186) << endl;
     cout << char(186) << setw(132) << char(186) << endl;
-    cout << char(186) << " \\" << string(127, '_') << "/ " << char(186) << endl;
+    cout << char(199) << string(131, char(196)) << char(182) << endl;
 
-    for(int i = 2; i < 41; i++){
+    for(int i = 2; i < 39; i++){
         cout << char(186) << setw(132) << char(186) << endl;
     }
+    cout << char(199) << string(131, char(196)) << char(182) << endl;
+    cout << char(186) << " Message: " << setw(122) << char(186) << endl;
+    cout << char(200) << string(131, char(205)) << char(188);
 
     do{
         gotoxy(25, 7);
@@ -863,6 +869,22 @@ int main(){
         cleanArea(25, 7, 132, 9);
     } while(scrSizeCheck == false);
 
+    file.open("admin.dat", ios::in | ios::binary);
+    if(!file.is_open()){
+        gotoxy(12, 44);
+        cout << "Administrator Details not Found!";
+        
+    }
+    file.close();
+
+    //Creating AdminOB for th First Time
+    CreateAdmin:
+    cout << "Administrator ID: ";
+    cin >> userName;
+    cout << "Administrator Password: ";
+    cin >> passWord;
+    ADMINISTRATOR adminOb(userName, passWord);
+
     gotoxy((135-menu[0][0].length())/2, 4);
     cout << menu[0][0] << endl;
 
@@ -877,6 +899,7 @@ int main(){
 
     gotoxy(20, 20);
     system("pause");
+    
     
     
     /*string userName, passWord, managerID, managerPassword, restaurantCode, title, description, contactNumber, address, freeDeliver;
