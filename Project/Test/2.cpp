@@ -834,7 +834,7 @@ int main(){
     bool scrSizeCheck;
     int fontSize = 19;
     fstream file;
-    setConsoleSize(133, 45);
+    setConsoleSize(145, 47);
     setFontSize(fontSize, 500, L"Linux Libertine Mono");
     SetConsoleTitle("Food-Panda");
 
