@@ -42,6 +42,12 @@
 
 using namespace std;
 
+//void replaceSpace(string& _string);
+void cleanArea(int _x1, int _y1, int _x2, int _y2);
+void setMessage(string message);
+void setTitle(string message);
+void setContinue();
+void clearMain();
 
 class PIZZA;
 class BURGER;
@@ -66,7 +72,19 @@ class TIMENOW;
 vector<string> cuisineTitle{"Pizza","Burgers","Sandwiches","Fast Food","Bar.B.Q","Pakistani","Chinese","International","Seafood","Desserts","Cakes & Bakery","Beverage"};
 vector<vector<string>> cities{{"Islamabad", "Area 1"}, {"Karachi", "Area 1", "Area 2", "Area 3", "Area 4", "Area 5"}, {"Lahore", "Area 1", "Area 2", "Area 3", "Area 4"}, {"Peshawar", "Area 1", "Area 2", "Area 3"}, {"Queta", "Area 1", "Area 2"}};
 vector<string> days{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-vector<vector<string>> menu{{"MAIN MENU", "Administrator", "Restaurant Management", "Customer"}, {"ADMINISTRATOR"},{"RESTAURANT MANAGER"}, {"CUSTOMER"}};
+vector<vector<string>> menu{{"MAIN  MENU", "Administrator", "Restaurant Manager", "Customer", "EXIT"}, //0
+                            {"ADMINISTRATOR", "Show Details", "Restaurant Management", "Customer Management", "Vouchers Management", "Go Back"}, //1
+                            {"ADMINISTRATOR > Show Details", "Summary", "Show Restaurants", "Go Back"}, //2
+                            {"ADMINISTRATOR > Show Details > Show Restaurants", "Show All", "By Cuisine", "By Location", "Go Back"}, //3
+                            {"ADMINISTRATOR > Restaurant Management", "Add New", "Close", "Re-Open", "Find", "Go Back"}, //4
+                            {"ADMINISTRATOR > Customer Management", "Add New", "Block", "Unblock", "Find", "Go Back"}, //5
+                            {"ADMINISTRATOR > Voucher Management", "Add New", "Block", "Send", "Show", "Go Back"}, //6
+                            {"RESTAURANT MANAGER", "Show Details", "Change Password", "Open/Close Restaurant", "Set Opening Days/Timings", "Modify Details", "Menu Management", "Order Management", "Go Back"}, //7
+                            {"RESTAURANT MANAGER > Menu Management", "Add Item", "Modify Item Details", "Delete Item", "Show Details", "Go Back"}, //8
+                            {"RESTAURANT MANAGER > Order Management", "Approve/Cancel Orders", "Show Details", "Go Back"}, //9
+                            {"CUSTOMER", "New User", "Sign In", "Sign Out", "Go Back"}, //10
+                            {"CUSTOMER > Signed In", "Show Details", "Modify Details", "Order Food", "Order Details", "Voucher Management", "Go Back"}, //11
+                            {"CUSTOMER > Signed In > Voucher Management", "Show Details", "Use Voucher", "Go Back"}}; //12
 
 auto nowTime = chrono::system_clock::now();
 time_t sleepTime = chrono::system_clock::to_time_t(nowTime);
@@ -158,13 +176,13 @@ class RESTAURANT{
     double restDiscount;
 
 public:
-    RESTAURANT(string _managerID, string _managerPassword, int _openTime, int _closeTime, string _title, string _description, string _contactNumber, string _address, int _area, int _city, bool _freeDelivery, int _minimumOrder, int _deliveryCharges){
+    RESTAURANT(string _managerID, string _managerPassword, int _openTime, int _closeTime, string _title, string _description, string _contactNumber, string _address, int _area, int _city, bool _freeDelivery, int _minimumOrder, int _deliveryCharges, double _restDiscount){
         managerID = _managerID;
         managerPassword = _managerPassword;
         isActive = true;
         isOpen = false;
         openTime = _openTime;
-        closeTime = _closeTime;
+        closeTime = _closeTime - 1;
         title = _title;
         description = _description;
         contactNumber = _contactNumber;
@@ -181,7 +199,7 @@ public:
         }
         deliveryCharges = _deliveryCharges;
         menuCount = 0;
-        restDiscount = 0;
+        restDiscount = (_restDiscount/100);
     }
 
     string getCode(){return restaurantCode;}
@@ -506,9 +524,9 @@ public:
             return -1;
         }else{
             if(managerLink[_managerID] == "000"){
-                cout << "Following Manager account is suspended!" << endl;
+                setMessage("Following Manager account is suspended!");
             }else{
-                cout << "Manager ID duplicate found!" << endl;
+                setMessage("Manager ID duplicate found!");
             }
             return stoi(managerLink[_managerID]);
         }
@@ -826,75 +844,370 @@ class TAXDEPARTMENT{
     vector<double> cuisineTax;
 };
 
-//void replaceSpace(string& _string);
-void cleanArea(int _x1, int _y1, int _x2, int _y2);
 
 int main(){
-    string userName, passWord;
+    stringstream ss;
+    string userName, passWord, inputString, choiceString, inputItem, inputItems, managerID;
     bool scrSizeCheck;
-    int fontSize = 19;
+    int fontSize = 19, menuIndex = 0, itemIndex, choice, restIndex, custIndex, city, area;
     fstream file;
-    setConsoleSize(145, 47);
-    setFontSize(fontSize, 500, L"Linux Libertine Mono");
+    setConsoleSize(144, 47);
+    setFontSize(fontSize, 500, L"Courier New");
     SetConsoleTitle("Food-Panda");
 
-    cout << char(201) << string(131, char(205)) << char(187) << endl;
-    cout << char(186) << setw(70) << "FoodPanda" << setw(62) << char(186) << endl;
-    cout << char(204) << string(131, char(205)) << char(185) << endl;
-    cout << char(186) << setw(132) << char(186) << endl;
-    cout << char(199) << string(131, char(196)) << char(182) << endl;
+    cout << char(201) << string(142, char(205)) << char(187) << endl;
+    cout << char(186) << setw(76) << "Food-Panda" << setw(67) << char(186) << endl;
+    cout << char(204) << string(142, char(205)) << char(185) << endl;
+    cout << char(186) << setw(143) << char(186) << endl;
+    cout << char(199) << string(142, char(196)) << char(182) << endl;
 
-    for(int i = 2; i < 39; i++){
-        cout << char(186) << setw(132) << char(186) << endl;
+    for(int i = 6; i <= 44; i++){
+        cout << char(186) << setw(143) << char(186) << endl;
     }
-    cout << char(199) << string(131, char(196)) << char(182) << endl;
-    cout << char(186) << " Message: " << setw(122) << char(186) << endl;
-    cout << char(200) << string(131, char(205)) << char(188);
+    cout << char(199) << string(142, char(196)) << char(182) << endl;
+    cout << char(186) << " Message: " << setw(133) << char(186) << endl;
+    cout << char(200) << string(142, char(205)) << char(188);
 
     do{
+        setMessage("Font Size is " + to_string(fontSize));
         gotoxy(25, 7);
         cout << "Can you See complete Double-:Lined Border inlined with you screen? (y/n): ";
         if(tolower(getche()) == 'n'){
             gotoxy(25, 9);
             cout << "You want it bigger or smaller? (b/s): ";
             if(tolower(getche()) == 'b'){
-                setFontSize(++fontSize, 500, L"Linux Libertine Mono");
+                setFontSize(++fontSize, 500, L"Courier New");
             } else{
-                setFontSize(--fontSize, 500, L"Linux Libertine Mono");
+                setFontSize(--fontSize, 500, L"Courier New");
             }
             scrSizeCheck = false;
         } else{
             scrSizeCheck = true;
         }
-        cleanArea(25, 7, 132, 9);
+        cleanArea(25, 7, 143, 9);
     } while(scrSizeCheck == false);
 
     file.open("admin.dat", ios::in | ios::binary);
     if(!file.is_open()){
-        gotoxy(12, 44);
-        cout << "Administrator Details not Found!";
+        //gotoxy(12, 46);
+        //cout << "Administrator Details not Found!";
+        setMessage("Administrator Details not Found!");
         
     }
     file.close();
 
     //Creating AdminOB for th First Time
     CreateAdmin:
+    setMessage("Setting Up Administrator");
+    gotoxy(36, 7);
     cout << "Administrator ID: ";
     cin >> userName;
+    gotoxy(36, 9);
     cout << "Administrator Password: ";
     cin >> passWord;
     ADMINISTRATOR adminOb(userName, passWord);
 
-    gotoxy((135-menu[0][0].length())/2, 4);
-    cout << menu[0][0] << endl;
-
-    for(int i = 1; i < menu[0].size(); i++){
-        gotoxy((132-menu[0][2].length())/2, 5+(i*2));
-        cout << i << "> " << menu[0][i];
-        if(i == (menu[0].size() - 1)){
-            gotoxy((132-menu[0][2].length())/2, 5+((i+1)*2));
-            cout << "0> EXIT";
+    MENU:
+    setTitle(menu[menuIndex][0]);
+    //gotoxy((135-menu[0][0].length())/2, 4);
+    //cout << menu[0][0] << endl;
+    
+    cleanArea(2, 6, 143, 44);
+    for(int i = 1; i < menu[menuIndex].size(); i++){
+        //gotoxy((132-menu[0][2].length())/2, 5+(i*2));
+        gotoxy(4, 5+(i*2));
+        if(i == (menu[menuIndex].size() - 1)){
+            cout << "0> ";
+            itemIndex = i + 1;
+        } else{
+            cout << i << "> ";
         }
+        cout << menu[menuIndex][i];
+        /*if(i == (menu[menuIndex].size() - 1)){
+            cout << "\nInput: " << choiceString;
+        }*/
+    }
+    
+
+    /*do{
+        cleanArea(12, 5+(itemIndex*2), 46, 5+(itemIndex*2));
+        gotoxy(4, 5+(itemIndex*2));
+        cout << "Choice: ";
+        getline(cin, inputString);
+        if(inputString.length() != 0){
+            choice = stoi(inputString);
+        }
+    } while((inputString.length() == 0) || (choice > (menu[menuIndex].size()-2)));
+    choiceString = choiceString + to_string(choice);*/
+
+    do{
+        cleanArea(12, 5+(itemIndex*2), 46, 5+(itemIndex*2));
+        gotoxy(4, 5+(itemIndex*2));
+        cout << "Choice: ";
+        getline(cin, inputString);
+    } while(inputString.length() == 0);
+    choiceString = choiceString + inputString;
+
+    switch (stoi(choiceString)){
+    case 1:
+        menuIndex = 1;
+        goto MENU;
+        break;
+    
+    case 11:
+        menuIndex = 2;
+        goto MENU;
+        break;
+
+    case 112:
+        menuIndex = 3;
+        goto MENU;
+        break;
+
+    case 12:
+        menuIndex = 4;
+        goto MENU;
+        break;
+
+    case 13:
+        menuIndex = 5;
+        goto MENU;
+        break;
+
+    case 14:
+        menuIndex = 6;
+        goto MENU;
+        break;
+
+    case 2:
+        menuIndex = 7;
+        goto MENU;
+        break;
+
+    case 26:
+        menuIndex = 8;
+        goto MENU;
+        break;
+
+    case 27:
+        menuIndex = 9;
+        goto MENU;
+        break;
+
+    case 3:
+        menuIndex = 10;
+        goto MENU;
+        break;
+
+    case 32:
+        menuIndex = 11;
+        goto MENU;
+        break;
+
+    case 325:
+        menuIndex = 12;
+        goto MENU;
+        break;
+
+    case 10:
+        menuIndex = 0;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 20:
+        menuIndex = 0;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 30:
+        menuIndex = 0;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 110:
+        menuIndex = 1;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+    
+    case 120:
+        menuIndex = 1;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+    
+    case 130:
+        menuIndex = 1;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 140:
+        menuIndex = 1;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 1120:
+        menuIndex = 2;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 260:
+        menuIndex = 7;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 270:
+        menuIndex = 7;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 320:
+        menuIndex = 10;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+    
+    case 3250:
+        menuIndex = 11;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 121:
+        clearMain();
+        do{
+            gotoxy(1, 7);
+            cout << "Manager ID: ";
+            getline(cin, managerID);
+        }while(adminOb.checkManager(managerID) != -1);
+        cout << "Manager Password: ";
+        getline(cin, inputItems);
+        clearMain();
+        cout << "Cities:\n";
+        for(int i = 0; i < cities.size(); i++){
+            cout << i << ") " << cities[i][0] << endl;
+        }
+        cout << "Choice: ";
+        cin >> city;
+        clearMain();
+        cout << "Area:\n";
+        for(int i = 1; i < cities[city].size(); i++){
+            cout << i << ") " << cities[city][i] << endl;
+        }
+        cout << "Choice: ";
+        cin >> area;
+        cin.clear();
+        cin.ignore();
+        clearMain();
+        cout << "Address: \nRestaurant Title: \nRestaurant Description: \nContact Number:\nOpening Time:\nClosing Time:\nDiscount Percentage:\nDo you offer Free Delivery (y/n):\n";
+        gotoxy(1, 7);
+        for(int i = 1; i < 8; i++){
+            cout << "\t\t\t\t  ";
+            getline(cin, inputItem);
+            inputItems = inputItems + ";" + inputItem;
+        }
+        //cout << "Do you offer Free Delivery (y/n): ";
+        //cin >> freeDeliver;
+        cout << "\t\t\t\t  ";
+        if(getche() == 'y'){
+            //freeDelivery = true;
+            //inputItem = "1";
+            inputItems = inputItems + ";" + "1";
+            cout << "\nMinimum Order for Free Delivery: ";
+            getline(cin, inputItem);
+            inputItems = inputItems + ";" + inputItem;
+            if(stoi(inputItem) > 0){
+                cout << "Delivery Charges for Orders less than " << inputItem << ": ";
+                //cin >> deliveryCharges;
+                getline(cin, inputItem);
+                inputItems = inputItems + ";" + inputItem;
+            } else{
+                inputItems = inputItems + ";" + "0";
+            }
+        } else{
+            //inputItem = 0;
+            inputItems = inputItems + ";" + "0";
+            inputItems = inputItems + ";" + "0";
+            cout << "Delivery Charges: ";
+            //cin >> deliveryCharges;
+            getline(cin, inputItem);
+            inputItems = inputItems + ";" + inputItem;
+        }
+        getline(ss, inputItems);
+        /*cout << "Manager Password: ";
+        cin >> managerPassword;
+        cout << "Opening Time: ";
+        cin >> openTime;
+        cout << "Closing Time: ";
+        cin >> closeTime;
+        cout << "Restaurant Title: ";
+        cin >> title;
+        cout << "Restaurant Description: ";
+        cin >> description;
+        cout << "Contact Number: ";
+        cin >> contactNumber;
+        cout << "Cities:\n";
+        for(int i = 0; i < cities.size(); i++){
+            cout << i << ") " << cities[i][0] << endl;
+        }
+        cout << "Choice: ";
+        cin >> city;
+        cout << "Areas:\n";
+        for(int i = 1; i < cities[city].size(); i++){
+            cout << i << ") " << cities[city][i] << endl;
+        }
+        cout << "Choice: ";
+        cin >> area;
+        cout << "Address: ";
+        cin >> address;
+        cout << "Do you offer Free Delivery (y/n): ";
+        cin >> freeDeliver;
+        if(freeDeliver == "y"){
+            freeDelivery = true;
+            cout << "Minimum Order for Free Delivery: ";
+            cin >> minimumOrder;
+            if(minimumOrder > 0){
+                cout << "Delivery Charges for Orders less than " << minimumOrder << ": ";
+                cin >> deliveryCharges;
+            }
+        }else{
+            cout << "Delivery Charges: ";
+            cin >> deliveryCharges;
+        }
+        cout << "Discount Percentage: ";
+        cin >> restDiscount;
+        cout << "pass1\n";
+        RESTAURANT restOb(managerID, managerPassword, openTime, closeTime, title, description, contactNumber, address, area, city, freeDelivery, minimumOrder, deliveryCharges, restDiscount);
+        cout << "pass2\n";
+        adminOb.addRestaurant(restOb);
+        cout << "pass3\n";
+        cout << adminOb.getRestaurantSize() << endl;
+        getline(cin, userName);*/
+        setContinue();
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 0:
+        system("exit");
+        /*if(menuIndex == 0){
+            system("exit");
+        }
+        else
+        menuIndex = 10;
+        goto MENU;*/
+        break;
+
+    default:
+        break;
     }
 
     gotoxy(20, 20);
@@ -1051,6 +1364,29 @@ void cleanArea(int _x1, int _y1, int _x2, int _y2){
         gotoxy(_x1, _y1++);
         cout << string((_x2 - _x1 + 1), ' ') << endl;
     }
+}
+
+void clearMain(){
+    cleanArea(1, 6, 144, 44);
+    gotoxy(1, 7);
+}
+
+void setMessage(string message){
+    cleanArea(12, 46, 143, 46);
+    gotoxy(12, 46);
+    cout << message;
+}
+
+void setContinue(){
+    cleanArea(12, 46, 143, 46);
+    gotoxy(12, 46);
+    system("pause");
+}
+
+void setTitle(string message){
+    cleanArea(2, 4, 143, 4);
+    gotoxy(73-message.length()/2, 4);
+    cout << message;
 }
 
 /*void replaceSpace(string& _string){
