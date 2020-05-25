@@ -61,7 +61,7 @@ int main(){
     a2.print();
 
     a1 = a2;
-    a1.change("1 String");
+    a1.change("3 String");
 
     a1.print();
     a2.print();

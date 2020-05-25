@@ -140,8 +140,8 @@ class RESTAURANT{
     string managerID;
     string managerPassword;
     string restaurantCode;
-    bool isActive;
-    bool isOpen;
+    bool isRestActive;
+    bool isRestOpen;
     int openTime;
     int closeTime;
     bool * daysOpen = new bool[7];
@@ -151,14 +151,14 @@ class RESTAURANT{
     string address;
     int area;
     int city;
-    int revenue;
-    int tax;
+    double restRevenue;
+    double restTax;
     int ordersPending;
     int ordersCompleted;
     int ordersCancelled;
     bool freeDelivery;
     int minimumOrder;
-    int deliveryCharges;
+    double deliveryCharges;
     //bool * cuisines = new bool[12]{};
     vector<PIZZA> pizzas;
     vector<BURGER> burgers;
@@ -176,11 +176,11 @@ class RESTAURANT{
     double restDiscount;
 
 public:
-    RESTAURANT(string _managerID, string _managerPassword, int _openTime, int _closeTime, string _title, string _description, string _contactNumber, string _address, int _area, int _city, bool _freeDelivery, int _minimumOrder, int _deliveryCharges, double _restDiscount){
+    RESTAURANT(string _managerID, string _managerPassword, int _openTime, int _closeTime, string _title, string _description, string _contactNumber, string _address, int _area, int _city, bool _freeDelivery, int _minimumOrder, double _deliveryCharges, double _restDiscount){
         managerID = _managerID;
         managerPassword = _managerPassword;
-        isActive = true;
-        isOpen = false;
+        isRestActive = true;
+        isRestOpen = false;
         openTime = _openTime;
         closeTime = _closeTime - 1;
         title = _title;
@@ -189,7 +189,8 @@ public:
         address = _address;
         area = _area;
         city = _city;
-        revenue = tax = ordersPending = ordersCompleted = ordersCancelled = 0;
+        restRevenue = restTax = 0.0;
+        ordersPending = ordersCompleted = ordersCancelled = 0;
         freeDelivery = _freeDelivery;
         if(freeDelivery == true){
             minimumOrder = _minimumOrder;
@@ -208,8 +209,8 @@ public:
     string getArea(){return cities[city][area];}
     string getManagerID(){return managerID;}
     string getManagerPassword(){return managerPassword;}
-    //bool isActive;
-    //bool isOpen;
+    //bool isRestActive;
+    //bool isRestOpen;
     //int openTime;
     //int closeTime;
     int getMenuCount(){return menuCount;}
@@ -307,14 +308,14 @@ public:
         cout << endl;
     }
 
-    //int revenue;
-    //int tax;
+    //double restRevenue;
+    //double restTax;
     //int ordersPending;
     //int ordersCompleted;
     //int ordersCancelled;
     //bool freeDelivery;
     //int minimumOrder;
-    //int deliveryCharges;
+    //double deliveryCharges;
 
     void setCode(string _code){
         restaurantCode = _code;
@@ -325,11 +326,11 @@ public:
     /*void setManagerPassword(string _managerPassword){
         managerPassword = _managerPassword;
     }*/
-    void setIsActive(bool _isActive){
-        isActive = _isActive;
+    void setIsRestActive(bool _isActive){
+        isRestActive = _isActive;
     }
-    void setIsOpen(bool _isOpen){
-        isOpen = _isOpen;
+    void setIsRestOpen(bool _isOpen){
+        isRestOpen = _isOpen;
     }
     void setOpenTime(int _opneTime){
         openTime = _opneTime;
@@ -355,17 +356,17 @@ public:
     void setCity(int _city){
         city = _city;
     }
-    void setRevenue(int _revenue){
-        revenue = _revenue;
+    void setRestRevenue(double _restRevenue){
+        restRevenue = _restRevenue;
     }
-    void IncreaseRevenue(int _revenue){
-        revenue = revenue + _revenue;
+    void increaseRestRevenue(double _restRevenue){
+        restRevenue = restRevenue + _restRevenue;
     }
-    void setTax(int _tax){
-        tax = _tax;
+    void setRestTax(double _restTax){
+        restTax = _restTax;
     }
-    void IncreaseTax(int _tax){
-        tax = tax + _tax;
+    void increaseRestTax(double _restTax){
+        restTax = restTax + _restTax;
     }
     void setOrdersPending(int _ordersPending){
         ordersPending = _ordersPending;
@@ -400,28 +401,28 @@ class CUSTOMER{
     string firstName;
     string lastName;
     string customerCode;
-    string passWord;
+    string custPassword;
     string emailAddress;
-    string contactNumber;
-    string address;
+    string custContactNumber;
+    string custAddress;
     bool isActive; 
-    int area;
-    int city;
-    int walletAmount;
+    int custArea;
+    int custCity;
+    double walletAmount;
     vector<string> vouchers;
     vector<string> pastVouchers;
     int orderCount;
 
 public:
-    CUSTOMER(string _firstName, string _lastName, string _passWord, string _emailAddress, string _contactNumber, string _address, int _area, int _city, int _walletAmount, int _orderCount){
+    CUSTOMER(string _firstName, string _lastName, string _passWord, string _emailAddress, string _contactNumber, string _address, int _area, int _city){
         firstName = _firstName;
         lastName = _lastName;
-        passWord = _passWord;
+        custPassword = _passWord;
         emailAddress = _emailAddress;
-        contactNumber = _contactNumber;
-        address = _address;
-        area = _area;
-        city = _city;
+        custContactNumber = _contactNumber;
+        custAddress = _address;
+        custArea = _area;
+        custCity = _city;
         walletAmount = 0;
         orderCount = 0;
     }
@@ -435,25 +436,25 @@ public:
     void setCustomerCode(string _code){
         customerCode = _code;
     }
-    void setPassword(string _password){
-        passWord = _password;
+    void setCustPassword(string _password){
+        custPassword = _password;
     }
     void setEmailAddress(string _emailAddress){
         emailAddress = _emailAddress;
     }
-    void setContactNumber(string _contactNumber){
-        contactNumber = _contactNumber;
+    void setCustContactNumber(string _contactNumber){
+        custContactNumber = _contactNumber;
     }
-    void setAddress(string _address){
-        address = _address;
+    void setCustAddress(string _address){
+        custAddress = _address;
     }
-    void setArea(int _area){
-        area = _area;
+    void setCustArea(int _area){
+        custArea = _area;
     }
-    void setCity(int _city){
-        city = _city;
+    void setCustCity(int _city){
+        custCity = _city;
     }
-    void setWalletAmount(int _walletAmount){
+    void setWalletAmount(double _walletAmount){
         walletAmount = _walletAmount;
     }
     void setOrderCount(int _order){
@@ -469,13 +470,13 @@ public:
     string getFirstName(){return firstName;}
     string getLastName(){return lastName;}
     string getCustomerCode(){return customerCode;}
-    string getPassword(){return passWord;}
+    string getCustPassword(){return custPassword;}
     string getEmailAddress(){return emailAddress;}
-    string getContactNumber(){return contactNumber;} 
-    string getAddress(){return address;}
-    int getArea(){return area;}
-    int getCity(){return city;}
-    int getWalletAmount(){return walletAmount;}
+    string getContactNumber(){return custContactNumber;} 
+    string getAddress(){return custAddress;}
+    int getArea(){return custArea;}
+    int getCity(){return custCity;}
+    double getWalletAmount(){return walletAmount;}
     int getOrderCount(){return orderCount;}
     string getVoucherUsed(int _index){return vouchers[_index];}
     bool getIsActive(){return isActive;}
@@ -486,10 +487,10 @@ class ADMINISTRATOR{
     const string userName;
     const string passWord;
     bool isOpen;
-    int openTime;
-    int closeTime;
-    int revenue;
-    int tax;
+    int openTimeAdmin;
+    int closeTimeAdmin;
+    double revenue;
+    double tax;
     vector<string> vouchers;
     //vector<string> vouchersExpired;
     vector<RESTAURANT> restaurants;
@@ -497,14 +498,14 @@ class ADMINISTRATOR{
     map <string, string> managerLink;
     map <string, string> custEmailLink; //(Email >> Code)
     map <string, string> custContactLink; //(Contact >> Email)
-    map <string, int> voucherValueLink;
+    map <string, double> voucherValueLink;
     map <string, int> voucherIndexLink;
 
 public:
     ADMINISTRATOR(string _userName, string _passWord) : userName(_userName), passWord(_passWord){
         isOpen = false;
-        openTime = 0;
-        closeTime = 0;
+        openTimeAdmin = 0;
+        closeTimeAdmin = 0;
         revenue = 0;
         tax = 0;
     }
@@ -512,10 +513,10 @@ public:
     //string userName;
     //string passWord;
     bool getIsOpen(){return isOpen;}
-    int getOpenTime(){return openTime;}
-    int getCloseTime(){return closeTime;}
-    //int revenue;
-    //int tax;
+    int getOpenTime(){return openTimeAdmin;}
+    int getCloseTime(){return closeTimeAdmin;}
+    //double revenue;
+    //double tax;
     int getRestaurantSize(){return restaurants.size();}
     int getCustomerSize(){return customers.size();}
 
@@ -533,8 +534,8 @@ public:
     }
 
     void setIsOpen(bool _isOpen){isOpen = _isOpen;}
-    void setOpenTime(int _openTime){openTime = _openTime;}
-    void setCloseTime(int _closeTime){closeTime = _closeTime;}
+    void setOpenTime(int _openTime){openTimeAdmin = _openTime;}
+    void setCloseTime(int _closeTime){closeTimeAdmin = _closeTime;}
 
     /*void setRestaurantCode(){
         if((restaurants.size() + 1) < 10){
@@ -596,8 +597,8 @@ public:
         }else if(managerLink[_managerID].length() == 0){
             cout << "Restaurant does not exist" << endl;
         }else{
-            restaurants[stoi(managerLink[_managerID]) - 1].setIsActive(false);
-            restaurants[stoi(managerLink[_managerID]) - 1].setIsOpen(false);
+            restaurants[stoi(managerLink[_managerID]) - 1].setIsRestActive(false);
+            restaurants[stoi(managerLink[_managerID]) - 1].setIsRestOpen(false);
             managerLink[_managerID] == "000";
             cout << "Restaurant has been removed" << endl;
         }
@@ -629,7 +630,7 @@ public:
                 cout << "Restaurant does not exist!" << endl;
             }else{
                 managerLink[_managerID] == restaurants[restIndex].getCode();
-                restaurants[(restIndex - 1)].setIsActive(true);
+                restaurants[(restIndex - 1)].setIsRestActive(true);
                 cout << "Restaurant has been Re-Opened!" << endl;
             }
         }
@@ -655,7 +656,7 @@ public:
         }
     }
 
-    void addVoucher(string _voucher, int _value){
+    void addVoucher(string _voucher, double _value){
         if(voucherValueLink[_voucher] == -1){
             cout << "Voucher Exists but Expired!" << endl;
         } else if(voucherValueLink[_voucher] > 0){
@@ -740,8 +741,8 @@ public:
 class FOOD{
     string itemCode;
     int cuisine;
-    string title;
-    string description;
+    string foodTitle;
+    string foodDescription;
     int stock;
     int limit;
     //bool haveSize;
@@ -749,13 +750,13 @@ class FOOD{
     double discount;
 
 protected:
-    int price;
+    double price;
 
 public:
-    FOOD(int _cuisine, string _title, string _description, int _stock, int _limit, int _time, double _discount, int _price){
+    FOOD(int _cuisine, string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price){
         cuisine = _cuisine;
-        title = _title;
-        description = _description;
+        foodTitle = _title;
+        foodDescription = _description;
         stock = _stock;
         limit = _limit;
         time = _time;
@@ -765,11 +766,11 @@ public:
 
     string getItemCode(){return itemCode;}
     int getCuisine(){return cuisine;}
-    string getTitle(){return title;}
-    string getDescription(){return description;}
+    string getTitle(){return foodTitle;}
+    string getDescription(){return foodDescription;}
     int getStock(){return stock;}
     int getLimit(){return limit;}
-    int getPrice(){return price;}
+    double getPrice(){return price;}
     int getTime(){return time;}
 
     void setItemCode(string _itemCode){}
@@ -778,19 +779,25 @@ public:
     void setDescription(string _description){}
     void setStock(int _stock){}
     void setLimit(int _limit){}
-    void setPrice(int _price){}
+    void setPrice(double _price){}
     void setTime(int _time){}
 };
 
 
 class PIZZA : public FOOD{
-    bool haveSize;
-    vector<int> price;
+    //bool haveSize;
+    vector<double> price;
     vector<string> size;
 
 public:
-    bool getHaveSize(){return haveSize;}
-    int getPrice(int _index){return price[_index];}
+    bool getHaveSize(){
+        if(size.size() > 1){
+            return true;
+        }
+        return false;
+    }
+
+    double getPrice(int _index){return price[_index];}
     string getSize(int _index){return size[_index];}
 };
 
@@ -808,13 +815,18 @@ class BEVERAGE : public FOOD{};
 
 
 class CAKE : public FOOD{
-    bool haveSize;
-    vector<int> weight;
+    //bool haveSize;
+    vector<double> weight;
 
 public:
-    bool getHaveSize(){return haveSize;}
-    int getPrice(int _index){return (price * weight[_index]);}
-    int getWeight(int _index){return weight[_index];}
+    bool getHaveSize(){
+        if(weight.size() > 1){
+            return true;
+        }
+        return false;
+    }
+    double getPrice(int _index){return (price * weight[_index]);}
+    double getWeight(int _index){return weight[_index];}
 };
 
 

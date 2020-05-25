@@ -1,3 +1,8 @@
+/*
+http://www.cplusplus.com/forum/windows/204878/
+https://docs.microsoft.com/en-us/windows/console/console-font-infoex
+*/
+
 void setFontSize(int FontSize, int fontWeight, wchar_t fontName[])
 {
 	//wprintf(fontName);
