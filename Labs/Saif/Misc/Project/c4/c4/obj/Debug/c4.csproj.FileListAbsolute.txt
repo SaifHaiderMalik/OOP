@@ -1,0 +1,6 @@
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c4\c4\bin\Debug\c4.exe.config
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c4\c4\bin\Debug\c4.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c4\c4\bin\Debug\c4.pdb
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c4\c4\obj\Debug\c4.csproj.CoreCompileInputs.cache
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c4\c4\obj\Debug\c4.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c4\c4\obj\Debug\c4.pdb

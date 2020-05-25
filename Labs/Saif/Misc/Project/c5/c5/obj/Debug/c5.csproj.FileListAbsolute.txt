@@ -1,0 +1,6 @@
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c5\c5\bin\Debug\c5.exe.config
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c5\c5\bin\Debug\c5.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c5\c5\bin\Debug\c5.pdb
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c5\c5\obj\Debug\c5.csproj.CoreCompileInputs.cache
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c5\c5\obj\Debug\c5.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c5\c5\obj\Debug\c5.pdb

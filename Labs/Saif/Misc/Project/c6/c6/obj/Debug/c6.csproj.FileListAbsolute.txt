@@ -1,0 +1,7 @@
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c6\c6\bin\Debug\c6.exe.config
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c6\c6\bin\Debug\c6.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c6\c6\bin\Debug\c6.pdb
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c6\c6\obj\Debug\c6.csprojAssemblyReference.cache
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c6\c6\obj\Debug\c6.csproj.CoreCompileInputs.cache
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c6\c6\obj\Debug\c6.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c6\c6\obj\Debug\c6.pdb

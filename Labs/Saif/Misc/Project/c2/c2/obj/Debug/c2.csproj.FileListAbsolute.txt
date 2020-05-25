@@ -1,0 +1,6 @@
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c2\c2\bin\Debug\c2.exe.config
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c2\c2\bin\Debug\c2.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c2\c2\bin\Debug\c2.pdb
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c2\c2\obj\Debug\c2.csproj.CoreCompileInputs.cache
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c2\c2\obj\Debug\c2.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c2\c2\obj\Debug\c2.pdb

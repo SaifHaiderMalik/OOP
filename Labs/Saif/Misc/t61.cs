@@ -9,11 +9,19 @@ namespace CSDemo
     class Program // Driver class
     {
         static void Main(string[] args){
-            int i;
-            int j;
-            i = Int32.Parse(Console.ReadLine());
-            j = Int32.Parse(Console.ReadLine());
-            Console.WriteLine("Result: " + (i + j));
+            
+            byte var1;
+            short var2;
+            int var3;
+            uint var4;
+            double var5;
+            decimal var6;
+
+            var3 = Int32.Parse(Console.ReadLine());
+            var3 = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine(var3);
+            
         }
     }
 }

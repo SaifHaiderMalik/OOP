@@ -1,0 +1,7 @@
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c8\c8\bin\Debug\c8.exe.config
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c8\c8\bin\Debug\c8.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c8\c8\bin\Debug\c8.pdb
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c8\c8\obj\Debug\c8.csprojAssemblyReference.cache
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c8\c8\obj\Debug\c8.csproj.CoreCompileInputs.cache
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c8\c8\obj\Debug\c8.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\c8\c8\obj\Debug\c8.pdb

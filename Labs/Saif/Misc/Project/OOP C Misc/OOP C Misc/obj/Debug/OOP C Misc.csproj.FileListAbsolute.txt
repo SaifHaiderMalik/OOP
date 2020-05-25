@@ -1,0 +1,7 @@
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\OOP C Misc\OOP C Misc\bin\Debug\OOP C Misc.exe.config
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\OOP C Misc\OOP C Misc\bin\Debug\OOP C Misc.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\OOP C Misc\OOP C Misc\bin\Debug\OOP C Misc.pdb
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\OOP C Misc\OOP C Misc\obj\Debug\OOP C Misc.csprojAssemblyReference.cache
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\OOP C Misc\OOP C Misc\obj\Debug\OOP C Misc.csproj.CoreCompileInputs.cache
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\OOP C Misc\OOP C Misc\obj\Debug\OOP C Misc.exe
+C:\Users\sohai\Desktop\Saif\OOP\Labs\Saif\Misc\Project\OOP C Misc\OOP C Misc\obj\Debug\OOP C Misc.pdb
