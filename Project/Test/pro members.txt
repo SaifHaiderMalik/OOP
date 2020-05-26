@@ -1,21 +1,17 @@
-String:	managerID;managerPassword;restaurantCode;title;description;contactNumber;address;firstName;lastName;customerCode;
-	custPassword;emailAddress;custContactNumber;custAddress;userName;passWord;itemCode;foodTitle;foodDescription;
-	orderNumber;
-Bool:	isRestActive;isRestOpen;freeDelivery;isActive;isOpen;openTimeAdmin;closeTimeAdmin;isPaid;isApproved;
-Bool[]:	daysOpen;
-Int:	openTime;closeTime;area;city;ordersPending;ordersCancelled;minimumOrder;menuCount;custArea;custCity;orderCount;
-	cuisine;stock;limit;time;
-Double:	restRevenue;restTax;deliveryCharges;restDiscount;walletAmount;revenue;tax;discount;price;
-Vector:	pizzas;burgers;sandwiches;fastfoods;barbqs;pakistanis;chineses;internationals;seafoods;desserts;cakes;beverages;
-	vouchers;pastVouchers;vouchers;restaurants;customers;price;size;weight;
-Maps:	managerLink;custEmailLink;custContactLink;voucherValueLink;voucherIndexLink;
-TIMENOW:orderTime;
+String:	managerID,managerPassword,restaurantCode,title,description,contactNumber,address,firstName,lastName,customerCode,
+	custPassword,emailAddress,custContactNumber,custAddress,userName,passWord,itemCode,foodTitle,foodDescription,
+	orderNumber,
+Bool:	isRestActive,isRestOpen,freeDelivery,isActive,isOpen,openTimeAdmin,closeTimeAdmin,isPaid,isApproved,
+Bool[]:	daysOpen,
+Int:	openTime,closeTime,area,city,ordersPending,ordersCancelled,minimumOrder,menuCount,custArea,custCity,orderCount,
+	cuisine,stock,limit,time,
+Double:	restRevenue,restTax,deliveryCharges,restDiscount,walletAmount,revenue,tax,discount,price,
+Vector:	pizzas,burgers,sandwiches,fastfoods,barbqs,pakistanis,chineses,internationals,seafoods,desserts,cakes,beverages,
+	vouchers,pastVouchers,vouchers,restaurants,customers,price,size,weight,
+Maps:	managerLink,custEmailLink,custContactLink,voucherValueLink,voucherIndexLink,
+TIMENOW:orderTime,
 
 
-SAIF
-S = 212
-A = 65
-I = 90
-F = 81
-165 - 91
-181165
+String:	managerID,managerPassword,restaurantCode,title,description,contactNumber,address,firstName,lastName,customerCode,
+	custPassword,emailAddress,custContactNumber,custAddress,userName,passWord,itemCode,foodTitle,foodDescription,
+	orderNumber,
