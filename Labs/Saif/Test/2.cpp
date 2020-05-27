@@ -1,4 +1,4 @@
-//
+//654
 // _WIN32_WINNT version constants
 //
 //#define _WIN32_WINNT_NT4                    0x0400 // Windows NT 4.0
@@ -16,9 +16,9 @@
 //#define _WIN32_WINNT_WIN10                  0x0A00 // Windows 10*/
 
 //#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wwrite-strings"
+#pragma GCC diagnostic ignored "-Wwrite-strings" //Remove warnings
 
-#define _WIN32_WINNT 0x0A00
+#define _WIN32_WINNT 0x0A00 // Set Windows version
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -42,13 +42,14 @@
 
 using namespace std;
 
-//void replaceSpace(string& _string);
-void cleanArea(int _x1, int _y1, int _x2, int _y2);
-void setMessage(string message);
-void setTitle(string message);
-void setContinue();
-void clearMain();
 
+void cleanArea(int _x1, int _y1, int _x2, int _y2); // clean Area
+void setMessage(string message); // display message
+void setTitle(string message);  // display title
+void setContinue(); //executes system("pause") on Message Box of Interface
+void clearMain(); //clears main
+
+// classes that are child of food class
 class PIZZA;
 class BURGER;
 class SANDWICHE;
@@ -86,20 +87,17 @@ vector<vector<string>> menu{{"MAIN  MENU", "Administrator", "Restaurant Manager"
                             {"CUSTOMER > Signed In", "Show Details", "Modify Details", "Order Food", "Order Details", "Voucher Management", "Go Back"}, //11
                             {"CUSTOMER > Signed In > Voucher Management", "Show Details", "Use Voucher", "Go Back"}}; //12
 
-auto nowTime = chrono::system_clock::now();
-time_t sleepTime = chrono::system_clock::to_time_t(nowTime);
-tm myLocalTime = *localtime(&sleepTime);
-string ss = ctime(&sleepTime);
-int day = myLocalTime.tm_mday;
-int month = myLocalTime.tm_mon;
-int year = myLocalTime.tm_year;
+auto nowTime = chrono::system_clock::now(); //returns current time in secs
+time_t sleepTime = chrono::system_clock::to_time_t(nowTime); //gives day date and time
+tm myLocalTime = *localtime(&sleepTime); // gives local time
+string ss = ctime(&sleepTime); // converts time value to string
+int day = myLocalTime.tm_mday; 
+int month = myLocalTime.tm_mon; 
+int year = myLocalTime.tm_year; 
 int hours = myLocalTime.tm_hour;
 int minutes = myLocalTime.tm_min;
 int seconds = myLocalTime.tm_sec;
-//int weekDay = myLocalTime.tm_wday;
-//int x1 = myLocalTime.tm_isdst;
-//int x2 = myLocalTime.tm_wday;
-//int x3 = myLocalTime.tm_yday;
+
 void newTime(){
     nowTime = chrono::system_clock::now();
     sleepTime = chrono::system_clock::to_time_t(nowTime);
@@ -118,16 +116,18 @@ class TIMENOW{
     string tnTime;
 
 public:
+    // displays current time
     TIMENOW(){
         tnDate = to_string(day)+"/"+to_string(month + 1)+"/"+to_string(year + 1900);
         tnTime = to_string(hours)+":"+to_string(minutes)+":"+to_string(seconds);
     }
 
-    void setTime(int _hours,int _minutes, int seconds){
+   
+    void setTime(int hours,int minutes, int seconds){
         tnTime = to_string(hours)+":"+to_string(minutes)+":"+to_string(seconds);
     }
 
-    void setDate(){
+    void setDate(int day, int month, int year){
         tnDate = to_string(day)+"/"+to_string(month + 1)+"/"+to_string(year + 1900);
     }
     
@@ -495,11 +495,11 @@ class ADMINISTRATOR{
     //vector<string> vouchersExpired;
     vector<RESTAURANT> restaurants;
     vector<CUSTOMER> customers;
-    map <string, string> managerLink;
+    map <string, string> managerLink; // Manager ID >> Restaurant Code  
     map <string, string> custEmailLink; //(Email >> Code)
     map <string, string> custContactLink; //(Contact >> Email)
-    map <string, double> voucherValueLink;
-    map <string, int> voucherIndexLink;
+    map <string, double> voucherValueLink; // (Voucher code >> Amount)
+    map <string, int> voucherIndexLink; // (Voucher code >> index)
 
 public:
     ADMINISTRATOR(string _userName, string _passWord) : userName(_userName), passWord(_passWord){
@@ -550,9 +550,10 @@ public:
         }
     }*/
 
+// restaurant code will be of 3 digits so if 1 digit is sent the n 2 0's if 2 digit then 1 0 if 3 digit then return as it is.
     string createRestCode(int _code){
         if(_code < 10){
-            return ("00" + to_string(_code));
+            return ("00" + to_string(_code));    
         }else if(_code < 100){
             return ("0" + to_string(_code));
         }else{
@@ -572,12 +573,15 @@ public:
         }
     }
 
+// object as parameter
     void addRestaurant(RESTAURANT _restaurant){
-        restaurants.push_back(_restaurant);
-        restaurants[restaurants.size() - 1].setCode(createRestCode(restaurants.size()));
+        restaurants.push_back(_restaurant); // push back to vector of restaurants
+        restaurants[restaurants.size() - 1].setCode(createRestCode(restaurants.size())); // size always gives +1 so -1
+        // manager id key contains value of restaurant code
         managerLink[restaurants[restaurants.size() - 1].getManagerID()] = restaurants[restaurants.size() - 1].getCode();
     }
 
+// search manager ID using for loop
     int searchRestByMangerID(string _managerID){
         for(int i = 0; i < restaurants.size(); i++){
             if(restaurants[i].getManagerID() == _managerID){
@@ -591,6 +595,7 @@ public:
         }
     }
 
+// removing restaurant by changing id to "000"
     void removeRestaurant(string _managerID){
         if(managerLink[_managerID] == "000"){
             cout << "Restaurant is already removed!" << endl;
@@ -621,6 +626,7 @@ public:
         }
     }*/
 
+
     void reOpenRestaurant(string _managerID){
         if(managerLink[_managerID].length() == 0){
             cout << "Restaurant does not exist" << endl;
@@ -636,6 +642,7 @@ public:
         }
     }
 
+// Demo Displays
     void showRestaurants(){
         cout << "Code\t";
         for(int i = 0; i < restaurants.size(); i++){
@@ -857,10 +864,11 @@ class TAXDEPARTMENT{
 };
 
 
-int main(){
+int main(void){
+
     stringstream ss;
     string userName, passWord, inputString, choiceString, inputItem, inputItems, managerID;
-    bool scrSizeCheck;
+    bool scrSizeCheck; // check screen size
     int fontSize = 19, menuIndex = 0, itemIndex, choice, restIndex, custIndex, city, area;
     //object for File handling
     fstream file;
@@ -868,6 +876,8 @@ int main(){
     setFontSize(fontSize, 500, L"Courier New");
     SetConsoleTitle("Food-Panda");
 
+// printing border
+// 201 left most border ; 205 = ; 187 right most border; 186 vertical doble line; 204 3 way ledt double line;185 3 way right double line  
     cout << char(201) << string(142, char(205)) << char(187) << endl;
     cout << char(186) << setw(76) << "Food-Panda" << setw(67) << char(186) << endl;
     cout << char(204) << string(142, char(205)) << char(185) << endl;
@@ -909,7 +919,7 @@ int main(){
     }
     file.close();
 
-    //Creating AdminOB for th First Time
+    //Creating AdminOB for the First Time
     CreateAdmin:
     setMessage("Setting Up Administrator");
     gotoxy(36, 7);
@@ -957,6 +967,7 @@ int main(){
     } while((inputString.length() == 0) || (choice > (menu[menuIndex].size()-2)));
     choiceString = choiceString + to_string(choice);*/
 
+// item index is number of menus displayed and then in order to properly place the choice the following code is used
     do{
         cleanArea(12, 5+(itemIndex*2), 46, 5+(itemIndex*2));
         gotoxy(4, 5+(itemIndex*2));
@@ -1398,13 +1409,14 @@ void setMessage(string message){
     gotoxy(12, 46);
     cout << message;
 }
-
+//cleans main and sets cursor
 void setContinue(){
     cleanArea(12, 46, 143, 46);
     gotoxy(12, 46);
     system("pause");
 }
 
+//Print Title in top in the Middle 
 void setTitle(string message){
     cleanArea(2, 4, 143, 4);
     gotoxy(73-message.length()/2, 4);
