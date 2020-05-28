@@ -609,7 +609,7 @@ public:
             if(custEmailLink[_email] == "0000"){
                 setMessage("Following Customer account is suspended!");
             }else{
-                setMessage("Manager ID duplicate found!");
+                setMessage("Following Customer already own an Account!");
             }
             return stoi(custEmailLink[_email]);
         }
@@ -1003,15 +1003,25 @@ public:
 
     void showCustomer(){
         gotoxy(70, 7);
-        int title[10] = {6, 14, 14, 25, 15, 11, 11, 7, 9, 6};
-        cout << "CUSTOMERS\n\t" << char(218);
+        int title[10] = {6, 14, 14, 25, 15, 10, 11, 9, 6, 7};
+        cout << "CUSTOMERS (ALL)\n\t" << char(218);
         for(int i = 0; i < 10; i++){
             cout << string(title[i], char(196)) << char(194);
         }
-        cout << "\b" << char(191);
-        for(int j = 0; j < customers.size(); j++){
-            cout << "\n\t" << char(179) << setw(title[0]) << customers[j].getCustomerCode();
+        cout << "\b" << char(191) << "\n\t" << char(179) << setw(title[0]) << "CODE " << char(179) << setw(title[1]) << "FIRST NAME " << char(179) << setw(title[2]) << "LAST NAME " << char(179) << setw(title[3]) << "EMAIL ADDRESS " << char(179) << setw(title[4]) << "CONTACT NUMBER" << char(179) << setw(title[5]) << "AREA " << char(179) << setw(title[6]) << "CITY " << char(179) << setw(title[7]) << "CASH " << char(179) << setw(title[8]) << "ORDERS" << char(179) << setw(title[9]) << "ACTIVE" << char(179);
+        cout << "\n\t" << char(195);
+        for(int i = 0; i < 10; i++){
+            cout << string(title[i], char(196)) << char(197);
         }
+        cout << "\b" << char(180);
+        for(int j = 0; j < customers.size(); j++){
+            cout << "\n\t" << char(179) << setw(title[0]) << customers[j].getCustomerCode() << char(179) << setw(title[1]) << customers[j].getFirstName() << char(179) << setw(title[2]) << customers[j].getLastName() << char(179) << setw(title[3]) << customers[j].getEmailAddress() << char(179) << setw(title[4]) << customers[j].getContactNumber() << char(179) << setw(title[5]) << customers[j].getArea() << char(179) << setw(title[6]) << customers[j].getCity() << char(179) << setw(title[7]) << customers[j].getWalletAmount() << char(179) << setw(title[8]) << customers[j].getOrderCount() << char(179) << setw(title[9]) << customers[j].getIsActive() << char(179);
+        }
+        cout << "\n\t" << char(212);
+        for(int i = 0; i < 10; i++){
+            cout << string(title[i], char(196)) << char(193);
+        }
+        cout << "\b" << char(217) << endl;
         
 
         /*cout << "CUISINES AVAILABLE\n\t" << char(218);
