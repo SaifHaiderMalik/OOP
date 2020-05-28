@@ -817,7 +817,13 @@ public:
             cout << string(cuisineTitle[i].length(), char(196)) << char(197);
         }
         cout << "\b" << char(180) << "\n\t" << char(179);
-        if(restaurants[i].hasPizza() == true){cout << " YES" << string((cuisineTitle[0].length() - 4), ' ') << char(179);} else{
+
+        for(int j = 0; j < cuisineTitle.size(); j++){
+            if(restaurants[i].hasFood(cuisineTitle[j]) == true){cout << " YES" << string((cuisineTitle[j].length() - 4), ' ') << char(179);} else{
+            cout << " NO" << string((cuisineTitle[j].length() - 3), ' ') << char(179);}
+        }
+
+        /*if(restaurants[i].hasPizza() == true){cout << " YES" << string((cuisineTitle[0].length() - 4), ' ') << char(179);} else{
             cout << " NO" << string((cuisineTitle[0].length() - 3), ' ') << char(179);}
         if(restaurants[i].hasBurgers() == true){cout << " YES" << string((cuisineTitle[1].length() - 4), ' ') << char(179);} else{
             cout << " NO" << string((cuisineTitle[1].length() - 3), ' ') << char(179);}
@@ -840,7 +846,8 @@ public:
         if(restaurants[i].hasCakes() == true){cout << " YES" << string((cuisineTitle[10].length() - 4), ' ') << char(179);} else{
             cout << " NO" << string((cuisineTitle[10].length() - 3), ' ') << char(179);}
         if(restaurants[i].hasBeverages() == true){cout << " YES" << string((cuisineTitle[11].length() - 4), ' ') << char(179);} else{
-            cout << " NO" << string((cuisineTitle[11].length() - 3), ' ') << char(179);}
+            cout << " NO" << string((cuisineTitle[11].length() - 3), ' ') << char(179);}*/
+        
         cout << "\n\t" << char(212);
         for(int i = 0; i < cuisineTitle.size(); i++){
             cout << string(cuisineTitle[i].length(), char(196)) << char(193);
