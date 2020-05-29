@@ -49,22 +49,62 @@ int main(){
 
     a1.print();
     a2.print();
+    cout << endl;
 
     a2.change("2 String");
 
     a1.print();
     a2.print();
+    cout << endl;
 
     a1.change("1 String");
 
     a1.print();
     a2.print();
+    cout << endl;
 
     a1 = a2;
     a1.change("3 String");
 
     a1.print();
     a2.print();
+    cout << endl;
+
+    A a3("X String");
+    a2 = a3;
+
+    a1.print();
+    a2.print();
+    a3.print();
+    cout << endl;
+
+    a1.change("a1");
+
+    a1.print();
+    a2.print();
+    a3.print();
+    cout << endl;
+
+    a2.change("a2");
+
+    a1.print();
+    a2.print();
+    a3.print();
+    cout << endl;
+
+    a3.change("a3");
+
+    a1.print();
+    a2.print();
+    a3.print();
+    cout << endl;
+
+    a3 = a1;
+
+    a1.print();
+    a2.print();
+    a3.print();
+    cout << endl;
 
     return 0;
 }
