@@ -331,7 +331,7 @@ public:
     }
 
     bool getDaysOpen(int _index){return daysOpen[_index];}
-    int getRestDiscount(){return (restDiscount * 100);}
+    double getRestDiscount(){return (restDiscount * 100);}
     string getContactNumber(){return contactNumber;}
     double getRestRevenue(){return restRevenue;}
     double getRestTax(){return restTax;}
@@ -397,6 +397,18 @@ public:
     void setOrdersPending(int _ordersPending){
         ordersPending = _ordersPending;
     }
+    void setDiscount(double _int){
+        restDiscount = _int/100;
+    }
+    void setFreeDelivery(bool _bool){
+        freeDelivery = _bool;
+    }
+    void setMininmumOrder(int _int){
+        minimumOrder = _int;
+    }
+    void setDeliveryCharges(double _double){
+        deliveryCharges = _double;
+    }
     void IncreaseordersPending(int _oredersPending){
         ordersPending = _oredersPending;
     }
@@ -422,33 +434,31 @@ public:
     void addPizza(){}
 
     void showDetails(){
-        cout << "\tTitle:\t\t\t" << title << "\n\n\tDescription:\t\t" << description.substr(0, 100) << "\n\n\tManager ID:\t\t" << managerID << setw(50 + managerID.length()) << "\t" << "Code:\t\t\t" << restaurantCode << "\n\n\tContact Number:\t\t" << contactNumber << setw(70-getX()) << "\t" << "Address:\t\t" << address << "\n\n\tArea:\t\t\t" << getArea() << setw(70-getX()) << "\t" << "City:\t\t\t" << getCity() << "\n\n\tActive:\t\t\t" << isRestActive << setw(70-getX()) << "\t" << "Open:\t\t\t" << isRestOpen << "\n\n\tFree Delivery:\t\t" << freeDelivery << setw(70-getX()) << "\t" << "Minimum Order:\t\t" << minimumOrder << "\n\n\tDelivery Charges:\t" << deliveryCharges << setw(70-getX()) << "\t" << "Discount:\t\t" << restDiscount << "%\n\n\tTotal Income:\t\t" << restRevenue << setw(70-getX()) << "\t" << "Tax:\t\t\t" << restTax << "\n\n\tOrders Pending:\t\t" << ordersPending << setw(70-getX()) << "\t" << "Orders Completed:\t" << ordersCompleted << "\n\n\tOrders Cancelled:\t" << ordersCancelled << setw(70-getX()) << "\t" << "Timings:\t\t" << openTime << " - " << closeTime;
-        gotoxy(66, (getY() + 2));
-        cout << "WORKING DAYS\n\t\t\t\t\t" << char(218);
+        cout << "\tTitle:\t\t\t" << title << "\n\n\tDescription:\t\t" << description.substr(0, 100) << "\n\n\tManager ID:\t\t" << managerID << string(45 - managerID.length(), ' ') << "Code:\t\t" << restaurantCode << "\n\n\tContact Number:\t\t" << contactNumber << string(45 - contactNumber.length(), ' ') << "Address:\t\t" << address << "\n\n\tArea:\t\t\t" << getArea() << string(45 - getArea().length(), ' ') << "City:\t\t" << getCity() << "\n\n\tActive:\t\t\t" << setw(5) << isRestActive << string(40, ' ') << "Open:\t\t" << isRestOpen << "\n\n\tFree Delivery:\t\t" << setw(5) << freeDelivery << string(40, ' ') << "Minimum Order:\t" << minimumOrder << "\n\n\tDelivery Charges:\t" << deliveryCharges << string(49 - to_string(deliveryCharges).length(), ' ') << "Discount:\t\t" << (restDiscount * 100) << "%\n\n\tTotal Income:\t\t" << restRevenue << string(49 - to_string(restRevenue).length(), ' ') << "Tax:\t\t" << restTax << "\n\n\tOrders Pending:\t\t" << ordersPending << string(45 - to_string(ordersPending).length(), ' ') << "Orders Completed:\t" << ordersCompleted << "\n\n\tOrders Cancelled:\t" << ordersCancelled << string(45 - to_string(ordersCancelled).length(), ' ') << "Timings:\t\t" << openTime << " - " << closeTime;
+        cout << "\n\n\n\tWORKING DAYS\n\t" << char(218);
         for(int i = 0; i < days.size(); i++){
             cout << string(days[i].length(), char(196)) << char(194);
         }
-        cout << "\b" << char(191) << "\n\t\t\t\t\t" << char(179);
+        cout << "\b" << char(191) << "\n\t" << char(179);
         for(int i = 0; i < days.size(); i++){
             cout << days[i] << char(179);
         }
-        cout << "\n\t\t\t\t\t" << char(195);
+        cout << "\n\t" << char(195);
         for(int i = 0; i < days.size(); i++){
             cout << string(days[i].length(), char(196)) << char(197);
         }
-        cout << "\b" << char(180) << "\n\t\t\t\t\t" << char(179);
+        cout << "\b" << char(180) << "\n\t" << char(179);
         for(int j = 0; j < days.size(); j++){
             if(daysOpen[j] == true){cout << " YES" << string((days[j].length() - 4), ' ') << char(179);} else{
             cout << " NO" << string((days[j].length() - 3), ' ') << char(179);}
         }
-        cout << "\n\t\t\t\t\t" << char(212);
+        cout << "\n\t" << char(212);
         for(int i = 0; i < days.size(); i++){
             cout << string(days[i].length(), char(196)) << char(193);
         }
         cout << "\b" << char(217);
         
-        gotoxy(63, (getY() + 2));
-        cout << "CUISINES AVAILABLE\n\t" << char(218);
+        cout << "\n\n\n\tCUISINES AVAILABLE\n\t" << char(218);
         for(int i = 0; i < cuisineTitle.size(); i++){
             cout << string(cuisineTitle[i].length(), char(196)) << char(194);
         }
@@ -471,7 +481,44 @@ public:
         for(int i = 0; i < cuisineTitle.size(); i++){
             cout << string(cuisineTitle[i].length(), char(196)) << char(193);
         }
-        cout << "\b" << char(217);
+        cout << "\b" << char(217) << "\n\t";
+    }
+
+    void displayDays(){
+        cout << "\n\t" << char(218) << string(6, char(196));
+        for(int i=0;i< days.size();i++){
+            cout << char(194) << string(days[i].length(),char(196));
+        }
+        cout << char(191) << "\n\t" << char(179) << " CODE " << char(179);
+        for(int i = 0; i < days.size();i++){
+            cout << setw(days[i].length()-2) << i << "  " << char(179);
+        }
+        cout << "\n\t" << char(195) << string(6, char(196));
+        for(int i=0;i< days.size();i++){
+            cout << char(197) << string(days[i].length(),char(196));
+        }
+        cout << char(180) << "\n\t" << char(179) << " DAYS ";
+        for(int i=0;i< days.size();i++){
+            cout << char(179) << days[i];
+        }
+        cout << char(179) << "\n\t" << char(195) << string(6, char(196));
+        for(int i=0;i< days.size();i++){
+            cout << char(197) << string(days[i].length(),char(196));
+        }
+        cout << char(180) << "\n\t" << char(179) << "STATUS";
+        for(int i=0;i< days.size();i++){
+            cout << char(179);
+            if(daysOpen[i]==true){
+                cout << setw(days[i].length()) << "OPEN";
+            } else{
+                cout << setw(days[i].length()) << "CLOSE";
+            }
+        }
+        cout << char(179) << "\n\t" << char(192) << string(6,char(196));
+        for(int i=0;i< days.size();i++){
+            cout << char(193) << string(days[i].length(),char(196));
+        }
+        cout << char(217);
     }
 };
 
@@ -1445,7 +1492,7 @@ int main(){
     int cuisine, stock, limit, prepTime;
     int openTimeAdmin, closeTimeAdmin;
     double restRevenue, restTax, walletAmount, revenue, tax;
-    double discount, price;
+    double price, discount;
     fstream adminFile;
     setConsoleSize(144, 47);
     setFontSize(fontSize, 500, L"Courier New");
@@ -1629,7 +1676,8 @@ int main(){
     
     case 22:
         cleanArea(2, 6, 143, 44);
-        gotoxy(1, 7);
+        setTitle("CHANGING PASSWORD");
+        gotoxy(2, 7);
         cout << "\tOld Password:\t";
         getline(cin, passWord);
         cout << "\n\tRetype Old Password:\t";
@@ -1646,7 +1694,6 @@ int main(){
         } else{
             setMessage("Password does not match!");
         }
-        system("pause");
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -1654,11 +1701,150 @@ int main(){
     case 23:
         if(restOB->getIsRestOpen() == false){
             restOB->setIsRestOpen(true);
+            setMessage("Restaurant Open");
         } else{
             restOB->setIsRestOpen(false);
+            setMessage("Restaurant Closed");
         }
-        setMessage(to_string(restOB->getIsRestOpen()) + " " + to_string(adminOb.getRestStatus(restIndex)));
-        system("pause");
+        choiceString = choiceString.substr(0, (choiceString.length()-1));
+        goto MENU;
+        break;
+
+    case 24:
+        cleanArea(2, 6, 143, 44);
+        setTitle("Setting Up Opening Days/Timings");
+        gotoxy(2, 7);
+        cout << "\t1> Change Opening Days\n\n\t2> Change Timings\n\n\t0> Go Back\n\n\tChoice:\t";
+        getline(cin, inputItem);
+        if(inputItem == "1"){
+            setMessage("Enter 0 - 6 to change Status or 'q' to quit.");
+            do{
+                cleanArea(2, 6, 143, 44);
+                gotoxy(2, 7);
+                restOB->displayDays();
+                cout << "\n\n\tCode:\t";
+                getline(cin, inputItem);
+                if((inputItem.length() == 1) && (inputItem[0] >= 48 && inputItem[0] < 55)){
+                    if(restOB->getDaysOpen(stoi(inputItem)) == true){
+                        restOB->setDayClose(stoi(inputItem));
+                        setMessage("Now Restaurant will stay Closed on " + days[stoi(inputItem)]);
+                    } else {
+                        restOB->setDayOpen(stoi(inputItem));
+                        setMessage("Now Restaurant will stay Open on " + days[stoi(inputItem)]);
+                    }
+                } else if(inputItem == "q"){
+                    setMessage("");
+                } else{
+                    setMessage("Invalid Input");
+                }
+            } while(tolower(inputItem[0]) != 'q');
+        } else if(inputItem == "2"){
+            cleanArea(2, 6, 143, 44);
+            gotoxy(2, 7);
+            cout << "\tOpening Time:\t";
+            cin >> openTime;
+            cout << "\tClosing Time:\t";
+            cin >> closeTime;
+            restOB->setOpenTime(stoi(openTime));
+            restOB->setCloseTime(stoi(closeTime));
+            cin.clear();
+            cin.ignore();
+            setMessage("Restaurant's Timings Changed");
+        }
+        choiceString = choiceString.substr(0, (choiceString.length()-1));
+        goto MENU;
+        break;
+    
+    case 25:
+        cleanArea(2, 6, 143, 44);
+        setTitle("Modifying Restaurant Details");
+        gotoxy(2, 7);
+        cout << "\t1> Title\n\n\t2> Description\n\n\t3> Contact Number\n\n\t4> Location\n\n\t5> Discount Percentage\n\n\t6> Delivery Options\n\n\t0> Go Back\n\n\tChoice:\t";
+        getline(cin, inputItem);
+        cleanArea(2, 6, 143, 44);
+        gotoxy(2, 7);
+        if(inputItem == "1"){
+            cout << "\tCurrent Title:\t";
+            getline(cin, inputItem);
+            cout << "\tNew Title:\t";
+            getline(cin, title);
+            if(restOB->getTitle() == inputItem && title.length() > 0){
+                restOB->setTitle(title);
+                setMessage("Restaurant Title Changed!");
+            } else if(title.length() == 0){
+                setMessage("Restaurant Title Unchanged!");
+            } else{
+                setMessage("Restaurant Title not matched!");
+            }
+        } else if(inputItem == "2"){
+            cout << "\tCurrent Description:\t" << restOB->getDescription().substr(0, 100) << "\n\n\tNew Description:\t";
+            getline(cin, inputItem);
+            if(inputItem.length() > 0){
+                restOB->setDescription(inputItem);
+                setMessage("Restaurant Description Changed!");
+            } else{
+                setMessage("Restaurant Description Unchanged!");
+            }
+        } else if(inputItem == "3"){
+            cout << "\tCurrent Contact Number:\t" << restOB->getContactNumber() << "\n\n\tNew Contact Number:\t";
+            getline(cin, inputItem);
+            if(inputItem.length() > 0){
+                restOB->setContactNumber(inputItem);
+                setMessage("Restaurant Contact Number Changed!");
+            } else{
+                setMessage("Restaurant Contact Number Unchanged!");
+            }
+        } else if(inputItem == "4"){
+            cout << "\tCities:\n";
+            for(int i = 0; i < cities.size(); i++){
+                cout << "\t\t" << i << ") " << cities[i][0] << endl;
+            }
+            cout << "\tChoice:\t";
+            cin >> city;
+            cout << "\n\tArea:\n";
+            for(int i = 1; i < cities[city].size(); i++){
+                cout << "\t\t" << i << ") " << cities[city][i] << endl;
+            }
+            cout << "\tChoice:\t";
+            cin >> area;
+            cin.clear();
+            cin.ignore();
+            cout << "\n\tAddress:\t";
+            getline(cin, address);
+            restOB->setCity(city);
+            restOB->setArea(area);
+            restOB->setAddress(address);
+            setMessage("Restaurant Location Changed!");
+        } else if(inputItem == "5"){
+            cout << "\tCurrent Discount Percentage:\t" << restOB->getRestDiscount() << "%\n\n\tNew Discount Percentage:\t";
+            cin >> discount;
+            cin.clear();
+            cin.ignore();
+            restOB->setDiscount(discount);
+            setMessage("Restaurant Discount Percentage Changed!");
+        } else if(inputItem == "6"){
+            cout << "\tDo you offer Free Delivery (y/n):\t";
+            if(tolower(getche()) == 'y'){
+                restOB->setFreeDelivery(true);
+                cout << "\n\n\tMinimum Order for Free Delivery:\t";
+                getline(cin, inputItem);
+                restOB->setMininmumOrder(stoi(inputItem));
+                if(stoi(inputItem) > 0){
+                    cout << "\n\tDelivery Charges for Orders less than " << inputItem << ":\t";
+                    getline(cin, inputItem);
+                    restOB->setDeliveryCharges(stod(inputItem));
+                } else{
+                    restOB->setDeliveryCharges(0);
+                }
+            } else{
+                restOB->setFreeDelivery(false);
+                restOB->setMininmumOrder(0);
+                cout << "\n\tDelivery Charges for All Orders:\t";
+                getline(cin, inputItem);
+                restOB->setDeliveryCharges(stod(inputItem));
+            }
+            setMessage("Restaurant Delivery Options Changed!");
+        }
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -1669,7 +1855,7 @@ int main(){
         break;
 
     case 261:
-        cleanArea(2, 6, 143, 44);
+        /*cleanArea(2, 6, 143, 44);
         gotoxy(1, 7);
         cout << "\tOld Password:\t";
         getline(cin, passWord);
@@ -1686,7 +1872,7 @@ int main(){
             }
         } else{
             setMessage("Password does not match!");
-        }
+        }*/
         system("pause");
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
