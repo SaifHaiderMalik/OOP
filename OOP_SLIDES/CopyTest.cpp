@@ -104,6 +104,23 @@ int main(void){
     cout << rest1.getTitle() << endl;
     cout << rest2->getTitle() << endl << endl;
 
+    {REST * rest3 = new REST;
+    rest3 = adminOB.setRest(1);
+    rest3->setTitle("Rest3 > 109");
+    cout << adminOB.getRestTitle(0) << endl;
+    cout << adminOB.getRestTitle(1) << endl;
+    cout << rest0.getTitle() << endl;
+    cout << rest1.getTitle() << endl;
+    cout << rest2->getTitle() << endl;
+    cout << rest3->getTitle() << endl << endl;}
+
+    cout << adminOB.getRestTitle(0) << endl;
+    cout << adminOB.getRestTitle(1) << endl;
+    cout << rest0.getTitle() << endl;
+    cout << rest1.getTitle() << endl;
+    cout << rest2->getTitle() << endl;
+    //cout << rest3->getTitle() << endl << endl;
+
     /*rest1 = adminOB.setRest(0, rest1);
     rest1.setTitle("Rest1 > 46");
     cout << adminOB.getRestTitle(0) << endl;

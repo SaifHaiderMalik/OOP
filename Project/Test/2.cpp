@@ -154,16 +154,18 @@ public:
     int getStock(){return stock;}
     int getLimit(){return limit;}
     double getPrice(){return price;}
+    double getDiscount(){return discount*100;}
     int getPrepTime(){return prepTime;}
 
-    void setItemCode(string _itemCode){}
-    void setCuisine(int _cuisine){}
-    void setTitle(string _title){}
-    void setDescription(string _description){}
-    void setStock(int _stock){}
-    void setLimit(int _limit){}
-    void setPrice(double _price){}
-    void setPrepTime(int _time){}
+    void setItemCode(string _itemCode){itemCode = _itemCode;}
+    //void setCuisine(int _cuisine){}
+    void setTitle(string _title){foodTitle = _title;}
+    void setDescription(string _description){foodDescription = _description;}
+    void setStock(int _stock){stock = _stock;}
+    void setLimit(int _limit){limit = _limit;}
+    void setPrice(double _price){price = _price;}
+    void setDiscount(double _discount){discount = _discount/100;}
+    void setPrepTime(int _time){prepTime = _time;}
 };
 
 class PIZZA : public FOOD{
@@ -182,6 +184,7 @@ public:
         price = _price;
         size = _size;
     }
+    PIZZA():FOOD(0){}
 
     bool getHaveSize(){
         if(size.size() > 1){
@@ -191,15 +194,20 @@ public:
     }
 
     double getPrice(int _index){return price[_index];}
+    vector<double> getPrice(){return price;}
     string getSize(int _index){return size[_index];}
+    vector<string> getSize(){return size;}
     void setPrice(vector<double> _price){
-        for(int i = 0; i < _price.size(); i++){
-            price[i] = _price[i];
-        }
+        price = _price;
     }
     void setSize(vector<string> _size){
-        for(int i = 0; i < _size.size(); i++){
-            size[i] = _size[i];
+        size = _size;
+    }
+
+    void showDetails(){
+        cout << "\tCode: " << itemCode << "\n\tTitle: " << foodTitle << "\n\tDescription: " << foodDescription << "\n\tstock: " << stock << "\n\tLimit: " << limit << "\n\tTime: " << prepTime << "\n\tDiscount: " << discount;
+        for(int i = 0; i < size.size(); i++){
+            cout << "\n\n\tSize: " << (i + 1) << "\n\t\t" << size[i] << ": " << price[i];
         }
     }
 };
@@ -354,10 +362,9 @@ public:
     }
     double getPrice(int _index){return (price * weight[_index]);}
     double getWeight(int _index){return weight[_index];}
-    double setWeight(vector<double> _weight){
-        for(int i = 0; i < _weight.size(); i++){
-            weight[i] = _weight[i];
-        }
+    vector<double> getWeight(){return weight;}
+    void setWeight(vector<double> _weight){
+        weight = _weight;
     }
 };
 
@@ -764,6 +771,128 @@ public:
     void addItem(BEVERAGE _beverage){
         beverages.push_back(_beverage);
         beverages[beverages.size()-1].setItemCode(restaurantCode + createItemCode(11, beverages.size()));
+    }
+
+    string deleteItem(string _itemCode){
+        int i = (stoi(_itemCode.substr(5, 3)) - 1);
+        if((_itemCode.substr(3, 2) == "00") && (i < pizzas.size())){
+            pizzas[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "01") && (i < burgers.size())){
+            burgers[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "02") && (i < sandwiches.size())){
+            sandwiches[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "03") && (i < fastfoods.size())){
+            fastfoods[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "04") && (i < barbqs.size())){
+            barbqs[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "05") && (i < pakistanis.size())){
+            pakistanis[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "06") && (i < chineses.size())){
+            chineses[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "07") && (i < internationals.size())){
+            internationals[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "08") && (i < seafoods.size())){
+            seafoods[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "09") && (i < desserts.size())){
+            desserts[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "10") && (i < cakes.size())){
+            cakes[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else if((_itemCode.substr(3, 2) == "11") && (i < beverages.size())){
+            beverages[i].setStock(0);
+            return ("Item Deletion Successful!");
+        } else{
+            return ("Item Deletion Unsuccessful! Invalid Code!");
+        }
+    }
+
+    void showFood(int _cuisine, int _index){
+        pizzas[_index].showDetails();
+    }
+
+    /*void modifyItem(string _ItemCode){
+
+    }*/
+
+    PIZZA * getPizza(int _index){
+        if(_index < pizzas.size()){
+            return &pizzas[_index];
+        }
+    }
+    BURGER * getBurger(int _index){
+        if(_index < burgers.size()){
+            return &burgers[_index];
+        }
+    }
+
+    SANDWICHE * getSandwich(int _index){
+        if(_index < sandwiches.size()){
+            return &sandwiches[_index];
+        }
+    }
+
+    FASTFOOD * getFastFood(int _index){
+        if(_index < fastfoods.size()){
+            return &fastfoods[_index];
+        }
+    }
+
+    BARBQ * getBarbq(int _index){
+        if(_index < barbqs.size()){
+            return &barbqs[_index];
+        }
+    }
+
+    PAKISTANI * getPakistani(int _index){
+        if(_index < pakistanis.size()){
+            return &pakistanis[_index];
+        }
+    }
+
+    CHINESE * getChinese(int _index){
+        if(_index < chineses.size()){
+            return &chineses[_index];
+        }
+    }
+
+    INTERNATIONAL * getInternational(int _index){
+        if(_index < internationals.size()){
+            return &internationals[_index];
+        }
+    }
+
+    SEAFOOD * getSeafood(int _index){
+        if(_index < seafoods.size()){
+            return &seafoods[_index];
+        }
+    }
+
+    DESSERT * getDessert(int _index){
+        if(_index < desserts.size()){
+            return &desserts[_index];
+        }
+    }
+
+    CAKE * getCake(int _index){
+        if(_index < cakes.size()){
+            return &cakes[_index];
+        }
+    }
+
+    BEVERAGE * getBeverage(int _index){
+        if(_index < beverages.size()){
+            return &beverages[_index];
+        }
     }
 
     void showDetails(){
@@ -2135,6 +2264,8 @@ int main(){
                 cin.ignore();
             }
             if(inputItem == "0"){
+                strVec.clear();
+                floatVecPrice.clear();
                 cout << "\n\tDo you offer \"" << title << "\" in different sizes? (y/n):\t";
                 if(tolower(getche()) == 'y'){
                     cout << "\n\n\tNumber of Sizes:\t";
@@ -2195,6 +2326,7 @@ int main(){
                 DESSERT dessertOB(title, description, stock, limit, prepTime, discount, price);
                 restOB->addItem(dessertOB);
             } else if(inputItem == "10"){
+                floatVecWeight.clear();
                 cout << "Do you offer \"" << title << "\" in different weights? (y/n):\t";
                 if(tolower(getche()) == 'y'){
                     cout << "\n\n\tNumber of Sizes (Weights):\t";
@@ -2229,8 +2361,104 @@ int main(){
         goto MENU;
         break;
     
+    case 262:
+        setTitle("RESTAURANT > MENU > Modifying Item");
+        setMessage("Enter Item Code to modify it!");
+        cleanArea(2, 6, 143, 44);
+        gotoxy(1, 7);
+        cout << "\tItem Code:\t";
+        getline(cin, inputItem);
+        if((inputItem.length() == 8) && (inputItem.substr(0, 3) == restOB->getCode())){
+            cleanArea(2, 6, 143, 44);
+            gotoxy(1, 7);
+            cout << "\tOld Title:\n\tNew Title:\n\n\tOld Description:\n\tNew Description:\n\n\tOld Stock:\n\tNew Stock:\n\n\tOld Order Limit:\n\tNew Order Limit:\n\n\tOld Preparation Time:\n\tNew  Preparation Time:\n\n\tOld Discount:\n\tNew  Discount:";
+            
+            if(inputItem.substr(3, 2) == "00"){
+                PIZZA * pizzaOB = new PIZZA;
+                pizzaOB = restOB->getPizza(stoi(inputItem.substr(5, 3)) - 1);
+                gotoxy(1, 7);
+                cout << "\t\t\t\t" << pizzaOB->getTitle() << "\n\n\n\t\t\t\t" << pizzaOB->getDescription() << "\n\n\n\t\t\t\t" << pizzaOB->getStock() << "\n\n\n\t\t\t\t" << pizzaOB->getLimit() << "\n\n\n\t\t\t\t" << pizzaOB->getPrepTime() << "\n\n\n\t\t\t\t" << pizzaOB->getDiscount();
+                gotoxy(1, 6);
+                for(int i = 0; i < 6; i++){
+                    cout << "\n\n\t\t\t\t";
+                    getline(cin, inputItem);
+                    if(inputItem.length() != 0){
+                        if(i == 0){pizzaOB->setTitle(inputItem);}
+                        else if(i == 1){pizzaOB->setDescription(inputItem);}
+                        else if(i == 2){pizzaOB->setStock(stoi(inputItem));}
+                        else if(i == 3){pizzaOB->setLimit(stoi(inputItem));}
+                        else if(i == 4){pizzaOB->setPrepTime(stoi(inputItem));}
+                        else if(i == 5){pizzaOB->setDiscount(stod(inputItem));}
+                    }
+                }
+                strVec.clear();
+                floatVecPrice.clear();
+                cout << "\n\tDo you offer \"" << pizzaOB->getTitle() << "\" in different sizes? (y/n):\t";
+                if(tolower(getche()) == 'y'){
+                    cout << "\n\n\tNumber of Sizes:\t";
+                    cin >> intInput;
+                    cin.clear();
+                    cin.ignore();
+                    for(int i = 0; i < intInput; i++){
+                        cleanArea(2, 6, 143, 44);
+                        gotoxy(1, 7);
+                        cout << "\n\tSize: " << (i + 1) << "\n\n\tSize Description:\t";
+                        cin >> strVecInput;
+                        strVec.push_back(strVecInput);
+                        cout << "\n\tPrice:\t";
+                        cin >> floatVecInput;
+                        floatVecPrice.push_back(floatVecInput);
+                        cin.clear();
+                        cin.ignore();
+                        //cout << "\n";
+                    }
+                } else{
+                    strVec[0] = "Default";
+                    cout << "\n\tPrice (Per Unit):\t";
+                    cin >> floatVecInput;
+                    floatVecPrice.push_back(floatVecInput);
+                    cin.clear();
+                    cin.ignore();
+                }
+                pizzaOB->setSize(strVec);
+                pizzaOB->setPrice(floatVecPrice);
+            }
+        } else{
+            setMessage("Invalid Code");
+        }
+        system("pause");
+        choiceString = choiceString.substr(0, (choiceString.length()-1));
+        goto MENU;
+        break;
+    
+    case 263:
+        setTitle("RESTAURANT > MENU > Deleting Item");
+        setMessage("Enter Item Code to delete it!");
+        cleanArea(2, 6, 143, 44);
+        gotoxy(1, 7);
+        cout << "\tItem Code:";
+        getline(cin, inputItem);
+        if((inputItem.length() == 8) && (inputItem.substr(0, 3) == restOB->getCode())){
+            restOB->deleteItem(inputItem);
+        } else{
+            setMessage("Invalid Code");
+        }
+        system("pause");
+        choiceString = choiceString.substr(0, (choiceString.length()-1));
+        goto MENU;
+        break;
+    
     case 264:
         menuIndex = 14;
+        goto MENU;
+        break;
+
+    case 2641:
+        cleanArea(2, 6, 143, 44);
+        gotoxy(1, 7);
+        restOB->showFood(0, 0);
+        system("pause");
+        choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
 
