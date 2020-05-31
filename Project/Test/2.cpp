@@ -28,6 +28,7 @@ void setTitle(string message);
 void setContinue();
 void clearMain();
 
+class FOOD;
 class PIZZA;
 class BURGER;
 class SANDWICHE;
@@ -43,7 +44,6 @@ class BEVERAGE;
 class CUSTOMER;
 class RESTAURANT;
 class ADMINISTRATOR;
-class FOOD;
 class ORDER;
 class TAXDEPARTMENT;
 class TIMENOW;
@@ -73,7 +73,8 @@ vector<vector<string>> menu{{"MAIN  MENU", "Administrator", "Restaurant Manager"
                             {"CUSTOMER", "New User", "Sign In", "Sign Out", "Go Back"}, //10
                             {"CUSTOMER > Signed In", "Show Details", "Modify Details", "Order Food", "Order Details", "Voucher Management", "Go Back"}, //11
                             {"CUSTOMER > Signed In > Voucher Management", "Show Details", "Use Voucher", "Go Back"}, //12
-                            {"ADMINISTRATOR > Show Details > Show Customers", "Show All", "By Location", "Go Back"}}; //13
+                            {"ADMINISTRATOR > Show Details > Show Customers", "Show All", "By Location", "Go Back"}, //13
+                            {"RESTAURANT MANAGER > Menu Management > Show Details", "Show All", "Show by Cuisine", "Show by Code", "Show by Title", "Show by Price", "Go Back"}}; //14
 
 auto nowTime = chrono::system_clock::now();
 time_t sleepTime = chrono::system_clock::to_time_t(nowTime);
@@ -119,6 +120,259 @@ public:
     
     string getDate(){return tnDate;}
     string getTime(){return tnTime;}
+};
+
+class FOOD{
+protected:
+    double price;
+    string itemCode;
+    const int cuisine;
+    string foodTitle;
+    string foodDescription;
+    int stock;
+    int limit;
+    int prepTime;
+    double discount;
+
+public:
+    /*FOOD(int _cuisine, string _title, string _description, int _stock, int _limit, int _time, double _discount):cuisine(_cuisine){
+        //cuisine = _cuisine;
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+    }*/
+
+    FOOD(int _cuisine):cuisine(_cuisine){}
+
+    string getItemCode(){return itemCode;}
+    int getCuisine(){return cuisine;}
+    string getTitle(){return foodTitle;}
+    string getDescription(){return foodDescription;}
+    int getStock(){return stock;}
+    int getLimit(){return limit;}
+    double getPrice(){return price;}
+    int getPrepTime(){return prepTime;}
+
+    void setItemCode(string _itemCode){}
+    void setCuisine(int _cuisine){}
+    void setTitle(string _title){}
+    void setDescription(string _description){}
+    void setStock(int _stock){}
+    void setLimit(int _limit){}
+    void setPrice(double _price){}
+    void setPrepTime(int _time){}
+};
+
+class PIZZA : public FOOD{
+    //bool haveSize;
+    vector<double> price;
+    vector<string> size;
+
+public:
+    PIZZA(string _title, string _description, int _stock, int _limit, int _time, double _discount, vector<double> _price, vector<string> _size):FOOD(0){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+        size = _size;
+    }
+
+    bool getHaveSize(){
+        if(size.size() > 1){
+            return true;
+        }
+        return false;
+    }
+
+    double getPrice(int _index){return price[_index];}
+    string getSize(int _index){return size[_index];}
+    void setPrice(vector<double> _price){
+        for(int i = 0; i < _price.size(); i++){
+            price[i] = _price[i];
+        }
+    }
+    void setSize(vector<string> _size){
+        for(int i = 0; i < _size.size(); i++){
+            size[i] = _size[i];
+        }
+    }
+};
+
+class BURGER : public FOOD{
+public:
+    BURGER(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price):FOOD(1){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+    }
+};
+
+
+class SANDWICHE : public FOOD{
+public:
+    SANDWICHE(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price):FOOD(2){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+    }
+};
+
+
+class FASTFOOD : public FOOD{
+public:
+    FASTFOOD(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price):FOOD(3){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+    }
+};
+
+
+class BARBQ : public FOOD{
+public:
+    BARBQ(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price):FOOD(4){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+    }
+};
+
+
+class PAKISTANI : public FOOD{
+public:
+    PAKISTANI(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price):FOOD(5){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+    }
+};
+
+
+class CHINESE : public FOOD{
+public:
+    CHINESE(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price):FOOD(6){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+    }
+};
+
+
+class INTERNATIONAL : public FOOD{
+public:
+    INTERNATIONAL(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price):FOOD(7){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+    }
+};
+
+
+class SEAFOOD : public FOOD{
+public:
+    SEAFOOD(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price):FOOD(8){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+    }
+};
+
+
+class DESSERT : public FOOD{
+public:
+    DESSERT(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price):FOOD(9){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+    }
+};
+
+
+class CAKE : public FOOD{
+    //bool haveSize;
+    vector<double> weight;
+
+public:
+    CAKE(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price, vector<double> _weight):FOOD(10){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+        weight = _weight;
+    }
+
+    bool getHaveSize(){
+        if(weight.size() > 1){
+            return true;
+        }
+        return false;
+    }
+    double getPrice(int _index){return (price * weight[_index]);}
+    double getWeight(int _index){return weight[_index];}
+    double setWeight(vector<double> _weight){
+        for(int i = 0; i < _weight.size(); i++){
+            weight[i] = _weight[i];
+        }
+    }
+};
+
+
+class BEVERAGE : public FOOD{
+public:
+    BEVERAGE(string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price):FOOD(11){
+        foodTitle = _title;
+        foodDescription = _description;
+        stock = _stock;
+        limit = _limit;
+        prepTime = _time;
+        discount = _discount;
+        price = _price;
+    }
 };
 
 
@@ -431,7 +685,86 @@ public:
         daysOpen[_day] = false;
     }
 
-    void addPizza(){}
+    string createItemCode(int _cuisine, int _item){
+        if(_cuisine < 10){
+            if(_item < 10){
+                return ("0" + to_string(_cuisine) + "00" + to_string(_item));
+            } else if(_item < 100){
+                return ("0" + to_string(_cuisine) + "0" + to_string(_item));
+            } else{
+                return ("0" + to_string(_cuisine) + to_string(_item));
+            }
+        } else{
+            if(_item < 10){
+                return (to_string(_cuisine) + "00" + to_string(_item));
+            } else if(_item < 100){
+                return (to_string(_cuisine) + "0" + to_string(_item));
+            } else{
+                return (to_string(_cuisine) + to_string(_item));
+            }
+        }
+    }
+
+    void addItem(PIZZA _pizza){
+        pizzas.push_back(_pizza);
+        pizzas[pizzas.size()-1].setItemCode(restaurantCode + createItemCode(0, pizzas.size()));
+    }
+
+    void addItem(BURGER _burger){
+        burgers.push_back(_burger);
+        setMessage("3");
+        burgers[burgers.size()-1].setItemCode(restaurantCode + createItemCode(1, burgers.size()));
+    }
+
+    void addItem(SANDWICHE _sandwich){
+        sandwiches.push_back(_sandwich);
+        sandwiches[sandwiches.size()-1].setItemCode(restaurantCode + createItemCode(2, sandwiches.size()));
+    }
+
+    void addItem(FASTFOOD _fastFood){
+        fastfoods.push_back(_fastFood);
+        fastfoods[fastfoods.size()-1].setItemCode(restaurantCode + createItemCode(3, fastfoods.size()));
+    }
+
+    void addItem(BARBQ _barBQ){
+        barbqs.push_back(_barBQ);
+        barbqs[barbqs.size()-1].setItemCode(restaurantCode + createItemCode(4, barbqs.size()));
+    }
+
+    void addItem(PAKISTANI _pakistani){
+        pakistanis.push_back(_pakistani);
+        pakistanis[pakistanis.size()-1].setItemCode(restaurantCode + createItemCode(5, pakistanis.size()));
+    }
+
+    void addItem(CHINESE _chinese){
+        chineses.push_back(_chinese);
+        chineses[chineses.size()-1].setItemCode(restaurantCode + createItemCode(6, chineses.size()));
+    }
+
+    void addItem(INTERNATIONAL _international){
+        internationals.push_back(_international);
+        internationals[internationals.size()-1].setItemCode(restaurantCode + createItemCode(7, internationals.size()));
+    }
+
+    void addItem(SEAFOOD _seaFood){
+        seafoods.push_back(_seaFood);
+        seafoods[seafoods.size()-1].setItemCode(restaurantCode + createItemCode(8, seafoods.size()));
+    }
+
+    void addItem(DESSERT _dessert){
+        desserts.push_back(_dessert);
+        desserts[desserts.size()-1].setItemCode(restaurantCode + createItemCode(9, desserts.size()));
+    }
+
+    void addItem(CAKE _cake){
+        cakes.push_back(_cake);
+        cakes[cakes.size()-1].setItemCode(restaurantCode + createItemCode(10, cakes.size()));
+    }
+
+    void addItem(BEVERAGE _beverage){
+        beverages.push_back(_beverage);
+        beverages[beverages.size()-1].setItemCode(restaurantCode + createItemCode(11, beverages.size()));
+    }
 
     void showDetails(){
         cout << "\tTitle:\t\t\t" << title << "\n\n\tDescription:\t\t" << description.substr(0, 100) << "\n\n\tManager ID:\t\t" << managerID << string(45 - managerID.length(), ' ') << "Code:\t\t" << restaurantCode << "\n\n\tContact Number:\t\t" << contactNumber << string(45 - contactNumber.length(), ' ') << "Address:\t\t" << address << "\n\n\tArea:\t\t\t" << getArea() << string(45 - getArea().length(), ' ') << "City:\t\t" << getCity() << "\n\n\tActive:\t\t\t" << setw(5) << isRestActive << string(40, ' ') << "Open:\t\t" << isRestOpen << "\n\n\tFree Delivery:\t\t" << setw(5) << freeDelivery << string(40, ' ') << "Minimum Order:\t" << minimumOrder << "\n\n\tDelivery Charges:\t" << deliveryCharges << string(49 - to_string(deliveryCharges).length(), ' ') << "Discount:\t\t" << (restDiscount * 100) << "%\n\n\tTotal Income:\t\t" << restRevenue << string(49 - to_string(restRevenue).length(), ' ') << "Tax:\t\t" << restTax << "\n\n\tOrders Pending:\t\t" << ordersPending << string(45 - to_string(ordersPending).length(), ' ') << "Orders Completed:\t" << ordersCompleted << "\n\n\tOrders Cancelled:\t" << ordersCancelled << string(45 - to_string(ordersCancelled).length(), ' ') << "Timings:\t\t" << openTime << " - " << closeTime;
@@ -1236,96 +1569,7 @@ public:
 };
 
 
-class FOOD{
-    string itemCode;
-    int cuisine;
-    string foodTitle;
-    string foodDescription;
-    int stock;
-    int limit;
-    //bool haveSize;
-    int prepTime;
-    double discount;
 
-protected:
-    double price;
-
-public:
-    FOOD(int _cuisine, string _title, string _description, int _stock, int _limit, int _time, double _discount, double _price){
-        cuisine = _cuisine;
-        foodTitle = _title;
-        foodDescription = _description;
-        stock = _stock;
-        limit = _limit;
-        prepTime = _time;
-        discount = _discount;
-        price = _price;
-    }
-
-    string getItemCode(){return itemCode;}
-    int getCuisine(){return cuisine;}
-    string getTitle(){return foodTitle;}
-    string getDescription(){return foodDescription;}
-    int getStock(){return stock;}
-    int getLimit(){return limit;}
-    double getPrice(){return price;}
-    int getPrepTime(){return prepTime;}
-
-    void setItemCode(string _itemCode){}
-    void setCuisine(int _cuisine){}
-    void setTitle(string _title){}
-    void setDescription(string _description){}
-    void setStock(int _stock){}
-    void setLimit(int _limit){}
-    void setPrice(double _price){}
-    void setPrepTime(int _time){}
-};
-
-
-class PIZZA : public FOOD{
-    //bool haveSize;
-    vector<double> price;
-    vector<string> size;
-
-public:
-    bool getHaveSize(){
-        if(size.size() > 1){
-            return true;
-        }
-        return false;
-    }
-
-    double getPrice(int _index){return price[_index];}
-    string getSize(int _index){return size[_index];}
-};
-
-
-class BURGER : public FOOD{};
-class SANDWICHE : public FOOD{};
-class FASTFOOD : public FOOD{};
-class BARBQ : public FOOD{};
-class PAKISTANI : public FOOD{};
-class CHINESE : public FOOD{};
-class INTERNATIONAL : public FOOD{};
-class SEAFOOD : public FOOD{};
-class DESSERT : public FOOD{};
-class BEVERAGE : public FOOD{};
-
-
-class CAKE : public FOOD{
-    //bool haveSize;
-    vector<double> weight;
-
-public:
-    bool getHaveSize(){
-        if(weight.size() > 1){
-            return true;
-        }
-        return false;
-    }
-    double getPrice(int _index){return (price * weight[_index]);}
-    double getWeight(int _index){return weight[_index];}
-};
 
 
 class ORDER{
@@ -1477,7 +1721,7 @@ class TAXDEPARTMENT{
 
 int main(){
     stringstream ss;
-    string inputString, choiceString, inputItem, inputItems = "";
+    string inputString, choiceString, inputItem, inputItems = "", strVecInput;
     string managerID, managerPassword, restaurantCode, title, description, contactNumber, address, openTime, closeTime, freeDelivery, restDiscount, minimumOrder, deliveryCharges;
     string firstName, lastName, customerCode, custPassword, emailAddress, custContactNumber, custAddress;
     string userName,passWord;
@@ -1486,13 +1730,15 @@ int main(){
     bool scrSizeCheck, firstInput = true;
     bool isRestActive, isRestOpen, isActive, isOpen, isPaid, isApproved;
     bool daysOpen[7] = {false,false,false,false,false,false,false};
-    int fontSize = 19, menuIndex = 0, itemIndex, choice, restIndex, custIndex;
+    int fontSize = 19, menuIndex = 0, itemIndex, choice, restIndex, custIndex, intVecInput;
     int area, city, ordersPending, ordersCancelled, menuCount;
-    int custArea, custCity, orderCount;
+    int custArea, custCity, orderCount, intInput;
     int cuisine, stock, limit, prepTime;
     int openTimeAdmin, closeTimeAdmin;
-    double restRevenue, restTax, walletAmount, revenue, tax;
+    double restRevenue, restTax, walletAmount, revenue, tax, floatVecInput;
     double price, discount;
+    vector<string> strVec;
+    vector<double> floatVecPrice, floatVecWeight;
     fstream adminFile;
     setConsoleSize(144, 47);
     setFontSize(fontSize, 500, L"Courier New");
@@ -1552,11 +1798,11 @@ int main(){
     gotoxy(36, 9);
     cout << "Administrator Password: ";
     getline(cin, passWord);
-    
-    CreateAdmin:
     adminFile.open("admin.dat", ios::out | ios::app | ios::binary);
     adminFile << userName << endl << passWord << endl;
     adminFile.close();
+    
+    CreateAdmin:
     ADMINISTRATOR adminOb(userName, passWord);
     RESTAURANT * restOB = new RESTAURANT;
 
@@ -1839,7 +2085,7 @@ int main(){
             } else{
                 restOB->setFreeDelivery(false);
                 restOB->setMininmumOrder(0);
-                cout << "\n\tDelivery Charges for All Orders:\t";
+                cout << "\n\n\tDelivery Charges for All Orders:\t";
                 getline(cin, inputItem);
                 restOB->setDeliveryCharges(stod(inputItem));
             }
@@ -1855,26 +2101,136 @@ int main(){
         break;
 
     case 261:
-        /*cleanArea(2, 6, 143, 44);
+        setTitle("RESTAURANT > MENU > Adding Item");
+        setMessage("Enter '0 - 11' to Add Item OR anything else to Quit.");
+        cleanArea(2, 6, 143, 44);
         gotoxy(1, 7);
-        cout << "\tOld Password:\t";
-        getline(cin, passWord);
-        cout << "\n\tRetype Old Password:\t";
-        getline(cin, managerPassword);
-        if(passWord == managerPassword){
-            cout << "\n\tNew Password:\t";
-            getline(cin, managerPassword);
-            if(adminOb.getRestPassword(restIndex) == passWord){
-                adminOb.setRestPassword(restIndex, managerPassword);
-                setMessage("Password Change Successful!");
-            } else{
-                setMessage("Password Change Unsuccessful, Wrong Password!");
+        cout << "\tCuisine List:";
+        for(int i = 0; i < cuisineTitle.size(); i++){
+            cout << "\n\n\t\t" << i << "> " << cuisineTitle[i];
+        }
+        cout << "\n\tChoice:\t";
+        getline(cin, inputItem);
+        cleanArea(2, 6, 143, 44);
+        gotoxy(1, 7);
+        if(((inputItem.length() == 1) && (inputItem[0] >= 48 && inputItem[0] < 55)) || inputItem == "10" || inputItem == "11"){
+            cout << "\tTitle:\t\t\t";
+            getline(cin, title);
+            cout << "\n\tDescription:\t\t";
+            getline(cin, description);
+            cout << "\n\tStock:\t\t\t";
+            cin >> stock;
+            cout << "\n\tMax Order Limit:\t";
+            cin >> limit;
+            cout << "\n\tPreparation Time:\t";
+            cin >> prepTime;
+            cout << "\n\tDiscount Percentage:\t";
+            cin >> discount;
+            cin.clear();
+            cin.ignore();
+            if(inputItem != "0"){
+                cout << "\n\tPrice:\t";
+                cin >> price;
+                cin.clear();
+                cin.ignore();
             }
-        } else{
-            setMessage("Password does not match!");
-        }*/
+            if(inputItem == "0"){
+                cout << "\n\tDo you offer \"" << title << "\" in different sizes? (y/n):\t";
+                if(tolower(getche()) == 'y'){
+                    cout << "\n\n\tNumber of Sizes:\t";
+                    cin >> intInput;
+                    cin.clear();
+                    cin.ignore();
+                    for(int i = 0; i < intInput; i++){
+                        cleanArea(2, 6, 143, 44);
+                        gotoxy(1, 7);
+                        cout << "\n\tSize: " << (i + 1) << "\n\n\tSize Description:\t";
+                        cin >> strVecInput;
+                        strVec.push_back(strVecInput);
+                        cout << "\n\tPrice:\t";
+                        cin >> floatVecInput;
+                        floatVecPrice.push_back(floatVecInput);
+                        cin.clear();
+                        cin.ignore();
+                        //cout << "\n";
+                    }
+                } else{
+                    strVec[0] = "Default";
+                    cout << "\n\tPrice (Per Unit):\t";
+                    cin >> floatVecInput;
+                    floatVecPrice.push_back(floatVecInput);
+                    cin.clear();
+                    cin.ignore();
+                }
+                PIZZA pizzaOB(title, description, stock, limit, prepTime, discount, floatVecPrice, strVec);
+                restOB->addItem(pizzaOB);
+            } else if(inputItem == "1"){
+                setMessage("1");
+                BURGER burgerOB(title, description, stock, limit, prepTime, discount, price);
+                setMessage("2");
+                restOB->addItem(burgerOB);
+                setMessage("4");
+            } else if(inputItem == "2"){
+                SANDWICHE sandwichOB(title, description, stock, limit, prepTime, discount, price);
+                restOB->addItem(sandwichOB);
+            } else if(inputItem == "3"){
+                FASTFOOD fastFoodOB(title, description, stock, limit, prepTime, discount, price);
+                restOB->addItem(fastFoodOB);
+            } else if(inputItem == "4"){
+                BARBQ barbqOB(title, description, stock, limit, prepTime, discount, price);
+                restOB->addItem(barbqOB);
+            } else if(inputItem == "5"){
+                PAKISTANI pakistaniOB(title, description, stock, limit, prepTime, discount, price);
+                restOB->addItem(pakistaniOB);
+            } else if(inputItem == "6"){
+                CHINESE chineseOB(title, description, stock, limit, prepTime, discount, price);
+                restOB->addItem(chineseOB);
+            } else if(inputItem == "7"){
+                INTERNATIONAL internationalOB(title, description, stock, limit, prepTime, discount, price);
+                restOB->addItem(internationalOB);
+            } else if(inputItem == "8"){
+                SEAFOOD seaFoodOB(title, description, stock, limit, prepTime, discount, price);
+                restOB->addItem(seaFoodOB);
+            } else if(inputItem == "9"){
+                DESSERT dessertOB(title, description, stock, limit, prepTime, discount, price);
+                restOB->addItem(dessertOB);
+            } else if(inputItem == "10"){
+                cout << "Do you offer \"" << title << "\" in different weights? (y/n):\t";
+                if(tolower(getche()) == 'y'){
+                    cout << "\n\n\tNumber of Sizes (Weights):\t";
+                    cin >> intInput;
+                    cin.clear();
+                    cin.ignore();
+                    for(int i = 0; i < intInput; i++){
+                        cleanArea(2, 6, 143, 44);
+                        gotoxy(1, 7);
+                        cout << "\n\tWeight Size: " << (i + 1) << "\n\tWeight:\t";
+                        cin >> floatVecInput;
+                        floatVecWeight.push_back(floatVecInput);
+                        cin.clear();
+                        cin.ignore();
+                    }
+                } else{
+                    cout << "Default Weight:\t";
+                    cin >> floatVecInput;
+                    floatVecWeight.push_back(floatVecInput);
+                    cin.clear();
+                    cin.ignore();
+                }
+                CAKE cakeOB(title, description, stock, limit, prepTime, discount, price, floatVecWeight);
+                restOB->addItem(cakeOB);
+            } else if(inputItem == "11"){
+                BEVERAGE beverageOB(title, description, stock, limit, prepTime, discount, price);
+                restOB->addItem(beverageOB);
+            }
+        }
         system("pause");
         choiceString = choiceString.substr(0, (choiceString.length()-1));
+        goto MENU;
+        break;
+    
+    case 264:
+        menuIndex = 14;
         goto MENU;
         break;
 
@@ -1954,6 +2310,12 @@ int main(){
 
     case 260:
         menuIndex = 7;
+        choiceString = choiceString.substr(0, (choiceString.length()-2));
+        goto MENU;
+        break;
+
+    case 2640:
+        menuIndex = 8;
         choiceString = choiceString.substr(0, (choiceString.length()-2));
         goto MENU;
         break;
