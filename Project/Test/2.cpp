@@ -406,7 +406,7 @@ public:
         weight = _weight;
     }
 
-    CAKE():FOOD(0){}
+    CAKE():FOOD(10){}
 
     bool getHaveSize(){
         if(weight.size() > 1){
@@ -734,7 +734,7 @@ public:
             cout << "Welcome " << managerID << " to " << title << endl;
             return true;
         }else{
-            cout << "Bad Mnager ID or Password!" << endl;
+            cout << "Bad Manager ID or Password!" << endl;
             return false;
         }
     }
@@ -774,7 +774,6 @@ public:
 
     void addItem(BURGER _burger){
         burgers.push_back(_burger);
-        setMessage("3");
         burgers[burgers.size()-1].setItemCode(restaurantCode + createItemCode(1, burgers.size()));
     }
 
@@ -1760,18 +1759,7 @@ public:
 class ORDER{
     string orderNumber;
     TIMENOW orderTime;
-    vector<PIZZA> pizzas;
-    vector<BURGER> burgers;
-    vector<SANDWICHE> sandwiches;
-    vector<FASTFOOD> fastfoods;
-    vector<BARBQ> barbqs;
-    vector<PAKISTANI> pakistanis;
-    vector<CHINESE> chineses;
-    vector<INTERNATIONAL> internationals;
-    vector<SEAFOOD> seafoods;
-    vector<DESSERT> desserts;
-    vector<CAKE> cakes;
-    vector<BEVERAGE> beverages;
+    
     bool isPaid;
     bool isApproved;
 
@@ -1781,7 +1769,7 @@ public:
     string getTime(){return orderTime.getTime();};
     bool getIsPaid(){return isPaid;}
     bool getIsApproved(){return isApproved;}
-    bool hasPizza(){
+    /*bool hasPizza(){
         if(pizzas.size() > 0){
             return true;
         }
@@ -1893,7 +1881,7 @@ public:
         } else{
             return false;
         }
-    }
+    }*/
 };
 
 
@@ -2023,7 +2011,7 @@ int main(){
     choiceString = choiceString + inputString;
 
     switch (stoi(choiceString)){
-    case 1:
+    case 1: //Administrator
         cleanArea(2, 6, 143, 44);
         setMessage("Please enter Administrator Credentials");
         gotoxy(36, 7);
@@ -2073,7 +2061,7 @@ int main(){
         goto MENU;
         break;
 
-    case 2:
+    case 2: //Restaurant Manager
         cleanArea(2, 6, 143, 44);
         setMessage("Please enter Manager Credentials");
         gotoxy(36, 7);
@@ -2105,7 +2093,7 @@ int main(){
         goto MENU;
         break;
     
-    case 22:
+    case 22: //Manager Password Change
         cleanArea(2, 6, 143, 44);
         setTitle("CHANGING PASSWORD");
         gotoxy(2, 7);
@@ -2129,7 +2117,7 @@ int main(){
         goto MENU;
         break;
 
-    case 23:
+    case 23: //Manager > Restaurant Open/Close
         if(restOB->getIsRestOpen() == false){
             restOB->setIsRestOpen(true);
             setMessage("Restaurant Open");
@@ -2141,7 +2129,7 @@ int main(){
         goto MENU;
         break;
 
-    case 24:
+    case 24: //Restaurant Day/Time Setup
         cleanArea(2, 6, 143, 44);
         setTitle("Setting Up Opening Days/Timings");
         gotoxy(2, 7);
@@ -2186,7 +2174,7 @@ int main(){
         goto MENU;
         break;
     
-    case 25:
+    case 25: //Modifying Restaurant Details
         cleanArea(2, 6, 143, 44);
         setTitle("Modifying Restaurant Details");
         gotoxy(2, 7);
@@ -2285,7 +2273,7 @@ int main(){
         goto MENU;
         break;
 
-    case 261:
+    case 261: //MENU > Add Item
         setTitle("RESTAURANT > MENU > Adding Item");
         setMessage("Enter '0 - 11' to Add Item OR anything else to Quit.");
         cleanArea(2, 6, 143, 44);
@@ -2298,7 +2286,7 @@ int main(){
         getline(cin, inputItem);
         cleanArea(2, 6, 143, 44);
         gotoxy(1, 7);
-        if(((inputItem.length() == 1) && (inputItem[0] >= 48 && inputItem[0] < 55)) || inputItem == "10" || inputItem == "11"){
+        if(((inputItem.length() == 1) && (inputItem[0] >= 48 && inputItem[0] < 58)) || inputItem == "10" || inputItem == "11"){
             cout << "\tTitle:\t\t\t";
             getline(cin, title);
             cout << "\n\tDescription:\t\t";
@@ -2352,11 +2340,8 @@ int main(){
                 PIZZA pizzaOB(title, description, stock, limit, prepTime, discount, floatVecPrice, strVec);
                 restOB->addItem(pizzaOB);
             } else if(inputItem == "1"){
-                setMessage("1");
                 BURGER burgerOB(title, description, stock, limit, prepTime, discount, price);
-                setMessage("2");
                 restOB->addItem(burgerOB);
-                setMessage("4");
             } else if(inputItem == "2"){
                 SANDWICHE sandwichOB(title, description, stock, limit, prepTime, discount, price);
                 restOB->addItem(sandwichOB);
@@ -2417,7 +2402,7 @@ int main(){
         goto MENU;
         break;
     
-    case 262:
+    case 262: //MENU > Modifying Item
         setTitle("RESTAURANT > MENU > Modifying Item");
         setMessage("Enter Item Code to modify it!");
         cleanArea(2, 6, 143, 44);
@@ -2571,7 +2556,7 @@ int main(){
         goto MENU;
         break;
     
-    case 263:
+    case 263: //MENU > Deleting Item
         setTitle("RESTAURANT > MENU > Deleting Item");
         setMessage("Enter Item Code to delete it!");
         cleanArea(2, 6, 143, 44);
@@ -2706,7 +2691,7 @@ int main(){
         goto MENU;
         break;
 
-    case 121:
+    case 121: //New Restaurant
         do{
             cleanArea(2, 6, 143, 44);
             gotoxy(1, 7);
@@ -2962,7 +2947,7 @@ int main(){
     case 134:
         cleanArea(2, 6, 143, 44);
         gotoxy(4, 7);
-        cout << "\t1> Customer Code\n\n\t2> Email Address\n\n\t3> Contact Number\n\n\t4>Customer Name\n\n\t0> Go Back\n\n\t Choice: ";
+        cout << "\t1> Customer Code\n\n\t2> Email Address\n\n\t3> Contact Number\n\n\t4> Customer Name\n\n\t0> Go Back\n\n\t Choice: ";
         getline(cin, inputItem);
         cleanArea(2, 6, 143, 44);
         gotoxy(4, 7);
@@ -3005,7 +2990,7 @@ int main(){
         goto MENU;
         break;
 
-    case 131:
+    case 131: //New Customer
         do{
             cleanArea(2, 6, 143, 44);
             gotoxy(1, 7);
