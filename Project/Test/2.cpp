@@ -123,16 +123,19 @@ public:
 };
 
 class FOOD{
+private:
+    //int stock;
+    //int limit;
 protected:
     double price;
     string itemCode;
     const int cuisine;
     string foodTitle;
     string foodDescription;
-    int stock;
-    int limit;
     int prepTime;
     double discount;
+    int stock;
+    int limit;
 
 public:
     /*FOOD(int _cuisine, string _title, string _description, int _stock, int _limit, int _time, double _discount):cuisine(_cuisine){
@@ -166,7 +169,54 @@ public:
     void setPrice(double _price){price = _price;}
     void setDiscount(double _discount){discount = _discount/100;}
     void setPrepTime(int _time){prepTime = _time;}
+
+    void showDetails(){
+        cout << "\tCode: " << itemCode << "\n\tTitle: " << foodTitle << "\n\tDescription: " << foodDescription << "\n\tstock: " << stock << "\n\tLimit: " << limit << "\n\tTime: " << prepTime << "\n\tDiscount: " << discount << "\n\tPrice: " << price << endl;;
+    }
 };
+
+
+class ORDERITEM{
+    string code;
+    string title;
+    string description;
+    double price;
+    double discount;
+    int prepTime;
+    int quantity;
+
+public:
+    ORDERITEM(string _code, string _title, string _description, double _price, double _discount, int _prepTime, int _quantity){
+        code = _code;
+        title = _title;
+        description = _description;
+        price = _price;
+        discount = _discount;
+        prepTime = _prepTime;
+        quantity = _quantity;
+    }
+
+    string getCode(){return code;}
+    string getTitle(){return title;}
+    string getDescription(){return description;}
+    double getPriceTotal(){return (price * quantity);}
+    double getPriceTotalValue(){return (price * quantity * (1+discount));}
+    double getPrice(){return price;}
+    double getDiscountPercent(){return discount;}
+    double getDiscountValue(){return (discount * price);}
+    double getDiscountValueTotal(){return (discount * price * quantity);}
+    int getPrepTime(){return prepTime;}
+    int getQuantity(){return quantity;}
+
+    void setCode(string _code){code = _code;}
+    void setTitle(string _title){title = _title;}
+    void setDescription(string _description){description = _description;}
+    void setPrice(double _price){price = _price;}
+    void setDiscountPercent(double _discount){discount = _discount;}
+    void setPrepTime(int _time){prepTime = _time;}
+    void setQuantity(int _quantity){quantity = _quantity;}
+};
+
 
 class PIZZA : public FOOD{
     //bool haveSize;
@@ -184,6 +234,7 @@ public:
         price = _price;
         size = _size;
     }
+
     PIZZA():FOOD(0){}
 
     bool getHaveSize(){
@@ -211,6 +262,7 @@ public:
         }
     }
 };
+
 
 class BURGER : public FOOD{
 public:
@@ -354,6 +406,8 @@ public:
         weight = _weight;
     }
 
+    CAKE():FOOD(0){}
+
     bool getHaveSize(){
         if(weight.size() > 1){
             return true;
@@ -361,6 +415,7 @@ public:
         return false;
     }
     double getPrice(int _index){return (price * weight[_index]);}
+    double getPriceUnit(){return price;}
     double getWeight(int _index){return weight[_index];}
     vector<double> getWeight(){return weight;}
     void setWeight(vector<double> _weight){
@@ -817,7 +872,8 @@ public:
     }
 
     void showFood(int _cuisine, int _index){
-        pizzas[_index].showDetails();
+        //pizzas[_index].showDetails();
+        burgers[_index].showDetails();
     }
 
     /*void modifyItem(string _ItemCode){
@@ -1850,7 +1906,7 @@ class TAXDEPARTMENT{
 
 int main(){
     stringstream ss;
-    string inputString, choiceString, inputItem, inputItems = "", strVecInput;
+    string inputString, choiceString, inputItem, inputItemSub, inputItems = "", strVecInput;
     string managerID, managerPassword, restaurantCode, title, description, contactNumber, address, openTime, closeTime, freeDelivery, restDiscount, minimumOrder, deliveryCharges;
     string firstName, lastName, customerCode, custPassword, emailAddress, custContactNumber, custAddress;
     string userName,passWord;
@@ -2258,7 +2314,7 @@ int main(){
             cin.clear();
             cin.ignore();
             if(inputItem != "0"){
-                cout << "\n\tPrice:\t";
+                cout << "\n\tPrice:\t\t\t";
                 cin >> price;
                 cin.clear();
                 cin.ignore();
@@ -2381,14 +2437,14 @@ int main(){
                 gotoxy(1, 6);
                 for(int i = 0; i < 6; i++){
                     cout << "\n\n\t\t\t\t";
-                    getline(cin, inputItem);
-                    if(inputItem.length() != 0){
-                        if(i == 0){pizzaOB->setTitle(inputItem);}
-                        else if(i == 1){pizzaOB->setDescription(inputItem);}
-                        else if(i == 2){pizzaOB->setStock(stoi(inputItem));}
-                        else if(i == 3){pizzaOB->setLimit(stoi(inputItem));}
-                        else if(i == 4){pizzaOB->setPrepTime(stoi(inputItem));}
-                        else if(i == 5){pizzaOB->setDiscount(stod(inputItem));}
+                    getline(cin, inputItemSub);
+                    if(inputItemSub.length() != 0){
+                        if(i == 0){pizzaOB->setTitle(inputItemSub);}
+                        else if(i == 1){pizzaOB->setDescription(inputItemSub);}
+                        else if(i == 2){pizzaOB->setStock(stoi(inputItemSub));}
+                        else if(i == 3){pizzaOB->setLimit(stoi(inputItemSub));}
+                        else if(i == 4){pizzaOB->setPrepTime(stoi(inputItemSub));}
+                        else if(i == 5){pizzaOB->setDiscount(stod(inputItemSub));}
                     }
                 }
                 strVec.clear();
@@ -2422,6 +2478,90 @@ int main(){
                 }
                 pizzaOB->setSize(strVec);
                 pizzaOB->setPrice(floatVecPrice);
+            } else if(inputItem.substr(3, 2) == "10"){
+                cout << "\n\n\tOld Unit Price:\n\tNew Unit Price:";
+                CAKE * cakeOB = new CAKE;
+                cakeOB = restOB->getCake(stoi(inputItem.substr(5, 3)) - 1);
+                gotoxy(1, 7);
+                cout << "\t\t\t\t" << cakeOB->getTitle() << "\n\n\n\t\t\t\t" << cakeOB->getDescription() << "\n\n\n\t\t\t\t" << cakeOB->getStock() << "\n\n\n\t\t\t\t" << cakeOB->getLimit() << "\n\n\n\t\t\t\t" << cakeOB->getPrepTime() << "\n\n\n\t\t\t\t" << cakeOB->getDiscount() << "\n\n\n\t\t\t\t" << cakeOB->getPriceUnit();
+                gotoxy(1, 6);
+                for(int i = 0; i < 7; i++){
+                    cout << "\n\n\t\t\t\t";
+                    getline(cin, inputItemSub);
+                    if(inputItemSub.length() != 0){
+                        if(i == 0){cakeOB->setTitle(inputItemSub);}
+                        else if(i == 1){cakeOB->setDescription(inputItemSub);}
+                        else if(i == 2){cakeOB->setStock(stoi(inputItemSub));}
+                        else if(i == 3){cakeOB->setLimit(stoi(inputItemSub));}
+                        else if(i == 4){cakeOB->setPrepTime(stoi(inputItemSub));}
+                        else if(i == 5){cakeOB->setDiscount(stod(inputItemSub));}
+                        else if(i == 6){cakeOB->setPrice(stod(inputItemSub));}
+                    }
+                }
+                floatVecWeight.clear();
+                cout << "Do you offer \"" << cakeOB->getTitle() << "\" in different weights? (y/n):\t";
+                if(tolower(getche()) == 'y'){
+                    cout << "\n\n\tNumber of Sizes (Weights):\t";
+                    cin >> intInput;
+                    cin.clear();
+                    cin.ignore();
+                    for(int i = 0; i < intInput; i++){
+                        cleanArea(2, 6, 143, 44);
+                        gotoxy(1, 7);
+                        cout << "\n\tWeight Size: " << (i + 1) << "\n\tWeight:\t";
+                        cin >> floatVecInput;
+                        floatVecWeight.push_back(floatVecInput);
+                        cin.clear();
+                        cin.ignore();
+                    }
+                } else{
+                    cout << "Default Weight:\t";
+                    cin >> floatVecInput;
+                    floatVecWeight.push_back(floatVecInput);
+                    cin.clear();
+                    cin.ignore();
+                }
+                cakeOB->setWeight(floatVecWeight);
+            } else if((inputItem[3] == '0' && (inputItem[4] > 48 && inputItem[4] < 58)) || inputItem == "11"){
+                cout << "\n\n\tOld Price:\n\tNew Price:";
+                FOOD * foodOB = new FOOD(stoi(inputItem.substr(3, 2)));
+                if(inputItem.substr(3, 2) == "01"){
+                    foodOB = restOB->getBurger(stoi(inputItem.substr(5, 3)) - 1);
+                } else if(inputItem.substr(3, 2) == "02"){
+                    foodOB = restOB->getSandwich(stoi(inputItem.substr(5, 3)) - 1);
+                } else if(inputItem.substr(3, 2) == "03"){
+                    foodOB = restOB->getFastFood(stoi(inputItem.substr(5, 3)) - 1);
+                } else if(inputItem.substr(3, 2) == "04"){
+                    foodOB = restOB->getBarbq(stoi(inputItem.substr(5, 3)) - 1);
+                } else if(inputItem.substr(3, 2) == "05"){
+                    foodOB = restOB->getPakistani(stoi(inputItem.substr(5, 3)) - 1);
+                } else if(inputItem.substr(3, 2) == "06"){
+                    foodOB = restOB->getChinese(stoi(inputItem.substr(5, 3)) - 1);
+                } else if(inputItem.substr(3, 2) == "07"){
+                    foodOB = restOB->getInternational(stoi(inputItem.substr(5, 3)) - 1);
+                } else if(inputItem.substr(3, 2) == "08"){
+                    foodOB = restOB->getSeafood(stoi(inputItem.substr(5, 3)) - 1);
+                } else if(inputItem.substr(3, 2) == "09"){
+                    foodOB = restOB->getDessert(stoi(inputItem.substr(5, 3)) - 1);
+                } else if(inputItem.substr(3, 2) == "11"){
+                    foodOB = restOB->getBeverage(stoi(inputItem.substr(5, 3)) - 1);
+                }
+                gotoxy(1, 7);
+                cout << "\t\t\t\t" << foodOB->getTitle() << "\n\n\n\t\t\t\t" << foodOB->getDescription() << "\n\n\n\t\t\t\t" << foodOB->getStock() << "\n\n\n\t\t\t\t" << foodOB->getLimit() << "\n\n\n\t\t\t\t" << foodOB->getPrepTime() << "\n\n\n\t\t\t\t" << foodOB->getDiscount() << "\n\n\n\t\t\t\t" << foodOB->getPrice();
+                gotoxy(1, 6);
+                for(int i = 0; i < 7; i++){
+                    cout << "\n\n\t\t\t\t";
+                    getline(cin, inputItemSub);
+                    if(inputItemSub.length() != 0){
+                        if(i == 0){foodOB->setTitle(inputItemSub);}
+                        else if(i == 1){foodOB->setDescription(inputItemSub);}
+                        else if(i == 2){foodOB->setStock(stoi(inputItemSub));}
+                        else if(i == 3){foodOB->setLimit(stoi(inputItemSub));}
+                        else if(i == 4){foodOB->setPrepTime(stoi(inputItemSub));}
+                        else if(i == 5){foodOB->setDiscount(stod(inputItemSub));}
+                        else if(i == 6){foodOB->setPrice(stod(inputItemSub));}
+                    }
+                }
             }
         } else{
             setMessage("Invalid Code");
@@ -2456,7 +2596,7 @@ int main(){
     case 2641:
         cleanArea(2, 6, 143, 44);
         gotoxy(1, 7);
-        restOB->showFood(0, 0);
+        restOB->showFood(1, 0);
         system("pause");
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
@@ -2918,7 +3058,7 @@ int main(){
     default:
         break;
     }
-
+    
     gotoxy(20, 20);
     system("pause");
     return 0;
