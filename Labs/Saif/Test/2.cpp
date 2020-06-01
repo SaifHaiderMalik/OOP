@@ -18,7 +18,7 @@
 //#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wwrite-strings" //Remove warnings
 
-#define _WIN32_WINNT 0x0A00 // Set Windows version
+#define _WIN32_WINNT 0x0A00 // Set Windows version 10
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -49,7 +49,7 @@ void setTitle(string message);  // display title
 void setContinue(); //executes system("pause") on Message Box of Interface
 void clearMain(); //clears main
 
-// classes that are child of food class
+// classes 
 class PIZZA;
 class BURGER;
 class SANDWICHE;

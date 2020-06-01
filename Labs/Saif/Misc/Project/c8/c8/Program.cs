@@ -49,7 +49,7 @@ namespace CSDemo
         {
             Employee e1 = new Employee("Sensei", 1200.45f);
             Employee e2 = new Employee("Nobita", 13400.50f);
-            string path = "C:\\Users\\sohai\\Desktop\\Saif\\OOP\\Labs\\Saif\\Misc\\Project";
+            string path = "C:\\projects\\1.bin";
 
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
