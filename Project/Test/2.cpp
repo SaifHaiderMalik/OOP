@@ -27,6 +27,7 @@ void setMessage(string message);
 void setTitle(string message);
 void setContinue();
 void clearMain();
+void showCuisine(int _index);
 
 class FOOD;
 class PIZZA;
@@ -70,11 +71,12 @@ vector<vector<string>> menu{{"MAIN  MENU", "Administrator", "Restaurant Manager"
                             {"RESTAURANT MANAGER", "Show Details", "Change Password", "Open/Close Restaurant", "Set Opening Days/Timings", "Modify Details", "Menu Management", "Order Management", "Go Back"}, //7
                             {"RESTAURANT MANAGER > Menu Management", "Add Item", "Modify Item Details", "Delete Item", "Show Details", "Go Back"}, //8
                             {"RESTAURANT MANAGER > Order Management", "Approve/Cancel Orders", "Show Details", "Go Back"}, //9
-                            {"CUSTOMER", "New User", "Sign In", "Sign Out", "Go Back"}, //10
+                            {"CUSTOMER", "New User", "Sign In", "Go Back"}, //10
                             {"CUSTOMER > Signed In", "Show Details", "Modify Details", "Order Food", "Order Details", "Voucher Management", "Go Back"}, //11
                             {"CUSTOMER > Signed In > Voucher Management", "Show Details", "Use Voucher", "Go Back"}, //12
                             {"ADMINISTRATOR > Show Details > Show Customers", "Show All", "By Location", "Go Back"}, //13
-                            {"RESTAURANT MANAGER > Menu Management > Show Details", "Show All", "Show by Cuisine", "Show by Code", "Show by Title", "Show by Price", "Go Back"}}; //14
+                            {"RESTAURANT MANAGER > Menu Management > Show Details", "Show All", "Show by Cuisine", "Show by Code", "Show by Title", "Show by Price", "Go Back"}, //14
+                            {"CUSTOMER > Signed In > Order Food", "Show Restaurants", "Show Restaurants Menu", "Go Back"}}; //15
 
 auto nowTime = chrono::system_clock::now();
 time_t sleepTime = chrono::system_clock::to_time_t(nowTime);
@@ -875,6 +877,29 @@ public:
         burgers[_index].showDetails();
     }
 
+    void displayRestMenu(){
+        int title[6] = {10, 30, 39, 19, 8, 15};
+        cout << boolalpha << fixed << setprecision(2);
+        cout << "\t" << char(218);
+        for(int i = 0; i < 6; i++){
+            cout << string(title[i], char(196)) << char(194);
+        }
+        cout << "\b" << char(191) << "\n\t" << char(179) << setw(title[0]) << "ItemCode " << char(179) << setw(title[1]) << "TITLE " << char(179) << setw(title[2]) << "DESCRIPTION " << char(179) << setw(title[3]) << "PRICE " << char(179) << setw(title[4]) << "DISCOUNT" << char(179) << setw(title[5]) << "DELIVERY TIME " << char(179);
+        cout << "\n\t" << char(195);
+        for(int i = 0; i < 6; i++){
+            cout << string(title[i], char(196)) << char(197);
+        }
+        cout << "\b" << char(180);
+        for(int j = 0; j < pizzas.size(); j++){
+            cout << "\n\t" << char(179) << setw(title[0]) << pizzas[j].getItemCode() << char(179) << setw(title[1]) << pizzas[j].getTitle() << char(179) << setw(title[2]) << pizzas[j].getDescription() << char(179) << setw(8) << pizzas[j].getPrice(0) << " - " << setw(8) << pizzas[j].getPrice(pizzas[j].getPrice().size()-1) << char(179) << setw(title[4]) << pizzas[j].getDiscount() << char(179) << setw(title[5]) << (to_string(pizzas[j].getPrepTime()) + " Minutes ") << char(179);
+        }
+        cout << "\n\t" << char(212);
+        for(int i = 0; i < 6; i++){
+            cout << string(title[i], char(196)) << char(193);
+        }
+        cout << "\b" << char(217) << endl;
+    }
+
     /*void modifyItem(string _ItemCode){
 
     }*/
@@ -1072,6 +1097,8 @@ public:
         isActive = true;
     }
 
+    CUSTOMER(){}
+
     void setFirstName(string _first){
         firstName = _first;
     }
@@ -1204,6 +1231,8 @@ public:
 
     RESTAURANT * getRestaurant(int _index){return &restaurants[_index];}
 
+    CUSTOMER * getCustomer(int _index){return &customers[_index];}
+
     int checkManager(string _managerID){
         if(managerLink[_managerID].length() == 0){
             return -1;
@@ -1231,6 +1260,28 @@ public:
                 setMessage("Following Customer already own an Account!");
             }
             return stoi(custEmailLink[_email]);
+        }
+    }
+
+    int checkCustomer(string _emailContact){
+        if(custEmailLink[_emailContact].length() > 0){
+            if(custEmailLink[_emailContact] != "0000"){
+                return stoi(custEmailLink[_emailContact]);
+            } else{
+                return 0;
+            }
+        } else{
+            if(custContactLink[_emailContact].length() > 0){
+                if(custEmailLink[custContactLink[_emailContact]].length() > 0){
+                    if(custEmailLink[custContactLink[_emailContact]] != "0000"){
+                        return stoi(custEmailLink[custContactLink[_emailContact]]);
+                    } else{
+                        return 0;
+                    }
+                } else{
+                    return -1;
+                }
+            }
         }
     }
 
@@ -1272,6 +1323,8 @@ public:
             return to_string(_code);
         }
     }
+
+    string getCustPassword(int _index){return customers[_index].getCustPassword();}
 
     void addRestaurant(RESTAURANT _restaurant){
         restaurants.push_back(_restaurant);
@@ -1622,6 +1675,30 @@ public:
         }
     }
 
+    string changeCustEmail(int _index, string _email){
+        if(custEmailLink[_email].length() == 0){
+            swap(custEmailLink[customers[_index].getEmailAddress()], custEmailLink[_email]);
+            custContactLink[customers[_index].getContactNumber()] = _email;
+            customers[_index].setEmailAddress(_email);
+            return "Email Change Successful!";
+        } else{
+            return "Email Address already in use on another Account!";
+        }
+        
+    }
+
+    string changeCustContact(int _index, string _contact){
+        if(custContactLink[_contact].length() == 0){
+            swap(custContactLink[customers[_index].getContactNumber()], custContactLink[_contact]);
+            custEmailLink[customers[_index].getEmailAddress()] = _contact;
+            customers[_index].setCustContactNumber(_contact);
+            return "Contact Number Change Successful!";
+        } else{
+            return "Contact Number already in use on another Email!";
+        }
+        
+    }
+
     void showCustomer(){
         gotoxy(70, 7);
         int title[10] = {6, 14, 14, 25, 15, 10, 11, 9, 6, 7};
@@ -1903,7 +1980,7 @@ int main(){
     bool scrSizeCheck, firstInput = true;
     bool isRestActive, isRestOpen, isActive, isOpen, isPaid, isApproved;
     bool daysOpen[7] = {false,false,false,false,false,false,false};
-    int fontSize = 19, menuIndex = 0, itemIndex, choice, restIndex, custIndex, intVecInput;
+    int fontSize = 19, menuIndex = 0, itemIndex, choice, restIndex, custIndex, intVecInput, cuisineIndex;
     int area, city, ordersPending, ordersCancelled, menuCount;
     int custArea, custCity, orderCount, intInput;
     int cuisine, stock, limit, prepTime;
@@ -1916,6 +1993,8 @@ int main(){
     setConsoleSize(144, 47);
     setFontSize(fontSize, 500, L"Courier New");
     SetConsoleTitle("Food-Panda");
+    //showCuisine();
+    //system("pause");
     cout << boolalpha << fixed << setprecision(2);
 
     cout << char(201) << string(142, char(205)) << char(187) << endl;
@@ -1978,6 +2057,7 @@ int main(){
     CreateAdmin:
     ADMINISTRATOR adminOb(userName, passWord);
     RESTAURANT * restOB = new RESTAURANT;
+    CUSTOMER * custOB = new CUSTOMER;
 
     MENU:
     setTitle(menu[menuIndex][0]);
@@ -2065,20 +2145,26 @@ int main(){
         cleanArea(2, 6, 143, 44);
         setMessage("Please enter Manager Credentials");
         gotoxy(36, 7);
-        cout << "Manager ID: ";
-        getline(cin, managerID);
-        gotoxy(36, 9);
-        cout << "Manager Password: ";
-        getline(cin, managerPassword);
-        restIndex = (adminOb.checkManager(managerID) - 1);
-        if((restIndex >= 0) && (adminOb.getRestPassword(restIndex) == managerPassword)){
-            setMessage("Manager Authentication Successfull!");
-            restOB = adminOb.getRestaurant(restIndex);
-            menuIndex = 7;
+        if(adminOb.getRestaurantSize() > 0){
+            cout << "Manager ID: ";
+            getline(cin, managerID);
+            gotoxy(36, 9);
+            cout << "Manager Password: ";
+            getline(cin, managerPassword);
+            restIndex = (adminOb.checkManager(managerID) - 1);
+            if((restIndex >= 0) && (adminOb.getRestPassword(restIndex) == managerPassword)){
+                setMessage("Manager Authentication Successfull!");
+                restOB = adminOb.getRestaurant(restIndex);
+                menuIndex = 7;
+            } else{
+                setMessage("Bad ID/Password!");
+                menuIndex = 0;
+                choiceString = "";
+            }
         } else{
-            setMessage("Bad ID/Password!");
             menuIndex = 0;
             choiceString = "";
+            setMessage("There is no Record of any Restaurant!");
         }
         goto MENU;
         break;
@@ -2597,8 +2683,192 @@ int main(){
         goto MENU;
         break;
 
+    case 31:
+        do{
+            cleanArea(2, 6, 143, 44);
+            gotoxy(1, 7);
+            cout << "\tEmail Address:\t";
+            getline(cin, emailAddress);
+            cout << "\tContact Number:\t";
+            getline(cin, contactNumber);
+        }while(adminOb.checkCustomer(emailAddress, contactNumber) != -1);
+        cout << "\n\tCities:\n";
+        for(int i = 0; i < cities.size(); i++){
+            cout << "\t\t" << i << ") " << cities[i][0] << endl;
+        }
+        cout << "\tChoice:\t\t";
+        cin >> city;
+        cout << "\n\tArea:\n";
+        for(int i = 1; i < cities[city].size(); i++){
+            cout << "\t\t" << i << ") " << cities[city][i] << endl;
+        }
+        cout << "\tChoice:\t\t";
+        cin >> area;
+        cin.clear();
+        cin.ignore();
+        cout << "\n\tAddress:\t";
+        getline(cin, address);
+        cout << "\n\tFirst Name:\t";
+        getline(cin, firstName);
+        cout << "\n\tLast Name:\t";
+        getline(cin, lastName);
+        cout << "\n\tPassword:\t";
+        getline(cin, passWord);
+        {
+            CUSTOMER custOb(firstName, lastName, passWord, emailAddress, contactNumber, address, area, city);
+            adminOb.addCustomer(custOb);
+        }
+        system("pause");
+        choiceString = choiceString.substr(0, (choiceString.length()-1));
+        goto MENU;
+        break;
+
     case 32:
-        menuIndex = 11;
+        cleanArea(2, 6, 143, 44);
+        setMessage("Please enter Customer Credentials");
+        gotoxy(36, 7);
+        if(adminOb.getCustomerSize() > 0){
+            cout << "Customer Email/Contact: ";
+            getline(cin, emailAddress);
+            gotoxy(36, 9);
+            cout << "Customer Password: ";
+            getline(cin, passWord);
+            custIndex = (adminOb.checkCustomer(emailAddress) - 1);
+            if((custIndex >= 0) && (adminOb.getCustPassword(custIndex) == passWord)){
+                setMessage("Customer Authentication Successfull!");
+                custOB = adminOb.getCustomer(custIndex);
+                menuIndex = 11;
+            } else{
+                setMessage("Bad Email/Contact OR Password!");
+                menuIndex = 10;
+                //choiceString = "";
+                choiceString = choiceString.substr(0, (choiceString.length()-1));
+            }
+        } else{
+            menuIndex = 10;
+            //choiceString = "";
+            choiceString = choiceString.substr(0, (choiceString.length()-1));
+            setMessage("There is no Record of any Customer!");
+        }
+        goto MENU;
+        break;
+
+    case 321:
+        cleanArea(2, 6, 143, 44);
+        gotoxy(1, 7);
+        cout << custOB->getAddress() << endl;
+        cout << custOB->getArea() << endl;
+        cout << custOB->getCity() << endl;
+        cout << custOB->getContactNumber() << endl;
+        cout << custOB->getCustomerCode() << endl;
+        cout << custOB->getCustPassword() << endl;
+        cout << custOB->getEmailAddress() << endl;
+        cout << custOB->getFirstName() << endl;
+        cout << custOB->getIsActive() << endl;
+        cout << custOB->getLastName() << endl;
+        cout << custOB->getOrderCount() << endl;
+        cout << custOB->getOrderSize() << endl;
+        //cout << custOB->getVoucherUsed() << endl;
+        cout << custOB->getWalletAmount() << endl;
+        system("pause");
+        choiceString = choiceString.substr(0, (choiceString.length()-1));
+        goto MENU;
+        break;
+
+    case 322:
+        cleanArea(2, 6, 143, 44);
+        gotoxy(1, 7);
+        cout << "\t1> Change Password\n\n\t2> Change Email Address\n\n\t3> Change Contact Number\n\n\t4> Change Location\n\n\t0> Go Back\n\n\tChoice:\t";
+        getline(cin, inputItem);
+        cleanArea(2, 6, 143, 44);
+        gotoxy(1, 7);
+        if(inputItem == "1"){
+            cout << "\tOld Password:\t\t";
+            getline(cin, passWord);
+            cout << "\n\tNew Password:\t\t";
+            getline(cin, managerPassword);
+            cout << "\n\tRetype New Password:\t";
+            getline(cin, inputItemSub);
+            if(managerPassword == inputItemSub){
+                cout << "passWord: " << passWord << "\tcust: " << custOB->getCustPassword();
+                system("pause");
+                if(passWord == custOB->getCustPassword()){
+                    custOB->setCustPassword(inputItemSub);
+                    setMessage("Password Change Successful!");
+                } else{
+                    setMessage("Wrong Password! Password Change Unsuccessful!");
+                }
+            } else{
+                setMessage("New Password not Matched!");
+            }
+        } else if(inputItem == "2"){
+            cout << "\tPassword:\t";
+            getline(cin, passWord);
+            if(passWord == custOB->getCustPassword()){
+                cout << "\n\tNew Email Address:\t";
+                getline(cin, emailAddress);
+                setMessage(adminOb.changeCustEmail(custIndex, emailAddress));
+            } else{
+                setMessage("Wrong Password Entered!");
+            }
+        } else if(inputItem == "3"){
+            cout << "\tPassword:\t";
+            getline(cin, passWord);
+            if(passWord == custOB->getCustPassword()){
+                cout << "\n\tNew Contact Number:\t";
+                getline(cin, contactNumber);
+                setMessage(adminOb.changeCustContact(custIndex, contactNumber));
+            } else{
+                setMessage("Wrong Password Entered!");
+            }
+        } else if(inputItem == "4"){
+            cout << "\tCities:\n";
+            for(int i = 0; i < cities.size(); i++){
+                cout << "\t\t" << i << ") " << cities[i][0] << endl;
+            }
+            cout << "\tChoice:\t";
+            cin >> city;
+            cout << "\n\tArea:\n";
+            for(int i = 1; i < cities[city].size(); i++){
+                cout << "\t\t" << i << ") " << cities[city][i] << endl;
+            }
+            cout << "\tChoice:\t";
+            cin >> area;
+            cin.clear();
+            cin.ignore();
+            cout << "\n\tAddress:\t";
+            getline(cin, address);
+            custOB->setCustCity(city);
+            custOB->setCustArea(area);
+            custOB->setCustAddress(address);
+            setMessage("Customer Location Changed!");
+        } else{
+            setMessage("");
+        }
+        choiceString = choiceString.substr(0, (choiceString.length()-1));
+        goto MENU;
+        break;
+
+    case 323:
+        cuisineIndex = -1;
+        cleanArea(2, 6, 143, 44);
+        gotoxy(1, 7);
+        cout << "Restaurant Code:\t";
+        getline(cin, restaurantCode);
+        if((restaurantCode.length() == 1 && restaurantCode[0] >= 48 && restaurantCode[0] < 58) || restaurantCode == "10" || restaurantCode == "11"){
+            restIndex = (stoi(restaurantCode) - 1);
+            restOB = adminOb.getRestaurant(restIndex);
+            do{
+                showCuisine(cuisineIndex);
+                cin >> cuisineIndex;
+                cin.clear();
+                cin.ignore();
+            } while(inputItem != "q");
+        }
+        
+        restOB->displayRestMenu();
+        system("pause");
+        choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
 
@@ -3078,4 +3348,17 @@ void setTitle(string message){
     cleanArea(2, 4, 143, 4);
     gotoxy(73-message.length()/2, 4);
     cout << message;
+}
+
+void showCuisine(int _index){
+    cleanArea(2, 6, 143, 44);
+    gotoxy(2,7);
+    cout << "\t" << char(218) << string(2, char(196)) << char(194) << string(14, char(196)) << char(191) << "\n\t" << char(179) << "C#" << char(179) << setw(14) << "CUISINES   " << char(179) << "\t123";
+    for(int i = 0; i < cuisineTitle.size(); i++){
+        cout << "\n\t" << char(195) << string(2, char(196)) << char(197) << string(14, char(196)) << char(180) << "\n\t" << char(179) << setw(2) << i << char(179) << setw(14) << cuisineTitle[i] << char(179);
+        if(_index == i){
+            cout << "  " << char(254);
+        }
+    }
+    cout << "\n\t" << char(192) << string(2, char(196)) << char(193) << string(14, char(196)) << char(217);
 }
