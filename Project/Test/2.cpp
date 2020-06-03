@@ -180,6 +180,7 @@ public:
 
 class ORDERITEM{
     string code;
+    int cuisine;
     string title;
     string description;
     double price;
@@ -188,9 +189,10 @@ class ORDERITEM{
     int quantity;
 
 public:
-    ORDERITEM(string _code, string _title, string _description, double _price, double _discount, int _prepTime, int _quantity){
+    ORDERITEM(int _cuisine, string _code, string _title, string _description, double _price, double _discount, int _prepTime, int _quantity){
         code = _code;
         title = _title;
+        cuisine = _cuisine;
         description = _description;
         price = _price;
         discount = _discount;
@@ -198,7 +200,10 @@ public:
         quantity = _quantity;
     }
 
+    ORDERITEM(){}
+
     string getCode(){return code;}
+    int getCuisine(){return cuisine;}
     string getTitle(){return title;}
     string getDescription(){return description;}
     double getPriceTotal(){return (price * quantity);}
@@ -450,6 +455,178 @@ public:
         price = _price;
     }
 };
+
+
+
+class ORDER{
+    string orderNumber;
+    TIMENOW orderTime;
+    vector<ORDERITEM> orderItems;
+    bool isPaid;
+    bool isApproved;
+
+public:
+    string getOrderNumber(){return orderNumber;}
+    string getDate(){return orderTime.getDate();}
+    string getTime(){return orderTime.getTime();};
+    bool getIsPaid(){return isPaid;}
+    bool getIsApproved(){return isApproved;}
+    int getOrderItemsSize(){return orderItems.size();}
+    vector<ORDERITEM> getOrderItems(){return orderItems;}
+    ORDERITEM getOrderItems(int _index){return orderItems[_index];}
+
+    void setIsPaid(bool _bool){
+        isPaid = _bool;
+    }
+
+    string createOrderNumber(){
+        if(orderItems.size() < 10){
+            return ("00" + to_string(orderItems.size()));
+        }else if(orderItems.size() < 100){
+            return ("0" + to_string(orderItems.size()));
+        }else{
+            return to_string(orderItems.size());
+        }
+    }
+
+    void addOrderItem(string _restCode, string _custCode, ORDERITEM _order){
+        _order.setCode(_restCode + _custCode + createOrderNumber());
+        orderItems.push_back(_order);
+        
+    }
+
+    int getBill(){
+        int amount = 0;
+        for(int i =0; i < orderItems.size(); i++){
+            amount += orderItems[i].getPriceTotal();
+        }
+        return amount;
+    }
+
+    int getPrepTime(){
+        int duration = 0;
+        for(int i =0; i < orderItems.size(); i++){
+            if(duration < orderItems[i].getPrepTime()){
+                duration = orderItems[i].getPrepTime();
+            }
+        }
+        return duration;
+    }
+    /*bool hasPizza(){
+        if(pizzas.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasBurgers(){
+        if(burgers.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasSandwiches(){
+        if(sandwiches.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasFastfoods(){
+        if(fastfoods.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasBarbqs(){
+        if(barbqs.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasPakistanis(){
+        if(pakistanis.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasChineses(){
+        if(chineses.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasInternationals(){
+        if(internationals.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasSeafoods(){
+        if(seafoods.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasDesserts(){
+        if(desserts.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasCakes(){
+        if(cakes.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasBeverages(){
+        if(beverages.size() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    bool hasFood(string _cuisine){
+        if((_cuisine == cuisineTitle[0]) && (hasPizza() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[1]) && (hasBurgers() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[2]) && (hasSandwiches() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[3]) && (hasFastfoods() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[4]) && (hasBarbqs() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[5]) && (hasPakistanis() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[6]) && (hasChineses() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[7]) && (hasInternationals() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[8]) && (hasSeafoods() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[9]) && (hasDesserts() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[10]) && (hasCakes() == true)){
+            return true;
+        } else if((_cuisine == cuisineTitle[11]) && (hasBeverages() == true)){
+            return true;
+        } else{
+            return false;
+        }
+    }*/
+};
+
 
 
 class RESTAURANT{
@@ -1087,6 +1264,90 @@ public:
             cout << char(193) << string(days[i].length(),char(196));
         }
         cout << char(217);
+    }
+
+    int confirmOrder(ORDER _order){
+        vector<ORDERITEM> orderItems = _order.getOrderItems();
+        for(int i = 0; i < orderItems.size(); i++){
+            int foodIndex = (stoi(orderItems[i].getCode().substr(5, 3)) - 1);
+            switch(orderItems[i].getCuisine()){
+            case 0:
+                if(orderItems[i].getQuantity() > pizzas[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 1:
+                if(orderItems[i].getQuantity() > burgers[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 2:
+                if(orderItems[i].getQuantity() > sandwiches[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 3:
+                if(orderItems[i].getQuantity() > fastfoods[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 4:
+                if(orderItems[i].getQuantity() > barbqs[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 5:
+                if(orderItems[i].getQuantity() > pakistanis[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 6:
+                if(orderItems[i].getQuantity() > chineses[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 7:
+                if(orderItems[i].getQuantity() > internationals[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 8:
+                if(orderItems[i].getQuantity() > seafoods[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 9:
+                if(orderItems[i].getQuantity() > desserts[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 10:
+                if(orderItems[i].getQuantity() > cakes[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+
+            case 11:
+                if(orderItems[i].getQuantity() > beverages[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                    return 0;
+                }
+                break;
+            
+            default:
+                break;
+            }
+        }
+
     }
 };
 
@@ -2001,134 +2262,6 @@ public:
 
 
 
-class ORDER{
-    string orderNumber;
-    TIMENOW orderTime;
-    vector<ORDERITEM> orderItems;
-    bool isPaid;
-    bool isApproved;
-
-public:
-    string getOrderNumber(){return orderNumber;}
-    string getDate(){return orderTime.getDate();}
-    string getTime(){return orderTime.getTime();};
-    bool getIsPaid(){return isPaid;}
-    bool getIsApproved(){return isApproved;}
-    /*bool hasPizza(){
-        if(pizzas.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasBurgers(){
-        if(burgers.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasSandwiches(){
-        if(sandwiches.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasFastfoods(){
-        if(fastfoods.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasBarbqs(){
-        if(barbqs.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasPakistanis(){
-        if(pakistanis.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasChineses(){
-        if(chineses.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasInternationals(){
-        if(internationals.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasSeafoods(){
-        if(seafoods.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasDesserts(){
-        if(desserts.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasCakes(){
-        if(cakes.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasBeverages(){
-        if(beverages.size() > 0){
-            return true;
-        }
-        return false;
-    }
-
-    bool hasFood(string _cuisine){
-        if((_cuisine == cuisineTitle[0]) && (hasPizza() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[1]) && (hasBurgers() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[2]) && (hasSandwiches() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[3]) && (hasFastfoods() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[4]) && (hasBarbqs() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[5]) && (hasPakistanis() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[6]) && (hasChineses() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[7]) && (hasInternationals() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[8]) && (hasSeafoods() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[9]) && (hasDesserts() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[10]) && (hasCakes() == true)){
-            return true;
-        } else if((_cuisine == cuisineTitle[11]) && (hasBeverages() == true)){
-            return true;
-        } else{
-            return false;
-        }
-    }*/
-};
-
 
 class TAXDEPARTMENT{
     string taxAdmin;
@@ -3032,6 +3165,7 @@ int main(){
             if(restIndex < adminOb.getRestaurantSize()){
                 restOB = adminOb.getRestaurant(restIndex);
                 ORDER orderOB;
+                ORDERITEM orderItemOB;
                 do{
                     showCuisine(cuisineIndex);
                     cout << "\n\n\tChoice:\t";
@@ -3065,13 +3199,50 @@ int main(){
                         if(cuisineIndex == 0){
                             PIZZA * pizzaOB = new PIZZA;
                             pizzaOB = restOB->getPizza(foodIndex);
-                            ORDERITEM orderItemOB(pizzaOB->getItemCode(), pizzaOB->getTitle(), pizzaOB->getSize(sizeIndex), pizzaOB->getPrice(sizeIndex), pizzaOB->getDiscount(), pizzaOB->getPrepTime(), quantity);
-                            //orderOB.();
+                            ORDERITEM tempOrderItemOB(0, pizzaOB->getItemCode(), pizzaOB->getTitle(), pizzaOB->getSize(sizeIndex), pizzaOB->getPrice(sizeIndex), pizzaOB->getDiscount(), pizzaOB->getPrepTime(), quantity);
+                            orderItemOB = tempOrderItemOB;
+                        } else{
+                            FOOD * foodOB = new FOOD(cuisineIndex);
+                            if(cuisineIndex == 1){
+                                foodOB = restOB->getBurger(foodIndex);
+                            } else if(cuisineIndex == 2){
+                                foodOB = restOB->getSandwich(foodIndex);
+                            } else if(cuisineIndex == 3){
+                                foodOB = restOB->getFastFood(foodIndex);
+                            } else if(cuisineIndex == 4){
+                                foodOB = restOB->getBarbq(foodIndex);
+                            } else if(cuisineIndex == 5){
+                                foodOB = restOB->getPakistani(foodIndex);
+                            } else if(cuisineIndex == 6){
+                                foodOB = restOB->getChinese(foodIndex);
+                            } else if(cuisineIndex == 7){
+                                foodOB = restOB->getInternational(foodIndex);
+                            } else if(cuisineIndex == 8){
+                                foodOB = restOB->getSeafood(foodIndex);
+                            } else if(cuisineIndex == 9){
+                                foodOB = restOB->getDessert(foodIndex);
+                            } else if(cuisineIndex == 10){
+                                foodOB = restOB->getCake(foodIndex);
+                            } else if(cuisineIndex == 11){
+                                foodOB = restOB->getBeverage(foodIndex);
+                            }
+                            ORDERITEM tempOrderItemOB(cuisineIndex, foodOB->getItemCode(), foodOB->getTitle(), "", foodOB->getPrice(), foodOB->getDiscount(), foodOB->getPrepTime(), quantity);
+                            orderItemOB = tempOrderItemOB;
                         }
-                        cout << "\n\t\t\t\t";
-                        system("pause");
+                        cout << "\n\t\t\t\tEnter \"+\" to add more Items OR \"q\" to Quit OR \"c\" to Confirm:\t";
+                        getline(cin, inputItem);
+                        if(inputItem[0] == '+'){
+                            orderOB.addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
+                        } else if(inputItem[0] == 'c'){
+                            orderOB.addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
+                            if(custOB->getWalletAmount() >= orderOB.getBill()){
+                                orderOB.setIsPaid(true);
+                            }
+                        }
+                        //cout << "\n\t\t\t\t";
+                        //system("pause");
                     }
-                } while(cuisineIndex != 12);
+                } while(cuisineIndex != 12 || inputItem[0] == 'q');
             }
         }
         system("pause");
