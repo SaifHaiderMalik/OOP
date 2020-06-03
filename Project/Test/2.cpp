@@ -479,6 +479,10 @@ public:
         isPaid = _bool;
     }
 
+    void setIsApproved(bool _bool){
+        isPaid = _bool;
+    }
+
     string createOrderNumber(){
         if(orderItems.size() < 10){
             return ("00" + to_string(orderItems.size()));
@@ -1347,7 +1351,120 @@ public:
                 break;
             }
         }
+        _order.setIsApproved(true);
+        restRevenue += _order.getBill();
+        restOrders.push_back(_order);
+        return (_order.getBill() * (-1));
+    }
 
+    int getLimit(int _cuisine, int _index){
+        switch (_cuisine){
+        case 0:
+            return pizzas[_index].getLimit();
+            break;
+        
+        case 1:
+            return burgers[_index].getLimit();
+            break;
+        
+        case 2:
+            return sandwiches[_index].getLimit();
+            break;
+
+        case 3:
+            return fastfoods[_index].getLimit();
+            break;
+
+        case 4:
+            return barbqs[_index].getLimit();
+            break;
+
+        case 5:
+            return pakistanis[_index].getLimit();
+            break;
+
+        case 6:
+            return chineses[_index].getLimit();
+            break;
+
+        case 7:
+            return internationals[_index].getLimit();
+            break;
+
+        case 8:
+            return seafoods[_index].getLimit();
+            break;
+
+        case 9:
+            return desserts[_index].getLimit();
+            break;
+
+        case 10:
+            return cakes[_index].getLimit();
+            break;
+
+        case 11:
+            return beverages[_index].getLimit();
+            break;
+        
+        default:
+            break;
+        }
+    }
+
+    int getStock(int _cuisine, int _index){
+        switch (_cuisine){
+        case 0:
+            return pizzas[_index].getStock();
+            break;
+        
+        case 1:
+            return burgers[_index].getStock();
+            break;
+        
+        case 2:
+            return sandwiches[_index].getStock();
+            break;
+
+        case 3:
+            return fastfoods[_index].getStock();
+            break;
+
+        case 4:
+            return barbqs[_index].getStock();
+            break;
+
+        case 5:
+            return pakistanis[_index].getStock();
+            break;
+
+        case 6:
+            return chineses[_index].getStock();
+            break;
+
+        case 7:
+            return internationals[_index].getStock();
+            break;
+
+        case 8:
+            return seafoods[_index].getStock();
+            break;
+
+        case 9:
+            return desserts[_index].getStock();
+            break;
+
+        case 10:
+            return cakes[_index].getStock();
+            break;
+
+        case 11:
+            return beverages[_index].getStock();
+            break;
+        
+        default:
+            break;
+        }
     }
 };
 
@@ -1456,6 +1573,17 @@ public:
             return ("Wallet ReCharge Successful! Amount is " + to_string(_value));
         } else if(_value < 0){
             return "Wallet ReCharge Unsuccessful! Voucher Expired!";
+        } else{
+            return "Wallet ReCharge Unsuccessful! Voucher Invalid!";
+        }
+    }
+
+    string payOrder(int _value){
+        walletAmount += _value;
+        if(_value < 0){
+            return "Order Completed Successfully!";
+        } else if(_value = 0){
+            return "Insufficient Item ";
         } else{
             return "Wallet ReCharge Unsuccessful! Voucher Invalid!";
         }
@@ -3179,6 +3307,7 @@ int main(){
                         restOB->displayRestMenu(cuisineIndex);
                         cout << "\n\n\t\t\t\tChoice:\t";
                         getline(cin, itemCode);
+                        foodIndex = (stoi(itemCode.substr(5, 3)) - 1);
                         if(cuisineIndex == 0){
                             PIZZA * pizzaOB = new PIZZA;
                             pizzaOB = restOB->getPizza(foodIndex);
@@ -3191,58 +3320,62 @@ int main(){
                                 }
                             }
                         }
-                        cout << "\n\t\t\t\tQuantity:\t";
+                        cout << "\n\t\t\t\tMax Limit:\t" << restOB->getLimit(cuisineIndex, foodIndex) << "\t\tStock Available:\t" << restOB->getStock(cuisineIndex, foodIndex) << "\n\t\t\t\tQuantity:\t";
                         cin >> quantity;
                         cin.clear();
                         cin.ignore();
-                        foodIndex = (stoi(itemCode.substr(5, 3)) - 1);
-                        if(cuisineIndex == 0){
-                            PIZZA * pizzaOB = new PIZZA;
-                            pizzaOB = restOB->getPizza(foodIndex);
-                            ORDERITEM tempOrderItemOB(0, pizzaOB->getItemCode(), pizzaOB->getTitle(), pizzaOB->getSize(sizeIndex), pizzaOB->getPrice(sizeIndex), pizzaOB->getDiscount(), pizzaOB->getPrepTime(), quantity);
-                            orderItemOB = tempOrderItemOB;
+                        if(quantity <= restOB->getLimit(cuisineIndex, foodIndex) && quantity <= restOB->getStock(cuisineIndex, foodIndex)){
+                            if(cuisineIndex == 0){
+                                PIZZA * pizzaOB = new PIZZA;
+                                pizzaOB = restOB->getPizza(foodIndex);
+                                ORDERITEM tempOrderItemOB(0, pizzaOB->getItemCode(), pizzaOB->getTitle(), pizzaOB->getSize(sizeIndex), pizzaOB->getPrice(sizeIndex), pizzaOB->getDiscount(), pizzaOB->getPrepTime(), quantity);
+                                orderItemOB = tempOrderItemOB;
+                            } else{
+                                FOOD * foodOB = new FOOD(cuisineIndex);
+                                if(cuisineIndex == 1){
+                                    foodOB = restOB->getBurger(foodIndex);
+                                } else if(cuisineIndex == 2){
+                                    foodOB = restOB->getSandwich(foodIndex);
+                                } else if(cuisineIndex == 3){
+                                    foodOB = restOB->getFastFood(foodIndex);
+                                } else if(cuisineIndex == 4){
+                                    foodOB = restOB->getBarbq(foodIndex);
+                                } else if(cuisineIndex == 5){
+                                    foodOB = restOB->getPakistani(foodIndex);
+                                } else if(cuisineIndex == 6){
+                                    foodOB = restOB->getChinese(foodIndex);
+                                } else if(cuisineIndex == 7){
+                                    foodOB = restOB->getInternational(foodIndex);
+                                } else if(cuisineIndex == 8){
+                                    foodOB = restOB->getSeafood(foodIndex);
+                                } else if(cuisineIndex == 9){
+                                    foodOB = restOB->getDessert(foodIndex);
+                                } else if(cuisineIndex == 10){
+                                    foodOB = restOB->getCake(foodIndex);
+                                } else if(cuisineIndex == 11){
+                                    foodOB = restOB->getBeverage(foodIndex);
+                                }
+                                ORDERITEM tempOrderItemOB(cuisineIndex, foodOB->getItemCode(), foodOB->getTitle(), "", foodOB->getPrice(), foodOB->getDiscount(), foodOB->getPrepTime(), quantity);
+                                orderItemOB = tempOrderItemOB;
+                            }
+                            cout << "\n\t\t\t\tEnter \"+\" to add more Items OR \"q\" to Quit OR \"c\" to Confirm:\t";
+                            getline(cin, inputItem);
+                            if(inputItem[0] == '+'){
+                                orderOB.addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
+                            } else if(inputItem[0] == 'c'){
+                                orderOB.addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
+                                if(custOB->getWalletAmount() >= orderOB.getBill()){
+                                    orderOB.setIsPaid(true);
+                                    custOB->chargeWallet(restOB->confirmOrder(orderOB));
+                                } else{
+                                    setMessage("Insufficient Funds to Complete Order! Please Recharge & Reorder.");
+                                }
+                            }
                         } else{
-                            FOOD * foodOB = new FOOD(cuisineIndex);
-                            if(cuisineIndex == 1){
-                                foodOB = restOB->getBurger(foodIndex);
-                            } else if(cuisineIndex == 2){
-                                foodOB = restOB->getSandwich(foodIndex);
-                            } else if(cuisineIndex == 3){
-                                foodOB = restOB->getFastFood(foodIndex);
-                            } else if(cuisineIndex == 4){
-                                foodOB = restOB->getBarbq(foodIndex);
-                            } else if(cuisineIndex == 5){
-                                foodOB = restOB->getPakistani(foodIndex);
-                            } else if(cuisineIndex == 6){
-                                foodOB = restOB->getChinese(foodIndex);
-                            } else if(cuisineIndex == 7){
-                                foodOB = restOB->getInternational(foodIndex);
-                            } else if(cuisineIndex == 8){
-                                foodOB = restOB->getSeafood(foodIndex);
-                            } else if(cuisineIndex == 9){
-                                foodOB = restOB->getDessert(foodIndex);
-                            } else if(cuisineIndex == 10){
-                                foodOB = restOB->getCake(foodIndex);
-                            } else if(cuisineIndex == 11){
-                                foodOB = restOB->getBeverage(foodIndex);
-                            }
-                            ORDERITEM tempOrderItemOB(cuisineIndex, foodOB->getItemCode(), foodOB->getTitle(), "", foodOB->getPrice(), foodOB->getDiscount(), foodOB->getPrepTime(), quantity);
-                            orderItemOB = tempOrderItemOB;
+                            setMessage("Order Quantity Exceeds Stock/Limit!");
                         }
-                        cout << "\n\t\t\t\tEnter \"+\" to add more Items OR \"q\" to Quit OR \"c\" to Confirm:\t";
-                        getline(cin, inputItem);
-                        if(inputItem[0] == '+'){
-                            orderOB.addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
-                        } else if(inputItem[0] == 'c'){
-                            orderOB.addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
-                            if(custOB->getWalletAmount() >= orderOB.getBill()){
-                                orderOB.setIsPaid(true);
-                            }
-                        }
-                        //cout << "\n\t\t\t\t";
-                        //system("pause");
                     }
-                } while(cuisineIndex != 12 || inputItem[0] == 'q');
+                } while(inputItem[0] != 'q' || inputItem[0] != 'c' || cuisineIndex != 12);
             }
         }
         system("pause");
