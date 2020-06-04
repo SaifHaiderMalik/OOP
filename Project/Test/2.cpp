@@ -222,6 +222,7 @@ public:
     void setDiscountPercent(double _discount){discount = _discount;}
     void setPrepTime(int _time){prepTime = _time;}
     void setQuantity(int _quantity){quantity = _quantity;}
+    void addQuantity(int _quantity){quantity += _quantity;}
 };
 
 
@@ -483,25 +484,23 @@ public:
         isPaid = _bool;
     }
 
-    string createOrderNumber(){
-        if(orderItems.size() < 10){
-            return ("00" + to_string(orderItems.size()));
-        }else if(orderItems.size() < 100){
-            return ("0" + to_string(orderItems.size()));
-        }else{
-            return to_string(orderItems.size());
-        }
-    }
+    void setOrderNumber(string _orderNumber){orderNumber = _orderNumber;}
+
+    
 
     void addOrderItem(string _restCode, string _custCode, ORDERITEM _order){
-        _order.setCode(_restCode + _custCode + createOrderNumber());
+        for(int i = 0; i < orderItems.size(); i++){
+            if(_order.getCode() == orderItems[i].getCode()){
+                orderItems[i].addQuantity(_order.getQuantity());
+                return;
+            }
+        }
         orderItems.push_back(_order);
-        
     }
 
     int getBill(){
         int amount = 0;
-        for(int i =0; i < orderItems.size(); i++){
+        for(int i = 0; i < orderItems.size(); i++){
             amount += orderItems[i].getPriceTotal();
         }
         return amount;
@@ -832,6 +831,36 @@ public:
         }
     }
 
+    bool hasFood(int _cuisine){
+        if((_cuisine == 0) && (hasPizza() == true)){
+            return true;
+        } else if((_cuisine == 1) && (hasBurgers() == true)){
+            return true;
+        } else if((_cuisine == 2) && (hasSandwiches() == true)){
+            return true;
+        } else if((_cuisine == 3) && (hasFastfoods() == true)){
+            return true;
+        } else if((_cuisine == 4) && (hasBarbqs() == true)){
+            return true;
+        } else if((_cuisine == 5) && (hasPakistanis() == true)){
+            return true;
+        } else if((_cuisine == 6) && (hasChineses() == true)){
+            return true;
+        } else if((_cuisine == 7) && (hasInternationals() == true)){
+            return true;
+        } else if((_cuisine == 8) && (hasSeafoods() == true)){
+            return true;
+        } else if((_cuisine == 9) && (hasDesserts() == true)){
+            return true;
+        } else if((_cuisine == 10) && (hasCakes() == true)){
+            return true;
+        } else if((_cuisine == 11) && (hasBeverages() == true)){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     void getDaysOpen(){
         for(int i = 0; i < 7; i++){
             if(daysOpen[i] == true){
@@ -1089,7 +1118,117 @@ public:
                     cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << pizzas[j].getItemCode() << char(179) << setw(title[1]) << pizzas[j].getTitle() << char(179) << setw(title[2]) << pizzas[j].getDescription() << char(179) << setw(8) << pizzas[j].getPrice(0) << " - " << setw(8) << pizzas[j].getPrice(pizzas[j].getPrice().size()-1) << char(179) << setw(title[4]) << pizzas[j].getDiscount() << char(179) << setw(title[5]) << (to_string(pizzas[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
-                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[0] << char(179);
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 1:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < burgers.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << burgers[j].getItemCode() << char(179) << setw(title[1]) << burgers[j].getTitle() << char(179) << setw(title[2]) << burgers[j].getDescription() << char(179) << setw(8) << burgers[j].getPrice() << " - " << setw(8) << burgers[j].getPrice() << char(179) << setw(title[4]) << burgers[j].getDiscount() << char(179) << setw(title[5]) << (to_string(burgers[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 2:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < sandwiches.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << sandwiches[j].getItemCode() << char(179) << setw(title[1]) << sandwiches[j].getTitle() << char(179) << setw(title[2]) << sandwiches[j].getDescription() << char(179) << setw(8) << sandwiches[j].getPrice() << " - " << setw(8) << sandwiches[j].getPrice() << char(179) << setw(title[4]) << sandwiches[j].getDiscount() << char(179) << setw(title[5]) << (to_string(sandwiches[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 3:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < fastfoods.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << fastfoods[j].getItemCode() << char(179) << setw(title[1]) << fastfoods[j].getTitle() << char(179) << setw(title[2]) << fastfoods[j].getDescription() << char(179) << setw(8) << fastfoods[j].getPrice() << " - " << setw(8) << fastfoods[j].getPrice() << char(179) << setw(title[4]) << fastfoods[j].getDiscount() << char(179) << setw(title[5]) << (to_string(fastfoods[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 4:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < barbqs.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << barbqs[j].getItemCode() << char(179) << setw(title[1]) << barbqs[j].getTitle() << char(179) << setw(title[2]) << barbqs[j].getDescription() << char(179) << setw(8) << barbqs[j].getPrice() << " - " << setw(8) << barbqs[j].getPrice() << char(179) << setw(title[4]) << barbqs[j].getDiscount() << char(179) << setw(title[5]) << (to_string(barbqs[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 5:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < pakistanis.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << pakistanis[j].getItemCode() << char(179) << setw(title[1]) << pakistanis[j].getTitle() << char(179) << setw(title[2]) << pakistanis[j].getDescription() << char(179) << setw(8) << pakistanis[j].getPrice() << " - " << setw(8) << pakistanis[j].getPrice() << char(179) << setw(title[4]) << pakistanis[j].getDiscount() << char(179) << setw(title[5]) << (to_string(pakistanis[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 6:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < chineses.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << chineses[j].getItemCode() << char(179) << setw(title[1]) << chineses[j].getTitle() << char(179) << setw(title[2]) << chineses[j].getDescription() << char(179) << setw(8) << chineses[j].getPrice() << " - " << setw(8) << chineses[j].getPrice() << char(179) << setw(title[4]) << chineses[j].getDiscount() << char(179) << setw(title[5]) << (to_string(chineses[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 7:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < internationals.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << internationals[j].getItemCode() << char(179) << setw(title[1]) << internationals[j].getTitle() << char(179) << setw(title[2]) << internationals[j].getDescription() << char(179) << setw(8) << internationals[j].getPrice() << " - " << setw(8) << internationals[j].getPrice() << char(179) << setw(title[4]) << internationals[j].getDiscount() << char(179) << setw(title[5]) << (to_string(internationals[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 8:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < seafoods.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << seafoods[j].getItemCode() << char(179) << setw(title[1]) << seafoods[j].getTitle() << char(179) << setw(title[2]) << seafoods[j].getDescription() << char(179) << setw(8) << seafoods[j].getPrice() << " - " << setw(8) << seafoods[j].getPrice() << char(179) << setw(title[4]) << seafoods[j].getDiscount() << char(179) << setw(title[5]) << (to_string(seafoods[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 9:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < desserts.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << desserts[j].getItemCode() << char(179) << setw(title[1]) << desserts[j].getTitle() << char(179) << setw(title[2]) << desserts[j].getDescription() << char(179) << setw(8) << desserts[j].getPrice() << " - " << setw(8) << desserts[j].getPrice() << char(179) << setw(title[4]) << desserts[j].getDiscount() << char(179) << setw(title[5]) << (to_string(desserts[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 10:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < cakes.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << cakes[j].getItemCode() << char(179) << setw(title[1]) << cakes[j].getTitle() << char(179) << setw(title[2]) << cakes[j].getDescription() << char(179) << setw(8) << cakes[j].getPrice() << " - " << setw(8) << cakes[j].getPrice() << char(179) << setw(title[4]) << cakes[j].getDiscount() << char(179) << setw(title[5]) << (to_string(cakes[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
+            }
+            break;
+
+        case 11:
+            if(hasFood(cuisineTitle[_cuisine]) == true){
+                for(int j = 0; j < beverages.size(); j++){
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << beverages[j].getItemCode() << char(179) << setw(title[1]) << beverages[j].getTitle() << char(179) << setw(title[2]) << beverages[j].getDescription() << char(179) << setw(8) << beverages[j].getPrice() << " - " << setw(8) << beverages[j].getPrice() << char(179) << setw(title[4]) << beverages[j].getDiscount() << char(179) << setw(title[5]) << (to_string(beverages[j].getPrepTime()) + " Minutes ") << char(179);
+                }
+            } else{
+                cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
             }
             break;
         
@@ -1270,9 +1409,11 @@ public:
         cout << char(217);
     }
 
-    int confirmOrder(ORDER _order){
+    int confirmOrder(ORDER &_order){
+        cout << _order.getIsPaid() << endl;
         vector<ORDERITEM> orderItems = _order.getOrderItems();
         for(int i = 0; i < orderItems.size(); i++){
+            cout << orderItems[i].getQuantity() << ",";
             int foodIndex = (stoi(orderItems[i].getCode().substr(5, 3)) - 1);
             switch(orderItems[i].getCuisine()){
             case 0:
@@ -1282,67 +1423,67 @@ public:
                 break;
 
             case 1:
-                if(orderItems[i].getQuantity() > burgers[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > burgers[foodIndex].getLimit() || orderItems[i].getQuantity() > burgers[foodIndex].getStock()){
                     return 0;
                 }
                 break;
 
             case 2:
-                if(orderItems[i].getQuantity() > sandwiches[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > sandwiches[foodIndex].getLimit() || orderItems[i].getQuantity() > sandwiches[foodIndex].getStock()){
                     return 0;
                 }
                 break;
 
             case 3:
-                if(orderItems[i].getQuantity() > fastfoods[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > fastfoods[foodIndex].getLimit() || orderItems[i].getQuantity() > fastfoods[foodIndex].getStock()){
                     return 0;
                 }
                 break;
 
             case 4:
-                if(orderItems[i].getQuantity() > barbqs[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > barbqs[foodIndex].getLimit() || orderItems[i].getQuantity() > barbqs[foodIndex].getStock()){
                     return 0;
                 }
                 break;
 
             case 5:
-                if(orderItems[i].getQuantity() > pakistanis[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > pakistanis[foodIndex].getLimit() || orderItems[i].getQuantity() > pakistanis[foodIndex].getStock()){
                     return 0;
                 }
                 break;
 
             case 6:
-                if(orderItems[i].getQuantity() > chineses[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > chineses[foodIndex].getLimit() || orderItems[i].getQuantity() > chineses[foodIndex].getStock()){
                     return 0;
                 }
                 break;
 
             case 7:
-                if(orderItems[i].getQuantity() > internationals[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > internationals[foodIndex].getLimit() || orderItems[i].getQuantity() > internationals[foodIndex].getStock()){
                     return 0;
                 }
                 break;
 
             case 8:
-                if(orderItems[i].getQuantity() > seafoods[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > seafoods[foodIndex].getLimit() || orderItems[i].getQuantity() > seafoods[foodIndex].getStock()){
                     return 0;
                 }
                 break;
 
             case 9:
-                if(orderItems[i].getQuantity() > desserts[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > desserts[foodIndex].getLimit() || orderItems[i].getQuantity() > desserts[foodIndex].getStock()){
                     return 0;
                 }
                 break;
 
             case 10:
-                if(orderItems[i].getQuantity() > cakes[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > cakes[foodIndex].getLimit() || orderItems[i].getQuantity() > cakes[foodIndex].getStock()){
                     return 0;
                 }
                 break;
 
             case 11:
-                if(orderItems[i].getQuantity() > beverages[foodIndex].getLimit() || orderItems[i].getQuantity() > pizzas[foodIndex].getStock()){
+                if(orderItems[i].getQuantity() > beverages[foodIndex].getLimit() || orderItems[i].getQuantity() > beverages[foodIndex].getStock()){
                     return 0;
                 }
                 break;
@@ -1351,6 +1492,7 @@ public:
                 break;
             }
         }
+        cout << "Big Pass" << endl;
         _order.setIsApproved(true);
         restRevenue += _order.getBill();
         restOrders.push_back(_order);
@@ -1496,8 +1638,8 @@ public:
         custAddress = _address;
         custArea = _area;
         custCity = _city;
-        walletAmount = 0;
-        orderCount = 0;
+        walletAmount = 10000;
+        //orderCount = 0;
         isActive = true;
     }
 
@@ -1582,11 +1724,30 @@ public:
         walletAmount += _value;
         if(_value < 0){
             return "Order Completed Successfully!";
-        } else if(_value = 0){
+        } else if(_value == 0){
             return "Insufficient Item ";
         } else{
-            return "Wallet ReCharge Unsuccessful! Voucher Invalid!";
+            return "Something went wrong!";
         }
+    }
+
+    string createOrderNumber(){
+        if(custOrders.size() < 10){
+            return ("00" + to_string(custOrders.size()));
+        }else if(custOrders.size() < 100){
+            return ("0" + to_string(custOrders.size()));
+        }else{
+            return to_string(custOrders.size());
+        }
+    }
+
+    void addOrder(ORDER _order, string _restCode){
+        _order.setOrderNumber(_restCode + customerCode + createOrderNumber());
+        custOrders.push_back(_order);
+    }
+
+    ORDER * getNewOrder(){
+        return &custOrders[(custOrders.size() - 1)];
     }
 };
 
@@ -2079,7 +2240,9 @@ public:
     }
 
     int cashVoucher(string _voucher){
-        return voucherValueLink[_voucher];
+        int amount = voucherValueLink[_voucher];
+        voucherValueLink[_voucher] = -1;
+        return amount;
     }
 
     string showVouchers(){
@@ -2487,6 +2650,7 @@ int main(){
     ADMINISTRATOR adminOb(userName, passWord);
     RESTAURANT * restOB = new RESTAURANT;
     CUSTOMER * custOB = new CUSTOMER;
+    ORDER * orderOB = new ORDER;
 
     MENU:
     setTitle(menu[menuIndex][0]);
@@ -2885,7 +3049,7 @@ int main(){
             cin.clear();
             cin.ignore();
             if(inputItem != "0"){
-                cout << "\n\tPrice (per Unit/Pound):\t\t";
+                cout << "\n\tPrice (per Unit/Pound):\t";
                 cin >> price;
                 cin.clear();
                 cin.ignore();
@@ -3285,98 +3449,131 @@ int main(){
     case 323:
         cleanArea(2, 6, 143, 44);
         gotoxy(1, 7);
-        cout << "Restaurant Code:\t";
+        cout << "\tRestaurant Code:\t";
         getline(cin, restaurantCode);
         if(restaurantCode.length() == 3){
             cuisineIndex = -1;
             restIndex = (stoi(restaurantCode) - 1);
             if(restIndex < adminOb.getRestaurantSize()){
                 restOB = adminOb.getRestaurant(restIndex);
-                ORDER orderOB;
-                ORDERITEM orderItemOB;
-                do{
-                    showCuisine(cuisineIndex);
-                    cout << "\n\n\tChoice:\t";
-                    cin >> cuisineIndex;
-                    cin.clear();
-                    cin.ignore();
-                    if(cuisineIndex >= 0 && cuisineIndex < 12){
+                if(custOB->getCity() == restOB->getCity()){
+                    ORDER tempOrder;
+                    custOB->addOrder(tempOrder, restOB->getCode());
+                    orderOB = custOB->getNewOrder();
+                    ORDERITEM orderItemOB;
+                    do{
                         showCuisine(cuisineIndex);
-                        cleanArea(30, 6, 143, 44);
-                        gotoxy(1, 7);
-                        restOB->displayRestMenu(cuisineIndex);
-                        cout << "\n\n\t\t\t\tChoice:\t";
-                        getline(cin, itemCode);
-                        foodIndex = (stoi(itemCode.substr(5, 3)) - 1);
-                        if(cuisineIndex == 0){
-                            PIZZA * pizzaOB = new PIZZA;
-                            pizzaOB = restOB->getPizza(foodIndex);
-                            cout << "\n\t\t\t\tSizes Available:\t";
-                            for(int i = 0; i < pizzaOB->getSizeLength(); i++){
-                                cout << "\n\t\t\t\t\t" << pizzaOB->getSize(i) << ":\t" << pizzaOB->getPrice(i);
-                                if(i == (pizzaOB->getSizeLength() - 1)){
-                                    cout << "\n\t\t\t\tChoice:\t";
-                                    cin >> sizeIndex;
-                                }
-                            }
-                        }
-                        cout << "\n\t\t\t\tMax Limit:\t" << restOB->getLimit(cuisineIndex, foodIndex) << "\t\tStock Available:\t" << restOB->getStock(cuisineIndex, foodIndex) << "\n\t\t\t\tQuantity:\t";
-                        cin >> quantity;
+                        cout << "\n\n\tChoice:\t";
+                        cin >> cuisineIndex;
                         cin.clear();
                         cin.ignore();
-                        if(quantity <= restOB->getLimit(cuisineIndex, foodIndex) && quantity <= restOB->getStock(cuisineIndex, foodIndex)){
+                        if(cuisineIndex >= 0 && cuisineIndex < 12){
+                            showCuisine(cuisineIndex);
+                            cleanArea(33, 6, 143, 44);
+                            gotoxy(1, 7);
+                            if(restOB->hasFood(cuisineIndex) == false){
+                                //cuisineIndex = -12;
+                                goto ORDEREND;
+                            } else{
+                                restOB->displayRestMenu(cuisineIndex);
+                                cout << "\n\n\t\t\t\tChoice:\t";
+                                getline(cin, itemCode);
+                                foodIndex = (stoi(itemCode.substr(5, 3)) - 1);
+                            }
                             if(cuisineIndex == 0){
                                 PIZZA * pizzaOB = new PIZZA;
                                 pizzaOB = restOB->getPizza(foodIndex);
-                                ORDERITEM tempOrderItemOB(0, pizzaOB->getItemCode(), pizzaOB->getTitle(), pizzaOB->getSize(sizeIndex), pizzaOB->getPrice(sizeIndex), pizzaOB->getDiscount(), pizzaOB->getPrepTime(), quantity);
-                                orderItemOB = tempOrderItemOB;
-                            } else{
-                                FOOD * foodOB = new FOOD(cuisineIndex);
-                                if(cuisineIndex == 1){
-                                    foodOB = restOB->getBurger(foodIndex);
-                                } else if(cuisineIndex == 2){
-                                    foodOB = restOB->getSandwich(foodIndex);
-                                } else if(cuisineIndex == 3){
-                                    foodOB = restOB->getFastFood(foodIndex);
-                                } else if(cuisineIndex == 4){
-                                    foodOB = restOB->getBarbq(foodIndex);
-                                } else if(cuisineIndex == 5){
-                                    foodOB = restOB->getPakistani(foodIndex);
-                                } else if(cuisineIndex == 6){
-                                    foodOB = restOB->getChinese(foodIndex);
-                                } else if(cuisineIndex == 7){
-                                    foodOB = restOB->getInternational(foodIndex);
-                                } else if(cuisineIndex == 8){
-                                    foodOB = restOB->getSeafood(foodIndex);
-                                } else if(cuisineIndex == 9){
-                                    foodOB = restOB->getDessert(foodIndex);
-                                } else if(cuisineIndex == 10){
-                                    foodOB = restOB->getCake(foodIndex);
-                                } else if(cuisineIndex == 11){
-                                    foodOB = restOB->getBeverage(foodIndex);
+                                cout << "\n\t\t\t\tSizes Available:\t";
+                                for(int i = 0; i < pizzaOB->getSizeLength(); i++){
+                                    cout << "\n\t\t\t\t\t" << i << "> " << pizzaOB->getSize(i) << ":\t" << pizzaOB->getPrice(i);
+                                    if(i == (pizzaOB->getSizeLength() - 1)){
+                                        cout << "\n\t\t\t\tChoice:\t";
+                                        cin >> sizeIndex;
+                                    }
                                 }
-                                ORDERITEM tempOrderItemOB(cuisineIndex, foodOB->getItemCode(), foodOB->getTitle(), "", foodOB->getPrice(), foodOB->getDiscount(), foodOB->getPrepTime(), quantity);
-                                orderItemOB = tempOrderItemOB;
                             }
-                            cout << "\n\t\t\t\tEnter \"+\" to add more Items OR \"q\" to Quit OR \"c\" to Confirm:\t";
-                            getline(cin, inputItem);
-                            if(inputItem[0] == '+'){
-                                orderOB.addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
-                            } else if(inputItem[0] == 'c'){
-                                orderOB.addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
-                                if(custOB->getWalletAmount() >= orderOB.getBill()){
-                                    orderOB.setIsPaid(true);
-                                    custOB->chargeWallet(restOB->confirmOrder(orderOB));
+                            cout << "\n\t\t\t\tMax Limit:\t" << restOB->getLimit(cuisineIndex, foodIndex) << "\t\tStock Available:\t" << restOB->getStock(cuisineIndex, foodIndex) << "\n\t\t\t\tQuantity:\t";
+                            cin >> quantity;
+                            cin.clear();
+                            cin.ignore();
+                            if(quantity <= restOB->getLimit(cuisineIndex, foodIndex) && quantity <= restOB->getStock(cuisineIndex, foodIndex)){
+                                if(cuisineIndex == 0){
+                                    PIZZA * pizzaOB = new PIZZA;
+                                    pizzaOB = restOB->getPizza(foodIndex);
+                                    ORDERITEM tempOrderItemOB(0, pizzaOB->getItemCode(), pizzaOB->getTitle(), pizzaOB->getSize(sizeIndex), pizzaOB->getPrice(sizeIndex), pizzaOB->getDiscount(), pizzaOB->getPrepTime(), quantity);
+                                    orderItemOB = tempOrderItemOB;
                                 } else{
-                                    setMessage("Insufficient Funds to Complete Order! Please Recharge & Reorder.");
+                                    FOOD * foodOB = new FOOD(cuisineIndex);
+                                    if(cuisineIndex == 1){
+                                        foodOB = restOB->getBurger(foodIndex);
+                                    } else if(cuisineIndex == 2){
+                                        foodOB = restOB->getSandwich(foodIndex);
+                                    } else if(cuisineIndex == 3){
+                                        foodOB = restOB->getFastFood(foodIndex);
+                                    } else if(cuisineIndex == 4){
+                                        foodOB = restOB->getBarbq(foodIndex);
+                                    } else if(cuisineIndex == 5){
+                                        foodOB = restOB->getPakistani(foodIndex);
+                                    } else if(cuisineIndex == 6){
+                                        foodOB = restOB->getChinese(foodIndex);
+                                    } else if(cuisineIndex == 7){
+                                        foodOB = restOB->getInternational(foodIndex);
+                                    } else if(cuisineIndex == 8){
+                                        foodOB = restOB->getSeafood(foodIndex);
+                                    } else if(cuisineIndex == 9){
+                                        foodOB = restOB->getDessert(foodIndex);
+                                    } else if(cuisineIndex == 10){
+                                        foodOB = restOB->getCake(foodIndex);
+                                    } else if(cuisineIndex == 11){
+                                        foodOB = restOB->getBeverage(foodIndex);
+                                    }
+                                    ORDERITEM tempOrderItemOB(cuisineIndex, foodOB->getItemCode(), foodOB->getTitle(), "", foodOB->getPrice(), foodOB->getDiscount(), foodOB->getPrepTime(), quantity);
+                                    orderItemOB = tempOrderItemOB;
                                 }
+                                cout << "\n\t\t\t\tEnter \"+\" to add more Items OR \"q\" to Quit OR \"c\" to Confirm:\t";
+                                getline(cin, inputItem);
+                                if(inputItem[0] == '+'){
+                                    orderOB->addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
+                                } else if(inputItem[0] == 'c'){
+                                    cout << "pass1" << endl;
+                                    system("pause");
+                                    orderOB->addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
+                                    cout << "pass2" << endl;
+                                    system("pause");
+                                    if(custOB->getWalletAmount() >= orderOB->getBill()){
+                                        cout << "pass3" << endl;
+                                        system("pause");
+                                        orderOB->setIsPaid(true);
+                                        cout << "pass4" << endl;
+                                        system("pause");
+                                        setMessage(custOB->payOrder(restOB->confirmOrder(*orderOB)));
+                                        cout << "pass5" << endl;
+                                        system("pause");
+                                    } else{
+                                        setMessage("Insufficient Funds to Complete Order! Please Recharge & Reorder.");
+                                    }
+                                    cuisineIndex = 12;
+                                } else if(inputItem[0] == 'q'){
+                                    cuisineIndex = 12;
+                                    setMessage("Exit.");
+                                }
+                            } else{
+                                setMessage("Order Quantity Exceeds Stock/Limit!");
                             }
-                        } else{
-                            setMessage("Order Quantity Exceeds Stock/Limit!");
                         }
-                    }
-                } while(inputItem[0] != 'q' || inputItem[0] != 'c' || cuisineIndex != 12);
+                        ORDEREND:
+                        if(cuisineIndex == -1){
+                            setMessage("Restaurant does not offer this Cuisine");
+                        }
+                    } while(cuisineIndex >= 0 && cuisineIndex < 12);
+                } else{
+                    setMessage("Restaurant: " + restOB->getTitle() + "do not offer services in " + custOB->getCity());
+                }
+            } else{
+                setMessage("Invalid Restaurant Code: " + restaurantCode);
             }
+        } else{
+            setMessage("You Entered Invalid Restaurant Code!");
         }
         system("pause");
         choiceString = choiceString.substr(0, (choiceString.length()-1));
