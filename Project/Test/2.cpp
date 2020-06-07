@@ -23,7 +23,8 @@
 using namespace std;
 
 void cleanArea(int _x1, int _y1, int _x2, int _y2);
-void setMessage(string message);
+//void setMessage(string message);
+template<class T> void setMessage(T message);
 void setTitle(string message);
 void setContinue();
 void clearMain();
@@ -55,7 +56,7 @@ vector<vector<string>> cities{{"Islamabad", "Area 1"},
                               {"Lahore", "Area 1", "Area 2", "Area 3", "Area 4"},
                               {"Peshawar", "Area 1", "Area 2", "Area 3"},
                               {"Queta", "Area 1", "Area 2"}};
-vector<vector<vector<int>>> distance {{{5}},
+vector<vector<vector<int>>> tDistance {{{5}},
                                       {{5,15,25,25,15},{15,5,15,25,25},{25,15,5,15,25},{25,25,15,5,15},{15,25,25,15,5}},
                                       {{5,15,25,15},{15,5,15,25},{25,15,5,15},{15,25,15,5}},
                                       {{5,15,15},{15,5,15},{15,15,5}},
@@ -79,6 +80,7 @@ vector<vector<string>> menu{{"MAIN  MENU", "Administrator", "Restaurant Manager"
                             {"CUSTOMER > Signed In > Order Food", "Show Restaurants", "Show Restaurant Menu (Order Food)", "Go Back"}, //15
                             {"CUSTOMER > Signed In > Order Food > Show Restaurants", "Show All", "By Cuisine", "By Location", "Go Back"}}; //16
 
+/*
 auto nowTime = chrono::system_clock::now();
 time_t sleepTime = chrono::system_clock::to_time_t(nowTime);
 tm myLocalTime = *localtime(&sleepTime);
@@ -89,7 +91,8 @@ int year = myLocalTime.tm_year;
 int hours = myLocalTime.tm_hour;
 int minutes = myLocalTime.tm_min;
 int seconds = myLocalTime.tm_sec;
-
+*/
+/*
 void newTime(){
     nowTime = chrono::system_clock::now();
     sleepTime = chrono::system_clock::to_time_t(nowTime);
@@ -101,8 +104,17 @@ void newTime(){
     minutes = myLocalTime.tm_min;
     seconds = myLocalTime.tm_sec;
 }
+*/
+
+tm newTime1(){
+    auto nowTime = chrono::system_clock::now();
+    time_t sleepTime = chrono::system_clock::to_time_t(nowTime);
+    tm myLocalTime = *localtime(&sleepTime);
+    return myLocalTime;
+}
 
 
+/*
 class TIMENOW{
     string tnDate;
     string tnTime;
@@ -124,6 +136,7 @@ public:
     string getDate(){return tnDate;}
     string getTime(){return tnTime;}
 };
+*/
 
 class FOOD{
 private:
@@ -174,9 +187,9 @@ public:
     void setDiscount(double _discount){discount = _discount/100;}
     void setPrepTime(int _time){prepTime = _time;}
 
-    void showDetails(){
+    /*void showDetails(){
         cout << "\tCode: " << itemCode << "\n\tTitle: " << foodTitle << "\n\tDescription: " << foodDescription << "\n\tstock: " << stock << "\n\tLimit: " << limit << "\n\tTime: " << prepTime << "\n\tDiscount: " << discount << "\n\tPrice: " << price << endl;;
-    }
+    }*/
 };
 
 
@@ -209,11 +222,11 @@ public:
     string getTitle(){return title;}
     string getDescription(){return description;}
     double getPriceTotal(){return (price * quantity);}
-    double getPriceTotalValue(){return (price * quantity * (1+discount));}
+    double getPriceTotalValue(){return ((price * quantity)/(1-discount));}
     double getPrice(){return price;}
     double getDiscountPercent(){return discount*100;}
-    double getDiscountValue(){return (discount * price);}
-    double getDiscountValueTotal(){return (discount * price * quantity);}
+    double getDiscountValue(){return (((price)/(1-discount)) - price);}
+    double getDiscountValueTotal(){return (getPriceTotalValue() - getPriceTotal());}
     int getPrepTime(){return prepTime;}
     int getQuantity(){return quantity;}
 
@@ -255,7 +268,7 @@ public:
     }
 
     double getPrice(int _index){return price[_index];}
-    double getValue(int _index){return (price[_index] * (1 + discount));}
+    double getValue(int _index){return (price[_index]/(1 - discount));}
     vector<double> getPrice(){return price;}
     string getSize(int _index){return size[_index];}
     vector<string> getSize(){return size;}
@@ -267,12 +280,12 @@ public:
         size = _size;
     }
 
-    void showDetails(){
+    /*void showDetails(){
         cout << "\tCode: " << itemCode << "\n\tTitle: " << foodTitle << "\n\tDescription: " << foodDescription << "\n\tstock: " << stock << "\n\tLimit: " << limit << "\n\tTime: " << prepTime << "\n\tDiscount: " << discount;
         for(int i = 0; i < size.size(); i++){
             cout << "\n\n\tSize: " << (i + 1) << "\n\t\t" << size[i] << ": " << price[i];
         }
-    }
+    }*/
 };
 
 
@@ -464,36 +477,51 @@ public:
 
 class ORDER{
     string orderNumber;
-    TIMENOW orderTime;
+    tm orderTime;
     vector<ORDERITEM> orderItems;
+    int deliveryTime;
+    double deliveryCharges;
     bool isPaid;
     bool isApproved;
 
 public:
+    int getDeliveryTime(){return deliveryTime;}
     string getOrderNumber(){return orderNumber;}
-    string getDate(){return orderTime.getDate();}
-    string getTime(){return orderTime.getTime();};
+    string getDate(){return (to_string(orderTime.tm_mday) + "/" + to_string(orderTime.tm_mon + 1) + "/" + to_string(orderTime.tm_year + 1900));}
+    string getTime(){return (to_string(orderTime.tm_hour) + ":" + to_string(orderTime.tm_min) + ":" + to_string(orderTime.tm_sec));}
     bool getIsPaid(){return isPaid;}
     bool getIsApproved(){return isApproved;}
     int getOrderItemsSize(){return orderItems.size();}
+    int getDeliveryCharges(){return deliveryCharges;}
     vector<ORDERITEM> getOrderItems(){return orderItems;}
     ORDERITEM getOrderItems(int _index){return orderItems[_index];}
+    tm getOrderTime(){return orderTime;}
+
+    void setOrderTime(tm _orderTime){
+        orderTime = _orderTime;
+    }
+
+    void setDeliveryCharges(int _amount){deliveryCharges = _amount;}
 
     void setIsPaid(bool _bool){
         isPaid = _bool;
     }
 
     void setIsApproved(bool _bool){
-        isPaid = _bool;
+        isApproved = _bool;
     }
 
     void setOrderNumber(string _orderNumber){orderNumber = _orderNumber;}
+
+    void setDeliveryTime(int _city, int _cArea, int _rArea){
+        deliveryTime = tDistance[_city][_cArea][_rArea];
+    }
 
     
 
     void addOrderItem(string _restCode, string _custCode, ORDERITEM _order){
         for(int i = 0; i < orderItems.size(); i++){
-            if(_order.getCode() == orderItems[i].getCode()){
+            if(_order.getCode() == orderItems[i].getCode() && _order.getPrice() == orderItems[i].getPrice()){
                 orderItems[i].addQuantity(_order.getQuantity());
                 return;
             }
@@ -527,6 +555,8 @@ public:
         return duration;
     }
 
+    int getDeliveryTimeTotal(){return (deliveryTime + getPrepTime());}
+
     void showAllOrderItems(){
         int title[9] = {9, 20, 10, 11, 7, 8, 8, 8, 8};
         cout << "\t" << char(218);
@@ -541,6 +571,17 @@ public:
         cout << "\b" << char(180);
         for(int i = 0; i < orderItems.size(); i++){
             cout << "\n\t" << char(179) << setw(title[0]) << orderItems[i].getCode() << char(179) << setw(title[1]) << orderItems[i].getTitle() << char(179) << setw(title[2]) << orderItems[i].getDescription() << char(179) << setw(title[3] - 8) << orderItems[i].getPrepTime() << " Minutes" << char(179) << setw(title[4]) << orderItems[i].getPrice() << char(179) << setw(title[5]) << orderItems[i].getQuantity() << char(179) << setw(title[6]) << orderItems[i].getPriceTotal() << char(179) << setw(title[7] - 1) << orderItems[i].getDiscountPercent() << "%" << char(179) << setw(title[8]) << orderItems[i].getPriceTotalValue() << char(179);
+            if((i % 32) == 0 && i != 0 && i != (orderItems.size() - 1)){
+                cout << "\n\t" << char(192);
+                for(int i = 0; i < 10; i++){
+                    cout << string(title[i], char(196)) << char(193);
+                }
+                cout << "\b" << char(217) << endl;
+                setMessage("More....");
+                setContinue();
+                cleanArea(2, 10, 143, 44);
+                gotoxy(2, 9);
+            }
         }
         cout << "\n\t" << char(192);
         for(int i = 0; i < 9; i++){
@@ -550,13 +591,23 @@ public:
     }
 
     void showOrder(){
-        cout << "\tOrder Number:\t" << orderNumber << string(45-orderNumber.length(), ' ') <<"Order Time:\t" << orderTime.getDate() << " " << orderTime.getTime() << "\n\tPaid:\t\t" << setw(5) << isPaid << string(45-5, ' ') << "Approved:\t\t" << isApproved << "\n\n";
+        //cout << "\tOrder Number:\t" << orderNumber << string(45-orderNumber.length(), ' ') <<"Order Time:\t" << getDate() << " " << getTime() << "\n\tPaid:\t\t" << setw(5) << isPaid << string(45-5, ' ') << "Approved:\t\t" << isApproved << "\n\n";
         showAllOrderItems();
     }
 
-    void showOrderDetails(){
-        int titleSize[9] = {13, 15, 13, 15, 12, 12, 6, 10, 15};
-        cout << "\n\t" << char(179) << setw(titleSize[0]) << orderNumber << char(179) << setw(titleSize[1]) << orderItems.size() << char(179) << setw(titleSize[2]) << getBill() << char(179) << setw(titleSize[3]) << getPrepTime() << char(179) << setw(titleSize[4]) << orderTime.getDate() << char(179) << setw(titleSize[5]) << orderTime.getTime() << char(179) << setw(titleSize[6]) << isPaid << char(179) << setw(titleSize[7]) << isApproved << char(179) << setw(titleSize[8]) << orderNumber.substr(3, 4) << char(179);
+    void showOrderDetails(char _type){
+        int titleSizeR[9] = {13, 15, 13, 15, 12, 12, 6, 10, 15};
+        int titleSizeC[9] = {13, 15, 13, 15, 12, 12, 6, 10, 17};
+        int titleSize[9];
+        string _code;
+        if(_type == 'R'){
+            swap(titleSize, titleSizeR);
+            _code = orderNumber.substr(3, 4);
+        } else if(_type == 'C'){
+            swap(titleSize, titleSizeC);
+            _code = orderNumber.substr(0, 3);
+        }
+        cout << "\n\t" << char(179) << setw(titleSize[0]) << orderNumber << char(179) << setw(titleSize[1]) << orderItems.size() << char(179) << setw(titleSize[2]) << (getBill() + deliveryCharges) << char(179) << setw(titleSize[3]) << (to_string(getDeliveryTimeTotal()) + " Minutes") << char(179) << setw(titleSize[4]) << getDate() << char(179) << setw(titleSize[5]) << getTime() << char(179) << setw(titleSize[6]) << isPaid << char(179) << setw(titleSize[7]) << isApproved << char(179) << setw(titleSize[8]) << _code << char(179);
     }
 
 
@@ -725,6 +776,9 @@ public:
         isRestOpen = false;
         openTime = _openTime;
         closeTime = _closeTime - 1;
+        if(closeTime == -1){
+            closeTime = 23;
+        }
         title = _title;
         description = _description;
         contactNumber = _contactNumber;
@@ -752,11 +806,35 @@ public:
     string getAddress(){return address;}
     string getCity(){return cities[city][0];}
     string getArea(){return cities[city][area];}
+    int getCityInt(){return city;}
+    int getAreaInt(){return area;}
     string getManagerID(){return managerID;}
     string getManagerPassword(){return managerPassword;}
     string getTime(){return (to_string(openTime) + " - " + to_string(closeTime));}
     bool getIsRestActive(){return isRestActive;}
-    bool getIsRestOpen(){return isRestOpen;}
+    bool getIsRestOpenR(){return isRestOpen;}
+    bool getIsRestOpen(){
+        tm tempTime = newTime1();
+        if(isRestActive == true && isRestOpen == true){
+            if(openTime == closeTime && daysOpen[tempTime.tm_wday] == true){
+                return true;
+            } else if(openTime > closeTime){
+                if((((tempTime.tm_hour >= openTime) && (tempTime.tm_hour > closeTime)) || ((tempTime.tm_hour < openTime) && (tempTime.tm_hour <= closeTime))) && daysOpen[tempTime.tm_wday] == true){
+                    return true;
+                } else{
+                    return false;
+                }
+            } else{
+                if(((tempTime.tm_hour >= openTime) && (tempTime.tm_hour <= closeTime)) && daysOpen[tempTime.tm_wday] == true){
+                    return true;
+                } else{
+                    return false;
+                }
+            }
+        } else{
+            return false;
+        }
+    }
     int getOpenTime(){return openTime;}
     int getCloseTime(){return (closeTime + 1);}
     int getMenuCount(){return menuCount;}
@@ -951,7 +1029,10 @@ public:
         openTime = _opneTime;
     }
     void setCloseTime(int _closeTime){
-        closeTime = _closeTime;
+        closeTime = _closeTime - 1;
+        if(closeTime == -1){
+            closeTime = 23;
+        };
     }
     void setTitle(string _title){
         title = _title;
@@ -1145,7 +1226,6 @@ public:
 
     void showFood(int _type){
         int titleSize[9] = {8, 20, 30, 5, 5, 11, 17, 8, 17};
-        int record = 0;
         cout << "\t" << char(218);
         for(int i = 0; i < 9; i++){
             cout << string(titleSize[i], char(196)) << char(194);
@@ -1161,17 +1241,14 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < pizzas.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << pizzas[i].getItemCode() << char(179) << setw(titleSize[1]) << pizzas[i].getTitle() << char(179) << setw(titleSize[2]) << pizzas[i].getDescription() << char(179) << setw(titleSize[3]) << pizzas[i].getStock() << char(179) << setw(titleSize[4]) << pizzas[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(pizzas[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << pizzas[i].getPrice(0) << "-" << setw(8) << pizzas[i].getPrice(pizzas[i].getPrice().size()-1) << char(179) << setw(titleSize[7]) << pizzas[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << pizzas[i].getValue(0) << "-" << setw(8) << pizzas[i].getValue(pizzas[i].getPrice().size()-1) << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << pizzas[i].getItemCode() << char(179) << setw(titleSize[1]) << pizzas[i].getTitle() << char(179) << setw(titleSize[2]) << pizzas[i].getDescription() << char(179) << setw(titleSize[3]) << pizzas[i].getStock() << char(179) << setw(titleSize[4]) << pizzas[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(pizzas[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << pizzas[i].getPrice(0) << "-" << setw(8) << pizzas[i].getPrice(pizzas[i].getPrice().size()-1) << char(179) << setw(titleSize[7]) << pizzas[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << pizzas[i].getValue(0) << "-" << setw(8) << pizzas[i].getValue(pizzas[i].getPrice().size()-1) << char(179);
                 if(i == (pizzas.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
@@ -1184,21 +1261,19 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < burgers.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << burgers[i].getItemCode() << char(179) << setw(titleSize[1]) << burgers[i].getTitle() << char(179) << setw(titleSize[2]) << burgers[i].getDescription() << char(179) << setw(titleSize[3]) << burgers[i].getStock() << char(179) << setw(titleSize[4]) << burgers[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(burgers[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << burgers[i].getPrice() << "-" << setw(8) << burgers[i].getPrice() << char(179) << setw(titleSize[7]) << burgers[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << burgers[i].getValue() << "-" << setw(8) << burgers[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << burgers[i].getItemCode() << char(179) << setw(titleSize[1]) << burgers[i].getTitle() << char(179) << setw(titleSize[2]) << burgers[i].getDescription() << char(179) << setw(titleSize[3]) << burgers[i].getStock() << char(179) << setw(titleSize[4]) << burgers[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(burgers[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << burgers[i].getPrice() << "-" << setw(8) << burgers[i].getPrice() << char(179) << setw(titleSize[7]) << burgers[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << burgers[i].getValue() << "-" << setw(8) << burgers[i].getValue() << char(179);
                 if(i == (burgers.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
         if(sandwiches.size() > 0 && (_type == 12 || _type == 2)){
             cout << "\n\t" << cuisineTitle[2] << "\n\t" << char(218);
@@ -1206,21 +1281,19 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < sandwiches.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << sandwiches[i].getItemCode() << char(179) << setw(titleSize[1]) << sandwiches[i].getTitle() << char(179) << setw(titleSize[2]) << sandwiches[i].getDescription() << char(179) << setw(titleSize[3]) << sandwiches[i].getStock() << char(179) << setw(titleSize[4]) << sandwiches[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(sandwiches[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << sandwiches[i].getPrice() << "-" << setw(8) << sandwiches[i].getPrice() << char(179) << setw(titleSize[7]) << sandwiches[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << sandwiches[i].getValue() << "-" << setw(8) << sandwiches[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << sandwiches[i].getItemCode() << char(179) << setw(titleSize[1]) << sandwiches[i].getTitle() << char(179) << setw(titleSize[2]) << sandwiches[i].getDescription() << char(179) << setw(titleSize[3]) << sandwiches[i].getStock() << char(179) << setw(titleSize[4]) << sandwiches[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(sandwiches[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << sandwiches[i].getPrice() << "-" << setw(8) << sandwiches[i].getPrice() << char(179) << setw(titleSize[7]) << sandwiches[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << sandwiches[i].getValue() << "-" << setw(8) << sandwiches[i].getValue() << char(179);
                 if(i == (sandwiches.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
         if(fastfoods.size() > 0 && (_type == 12 || _type == 3)){
             cout << "\n\t" << cuisineTitle[3] << "\n\t" << char(218);
@@ -1228,21 +1301,19 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < fastfoods.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << fastfoods[i].getItemCode() << char(179) << setw(titleSize[1]) << fastfoods[i].getTitle() << char(179) << setw(titleSize[2]) << fastfoods[i].getDescription() << char(179) << setw(titleSize[3]) << fastfoods[i].getStock() << char(179) << setw(titleSize[4]) << fastfoods[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(fastfoods[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << fastfoods[i].getPrice() << "-" << setw(8) << fastfoods[i].getPrice() << char(179) << setw(titleSize[7]) << fastfoods[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << fastfoods[i].getValue() << "-" << setw(8) << fastfoods[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << fastfoods[i].getItemCode() << char(179) << setw(titleSize[1]) << fastfoods[i].getTitle() << char(179) << setw(titleSize[2]) << fastfoods[i].getDescription() << char(179) << setw(titleSize[3]) << fastfoods[i].getStock() << char(179) << setw(titleSize[4]) << fastfoods[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(fastfoods[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << fastfoods[i].getPrice() << "-" << setw(8) << fastfoods[i].getPrice() << char(179) << setw(titleSize[7]) << fastfoods[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << fastfoods[i].getValue() << "-" << setw(8) << fastfoods[i].getValue() << char(179);
                 if(i == (fastfoods.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
         if(barbqs.size() > 0 && (_type == 12 || _type == 4)){
             cout << "\n\t" << cuisineTitle[4] << "\n\t" << char(218);
@@ -1250,21 +1321,19 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < barbqs.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << barbqs[i].getItemCode() << char(179) << setw(titleSize[1]) << barbqs[i].getTitle() << char(179) << setw(titleSize[2]) << barbqs[i].getDescription() << char(179) << setw(titleSize[3]) << barbqs[i].getStock() << char(179) << setw(titleSize[4]) << barbqs[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(barbqs[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << barbqs[i].getPrice() << "-" << setw(8) << barbqs[i].getPrice() << char(179) << setw(titleSize[7]) << barbqs[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << barbqs[i].getValue() << "-" << setw(8) << barbqs[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << barbqs[i].getItemCode() << char(179) << setw(titleSize[1]) << barbqs[i].getTitle() << char(179) << setw(titleSize[2]) << barbqs[i].getDescription() << char(179) << setw(titleSize[3]) << barbqs[i].getStock() << char(179) << setw(titleSize[4]) << barbqs[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(barbqs[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << barbqs[i].getPrice() << "-" << setw(8) << barbqs[i].getPrice() << char(179) << setw(titleSize[7]) << barbqs[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << barbqs[i].getValue() << "-" << setw(8) << barbqs[i].getValue() << char(179);
                 if(i == (barbqs.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
         if(pakistanis.size() > 0 && (_type == 12 || _type == 5)){
             cout << "\n\t" << cuisineTitle[5] << "\n\t" << char(218);
@@ -1272,21 +1341,19 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < pakistanis.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << pakistanis[i].getItemCode() << char(179) << setw(titleSize[1]) << pakistanis[i].getTitle() << char(179) << setw(titleSize[2]) << pakistanis[i].getDescription() << char(179) << setw(titleSize[3]) << pakistanis[i].getStock() << char(179) << setw(titleSize[4]) << pakistanis[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(pakistanis[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << pakistanis[i].getPrice() << "-" << setw(8) << pakistanis[i].getPrice() << char(179) << setw(titleSize[7]) << pakistanis[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << pakistanis[i].getValue() << "-" << setw(8) << pakistanis[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << pakistanis[i].getItemCode() << char(179) << setw(titleSize[1]) << pakistanis[i].getTitle() << char(179) << setw(titleSize[2]) << pakistanis[i].getDescription() << char(179) << setw(titleSize[3]) << pakistanis[i].getStock() << char(179) << setw(titleSize[4]) << pakistanis[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(pakistanis[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << pakistanis[i].getPrice() << "-" << setw(8) << pakistanis[i].getPrice() << char(179) << setw(titleSize[7]) << pakistanis[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << pakistanis[i].getValue() << "-" << setw(8) << pakistanis[i].getValue() << char(179);
                 if(i == (pakistanis.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
         if(chineses.size() > 0 && (_type == 12 || _type == 6)){
             cout << "\n\t" << cuisineTitle[6] << "\n\t" << char(218);
@@ -1294,21 +1361,19 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < chineses.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << chineses[i].getItemCode() << char(179) << setw(titleSize[1]) << chineses[i].getTitle() << char(179) << setw(titleSize[2]) << chineses[i].getDescription() << char(179) << setw(titleSize[3]) << chineses[i].getStock() << char(179) << setw(titleSize[4]) << chineses[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(chineses[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << chineses[i].getPrice() << "-" << setw(8) << chineses[i].getPrice() << char(179) << setw(titleSize[7]) << chineses[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << chineses[i].getValue() << "-" << setw(8) << chineses[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << chineses[i].getItemCode() << char(179) << setw(titleSize[1]) << chineses[i].getTitle() << char(179) << setw(titleSize[2]) << chineses[i].getDescription() << char(179) << setw(titleSize[3]) << chineses[i].getStock() << char(179) << setw(titleSize[4]) << chineses[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(chineses[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << chineses[i].getPrice() << "-" << setw(8) << chineses[i].getPrice() << char(179) << setw(titleSize[7]) << chineses[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << chineses[i].getValue() << "-" << setw(8) << chineses[i].getValue() << char(179);
                 if(i == (chineses.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
         if(internationals.size() > 0 && (_type == 12 || _type == 7)){
             cout << "\n\t" << cuisineTitle[7] << "\n\t" << char(218);
@@ -1316,21 +1381,19 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < internationals.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << internationals[i].getItemCode() << char(179) << setw(titleSize[1]) << internationals[i].getTitle() << char(179) << setw(titleSize[2]) << internationals[i].getDescription() << char(179) << setw(titleSize[3]) << internationals[i].getStock() << char(179) << setw(titleSize[4]) << internationals[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(internationals[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << internationals[i].getPrice() << "-" << setw(8) << internationals[i].getPrice() << char(179) << setw(titleSize[7]) << internationals[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << internationals[i].getValue() << "-" << setw(8) << internationals[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << internationals[i].getItemCode() << char(179) << setw(titleSize[1]) << internationals[i].getTitle() << char(179) << setw(titleSize[2]) << internationals[i].getDescription() << char(179) << setw(titleSize[3]) << internationals[i].getStock() << char(179) << setw(titleSize[4]) << internationals[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(internationals[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << internationals[i].getPrice() << "-" << setw(8) << internationals[i].getPrice() << char(179) << setw(titleSize[7]) << internationals[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << internationals[i].getValue() << "-" << setw(8) << internationals[i].getValue() << char(179);
                 if(i == (internationals.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
         if(seafoods.size() > 0 && (_type == 12 || _type == 8)){
             cout << "\n\t" << cuisineTitle[8] << "\n\t" << char(218);
@@ -1338,21 +1401,19 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < seafoods.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << seafoods[i].getItemCode() << char(179) << setw(titleSize[1]) << seafoods[i].getTitle() << char(179) << setw(titleSize[2]) << seafoods[i].getDescription() << char(179) << setw(titleSize[3]) << seafoods[i].getStock() << char(179) << setw(titleSize[4]) << seafoods[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(seafoods[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << seafoods[i].getPrice() << "-" << setw(8) << seafoods[i].getPrice() << char(179) << setw(titleSize[7]) << seafoods[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << seafoods[i].getValue() << "-" << setw(8) << seafoods[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << seafoods[i].getItemCode() << char(179) << setw(titleSize[1]) << seafoods[i].getTitle() << char(179) << setw(titleSize[2]) << seafoods[i].getDescription() << char(179) << setw(titleSize[3]) << seafoods[i].getStock() << char(179) << setw(titleSize[4]) << seafoods[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(seafoods[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << seafoods[i].getPrice() << "-" << setw(8) << seafoods[i].getPrice() << char(179) << setw(titleSize[7]) << seafoods[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << seafoods[i].getValue() << "-" << setw(8) << seafoods[i].getValue() << char(179);
                 if(i == (seafoods.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
         if(desserts.size() > 0 && (_type == 12 || _type == 9)){
             cout << "\n\t" << cuisineTitle[9] << "\n\t" << char(218);
@@ -1360,21 +1421,19 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < desserts.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << desserts[i].getItemCode() << char(179) << setw(titleSize[1]) << desserts[i].getTitle() << char(179) << setw(titleSize[2]) << desserts[i].getDescription() << char(179) << setw(titleSize[3]) << desserts[i].getStock() << char(179) << setw(titleSize[4]) << desserts[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(desserts[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << desserts[i].getPrice() << "-" << setw(8) << desserts[i].getPrice() << char(179) << setw(titleSize[7]) << desserts[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << desserts[i].getValue() << "-" << setw(8) << desserts[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << desserts[i].getItemCode() << char(179) << setw(titleSize[1]) << desserts[i].getTitle() << char(179) << setw(titleSize[2]) << desserts[i].getDescription() << char(179) << setw(titleSize[3]) << desserts[i].getStock() << char(179) << setw(titleSize[4]) << desserts[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(desserts[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << desserts[i].getPrice() << "-" << setw(8) << desserts[i].getPrice() << char(179) << setw(titleSize[7]) << desserts[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << desserts[i].getValue() << "-" << setw(8) << desserts[i].getValue() << char(179);
                 if(i == (desserts.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
         if(cakes.size() > 0 && (_type == 12 || _type == 10)){
             cout << "\n\t" << cuisineTitle[10] << "\n\t" << char(218);
@@ -1382,21 +1441,19 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < cakes.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << cakes[i].getItemCode() << char(179) << setw(titleSize[1]) << cakes[i].getTitle() << char(179) << setw(titleSize[2]) << cakes[i].getDescription() << char(179) << setw(titleSize[3]) << cakes[i].getStock() << char(179) << setw(titleSize[4]) << cakes[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(cakes[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << cakes[i].getPrice() << "-" << setw(8) << cakes[i].getPrice() << char(179) << setw(titleSize[7]) << cakes[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << cakes[i].getValue() << "-" << setw(8) << cakes[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << cakes[i].getItemCode() << char(179) << setw(titleSize[1]) << cakes[i].getTitle() << char(179) << setw(titleSize[2]) << cakes[i].getDescription() << char(179) << setw(titleSize[3]) << cakes[i].getStock() << char(179) << setw(titleSize[4]) << cakes[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(cakes[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << cakes[i].getPrice() << "-" << setw(8) << cakes[i].getPrice() << char(179) << setw(titleSize[7]) << cakes[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << cakes[i].getValue() << "-" << setw(8) << cakes[i].getValue() << char(179);
                 if(i == (cakes.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
         if(beverages.size() > 0 && (_type == 12 || _type == 11)){
             cout << "\n\t" << cuisineTitle[11] << "\n\t" << char(218);
@@ -1404,26 +1461,20 @@ public:
                 cout << string(titleSize[i], char(196)) << char(194);
             }
             cout << "\b" << char(191);
-            record += 2;
             for(int i = 0; i < beverages.size(); i++){
-                cout << "\n\t" << char(179) << setw(titleSize[0]) << beverages[i].getItemCode() << char(179) << setw(titleSize[1]) << beverages[i].getTitle() << char(179) << setw(titleSize[2]) << beverages[i].getDescription() << char(179) << setw(titleSize[3]) << beverages[i].getStock() << char(179) << setw(titleSize[4]) << beverages[i].getStock() << char(179) << setw(titleSize[5]) << (to_string(beverages[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << beverages[i].getPrice() << "-" << setw(8) << beverages[i].getPrice() << char(179) << setw(titleSize[7]) << beverages[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << beverages[i].getValue() << "-" << setw(8) << beverages[i].getValue() << char(179);
-                record++;
+                cout << "\n\t" << char(179) << setw(titleSize[0]) << beverages[i].getItemCode() << char(179) << setw(titleSize[1]) << beverages[i].getTitle() << char(179) << setw(titleSize[2]) << beverages[i].getDescription() << char(179) << setw(titleSize[3]) << beverages[i].getStock() << char(179) << setw(titleSize[4]) << beverages[i].getLimit() << char(179) << setw(titleSize[5]) << (to_string(beverages[i].getPrepTime()) + " Minutes") << char(179) << setw(titleSize[6]) << setw(8) << beverages[i].getPrice() << "-" << setw(8) << beverages[i].getPrice() << char(179) << setw(titleSize[7]) << beverages[i].getDiscount() << char(179) << setw(titleSize[8]) << setw(8) << beverages[i].getValue() << "-" << setw(8) << beverages[i].getValue() << char(179);
                 if(i == (beverages.size()-1)){
                     cout << "\n\t" << char(192);
                     for(int i = 0; i < 9; i++){
                         cout << string(titleSize[i], char(196)) << char(193);
                     }
                     cout << "\b" << char(217);
-                    record++;
                 }
             }
             setContinue();
-            gotoxy(2, 10);
+            cleanArea(2, 10, 143, 44);
+            gotoxy(2, 9);
         }
-        
-        
-        //pizzas[_index].showDetails();
-        //burgers[_index].showDetails();
     }
 
     void showFoodItem(PIZZA _pizza){
@@ -1547,7 +1598,7 @@ public:
         case 1:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < burgers.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << burgers[j].getItemCode() << char(179) << setw(title[1]) << burgers[j].getTitle() << char(179) << setw(title[2]) << burgers[j].getDescription() << char(179) << setw(8) << burgers[j].getPrice() << "-" << setw(8) << burgers[j].getPrice() << char(179) << setw(title[4]) << burgers[j].getDiscount() << char(179) << setw(title[5]) << (to_string(burgers[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << burgers[j].getItemCode() << char(179) << setw(title[1]) << burgers[j].getTitle() << char(179) << setw(title[2]) << burgers[j].getDescription() << char(179) << setw(8) << burgers[j].getPrice() << " - " << setw(8) << burgers[j].getPrice() << char(179) << setw(title[4]) << burgers[j].getDiscount() << char(179) << setw(title[5]) << (to_string(burgers[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1557,7 +1608,7 @@ public:
         case 2:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < sandwiches.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << sandwiches[j].getItemCode() << char(179) << setw(title[1]) << sandwiches[j].getTitle() << char(179) << setw(title[2]) << sandwiches[j].getDescription() << char(179) << setw(8) << sandwiches[j].getPrice() << "-" << setw(8) << sandwiches[j].getPrice() << char(179) << setw(title[4]) << sandwiches[j].getDiscount() << char(179) << setw(title[5]) << (to_string(sandwiches[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << sandwiches[j].getItemCode() << char(179) << setw(title[1]) << sandwiches[j].getTitle() << char(179) << setw(title[2]) << sandwiches[j].getDescription() << char(179) << setw(8) << sandwiches[j].getPrice() << " - " << setw(8) << sandwiches[j].getPrice() << char(179) << setw(title[4]) << sandwiches[j].getDiscount() << char(179) << setw(title[5]) << (to_string(sandwiches[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1567,7 +1618,7 @@ public:
         case 3:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < fastfoods.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << fastfoods[j].getItemCode() << char(179) << setw(title[1]) << fastfoods[j].getTitle() << char(179) << setw(title[2]) << fastfoods[j].getDescription() << char(179) << setw(8) << fastfoods[j].getPrice() << "-" << setw(8) << fastfoods[j].getPrice() << char(179) << setw(title[4]) << fastfoods[j].getDiscount() << char(179) << setw(title[5]) << (to_string(fastfoods[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << fastfoods[j].getItemCode() << char(179) << setw(title[1]) << fastfoods[j].getTitle() << char(179) << setw(title[2]) << fastfoods[j].getDescription() << char(179) << setw(8) << fastfoods[j].getPrice() << " - " << setw(8) << fastfoods[j].getPrice() << char(179) << setw(title[4]) << fastfoods[j].getDiscount() << char(179) << setw(title[5]) << (to_string(fastfoods[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1577,7 +1628,7 @@ public:
         case 4:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < barbqs.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << barbqs[j].getItemCode() << char(179) << setw(title[1]) << barbqs[j].getTitle() << char(179) << setw(title[2]) << barbqs[j].getDescription() << char(179) << setw(8) << barbqs[j].getPrice() << "-" << setw(8) << barbqs[j].getPrice() << char(179) << setw(title[4]) << barbqs[j].getDiscount() << char(179) << setw(title[5]) << (to_string(barbqs[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << barbqs[j].getItemCode() << char(179) << setw(title[1]) << barbqs[j].getTitle() << char(179) << setw(title[2]) << barbqs[j].getDescription() << char(179) << setw(8) << barbqs[j].getPrice() << " - " << setw(8) << barbqs[j].getPrice() << char(179) << setw(title[4]) << barbqs[j].getDiscount() << char(179) << setw(title[5]) << (to_string(barbqs[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1587,7 +1638,7 @@ public:
         case 5:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < pakistanis.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << pakistanis[j].getItemCode() << char(179) << setw(title[1]) << pakistanis[j].getTitle() << char(179) << setw(title[2]) << pakistanis[j].getDescription() << char(179) << setw(8) << pakistanis[j].getPrice() << "-" << setw(8) << pakistanis[j].getPrice() << char(179) << setw(title[4]) << pakistanis[j].getDiscount() << char(179) << setw(title[5]) << (to_string(pakistanis[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << pakistanis[j].getItemCode() << char(179) << setw(title[1]) << pakistanis[j].getTitle() << char(179) << setw(title[2]) << pakistanis[j].getDescription() << char(179) << setw(8) << pakistanis[j].getPrice() << " - " << setw(8) << pakistanis[j].getPrice() << char(179) << setw(title[4]) << pakistanis[j].getDiscount() << char(179) << setw(title[5]) << (to_string(pakistanis[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1597,7 +1648,7 @@ public:
         case 6:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < chineses.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << chineses[j].getItemCode() << char(179) << setw(title[1]) << chineses[j].getTitle() << char(179) << setw(title[2]) << chineses[j].getDescription() << char(179) << setw(8) << chineses[j].getPrice() << "-" << setw(8) << chineses[j].getPrice() << char(179) << setw(title[4]) << chineses[j].getDiscount() << char(179) << setw(title[5]) << (to_string(chineses[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << chineses[j].getItemCode() << char(179) << setw(title[1]) << chineses[j].getTitle() << char(179) << setw(title[2]) << chineses[j].getDescription() << char(179) << setw(8) << chineses[j].getPrice() << " - " << setw(8) << chineses[j].getPrice() << char(179) << setw(title[4]) << chineses[j].getDiscount() << char(179) << setw(title[5]) << (to_string(chineses[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1607,7 +1658,7 @@ public:
         case 7:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < internationals.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << internationals[j].getItemCode() << char(179) << setw(title[1]) << internationals[j].getTitle() << char(179) << setw(title[2]) << internationals[j].getDescription() << char(179) << setw(8) << internationals[j].getPrice() << "-" << setw(8) << internationals[j].getPrice() << char(179) << setw(title[4]) << internationals[j].getDiscount() << char(179) << setw(title[5]) << (to_string(internationals[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << internationals[j].getItemCode() << char(179) << setw(title[1]) << internationals[j].getTitle() << char(179) << setw(title[2]) << internationals[j].getDescription() << char(179) << setw(8) << internationals[j].getPrice() << " - " << setw(8) << internationals[j].getPrice() << char(179) << setw(title[4]) << internationals[j].getDiscount() << char(179) << setw(title[5]) << (to_string(internationals[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1617,7 +1668,7 @@ public:
         case 8:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < seafoods.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << seafoods[j].getItemCode() << char(179) << setw(title[1]) << seafoods[j].getTitle() << char(179) << setw(title[2]) << seafoods[j].getDescription() << char(179) << setw(8) << seafoods[j].getPrice() << "-" << setw(8) << seafoods[j].getPrice() << char(179) << setw(title[4]) << seafoods[j].getDiscount() << char(179) << setw(title[5]) << (to_string(seafoods[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << seafoods[j].getItemCode() << char(179) << setw(title[1]) << seafoods[j].getTitle() << char(179) << setw(title[2]) << seafoods[j].getDescription() << char(179) << setw(8) << seafoods[j].getPrice() << " - " << setw(8) << seafoods[j].getPrice() << char(179) << setw(title[4]) << seafoods[j].getDiscount() << char(179) << setw(title[5]) << (to_string(seafoods[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1627,7 +1678,7 @@ public:
         case 9:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < desserts.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << desserts[j].getItemCode() << char(179) << setw(title[1]) << desserts[j].getTitle() << char(179) << setw(title[2]) << desserts[j].getDescription() << char(179) << setw(8) << desserts[j].getPrice() << "-" << setw(8) << desserts[j].getPrice() << char(179) << setw(title[4]) << desserts[j].getDiscount() << char(179) << setw(title[5]) << (to_string(desserts[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << desserts[j].getItemCode() << char(179) << setw(title[1]) << desserts[j].getTitle() << char(179) << setw(title[2]) << desserts[j].getDescription() << char(179) << setw(8) << desserts[j].getPrice() << " - " << setw(8) << desserts[j].getPrice() << char(179) << setw(title[4]) << desserts[j].getDiscount() << char(179) << setw(title[5]) << (to_string(desserts[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1637,7 +1688,7 @@ public:
         case 10:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < cakes.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << cakes[j].getItemCode() << char(179) << setw(title[1]) << cakes[j].getTitle() << char(179) << setw(title[2]) << cakes[j].getDescription() << char(179) << setw(8) << cakes[j].getPrice() << "-" << setw(8) << cakes[j].getPrice() << char(179) << setw(title[4]) << cakes[j].getDiscount() << char(179) << setw(title[5]) << (to_string(cakes[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << cakes[j].getItemCode() << char(179) << setw(title[1]) << cakes[j].getTitle() << char(179) << setw(title[2]) << cakes[j].getDescription() << char(179) << setw(8) << cakes[j].getPrice() << " - " << setw(8) << cakes[j].getPrice() << char(179) << setw(title[4]) << cakes[j].getDiscount() << char(179) << setw(title[5]) << (to_string(cakes[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1647,7 +1698,7 @@ public:
         case 11:
             if(hasFood(cuisineTitle[_cuisine]) == true){
                 for(int j = 0; j < beverages.size(); j++){
-                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << beverages[j].getItemCode() << char(179) << setw(title[1]) << beverages[j].getTitle() << char(179) << setw(title[2]) << beverages[j].getDescription() << char(179) << setw(8) << beverages[j].getPrice() << "-" << setw(8) << beverages[j].getPrice() << char(179) << setw(title[4]) << beverages[j].getDiscount() << char(179) << setw(title[5]) << (to_string(beverages[j].getPrepTime()) + " Minutes ") << char(179);
+                    cout << "\n\t\t\t\t" << char(179) << setw(title[0]) << beverages[j].getItemCode() << char(179) << setw(title[1]) << beverages[j].getTitle() << char(179) << setw(title[2]) << beverages[j].getDescription() << char(179) << setw(8) << beverages[j].getPrice() << " - " << setw(8) << beverages[j].getPrice() << char(179) << setw(title[4]) << beverages[j].getDiscount() << char(179) << setw(title[5]) << (to_string(beverages[j].getPrepTime()) + " Minutes ") << char(179);
                 }
             } else{
                 cout << "\n\t\t\t\t" << char(179) << " No Item Available in Cuisine: " << cuisineTitle[_cuisine] << char(179);
@@ -1744,7 +1795,7 @@ public:
     }
 
     void showDetails(){
-        cout << "\tTitle:\t\t\t" << title << "\n\n\tDescription:\t\t" << description.substr(0, 100) << "\n\n\tManager ID:\t\t" << managerID << string(45 - managerID.length(), ' ') << "Code:\t\t" << restaurantCode << "\n\n\tContact Number:\t\t" << contactNumber << string(45 - contactNumber.length(), ' ') << "Address:\t\t" << address << "\n\n\tArea:\t\t\t" << getArea() << string(45 - getArea().length(), ' ') << "City:\t\t" << getCity() << "\n\n\tActive:\t\t\t" << setw(5) << isRestActive << string(40, ' ') << "Open:\t\t" << isRestOpen << "\n\n\tFree Delivery:\t\t" << setw(5) << freeDelivery << string(40, ' ') << "Minimum Order:\t" << minimumOrder << "\n\n\tDelivery Charges:\t" << deliveryCharges << string(49 - to_string(deliveryCharges).length(), ' ') << "Discount:\t\t" << (restDiscount * 100) << "%\n\n\tTotal Income:\t\t" << restRevenue << string(49 - to_string(restRevenue).length(), ' ') << "Tax:\t\t" << restTax << "\n\n\tOrders Pending:\t\t" << ordersPending << string(45 - to_string(ordersPending).length(), ' ') << "Orders Completed:\t" << ordersCompleted << "\n\n\tOrders Cancelled:\t" << ordersCancelled << string(45 - to_string(ordersCancelled).length(), ' ') << "Timings:\t\t" << openTime << " - " << closeTime;
+        cout << "\tTitle:\t\t\t" << title << "\n\n\tDescription:\t\t" << description.substr(0, 100) << "\n\n\tManager ID:\t\t" << managerID << string(45 - managerID.length(), ' ') << "Code:\t\t" << restaurantCode << "\n\n\tContact Number:\t\t" << contactNumber << string(45 - contactNumber.length(), ' ') << "Address:\t\t" << address << "\n\n\tArea:\t\t\t" << getArea() << string(45 - getArea().length(), ' ') << "City:\t\t" << getCity() << "\n\n\tActive:\t\t\t" << setw(5) << isRestActive << string(40, ' ') << "Open:\t\t" << isRestOpen << "\n\n\tFree Delivery:\t\t" << setw(5) << freeDelivery << string(40, ' ') << "Minimum Order:\t" << minimumOrder << "\n\n\tDelivery Charges:\t" << deliveryCharges << string(49 - to_string(deliveryCharges).length(), ' ') << "Discount:\t\t" << (restDiscount * 100) << "%\n\n\tTotal Income:\t\t" << restRevenue << string(49 - to_string(restRevenue).length(), ' ') << "Tax:\t\t" << restTax << "\n\n\tOrders Pending:\t\t" << ordersPending << string(45 - to_string(ordersPending).length(), ' ') << "Orders Completed:\t" << ordersCompleted << "\n\n\tOrders Cancelled:\t" << ordersCancelled << string(45 - to_string(ordersCancelled).length(), ' ') << "Timings:\t\t" << openTime << " - " << (closeTime + 1);
         cout << "\n\n\n\tWORKING DAYS\n\t" << char(218);
         for(int i = 0; i < days.size(); i++){
             cout << string(days[i].length(), char(196)) << char(194);
@@ -1831,11 +1882,115 @@ public:
         cout << char(217);
     }
 
+    void changeStock(vector<ORDERITEM> orderItems){
+        for(int i = 0; i < orderItems.size(); i++){
+            int itemIndex = (stoi(orderItems[i].getCode().substr(5, 3)) - 1);
+            switch(orderItems[i].getCuisine()){
+            case 0:
+                for(int j = 0; j < pizzas.size(); j++){
+                    if(orderItems[i].getCode() == pizzas[j].getItemCode()){
+                        pizzas[j].setStock(pizzas[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 1:
+                for(int j = 0; j < burgers.size(); j++){
+                    if(orderItems[i].getCode() == burgers[j].getItemCode()){
+                        burgers[j].setStock(burgers[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 2:
+                for(int j = 0; j < sandwiches.size(); j++){
+                    if(orderItems[i].getCode() == sandwiches[j].getItemCode()){
+                        sandwiches[j].setStock(sandwiches[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 3:
+                for(int j = 0; j < fastfoods.size(); j++){
+                    if(orderItems[i].getCode() == fastfoods[j].getItemCode()){
+                        fastfoods[j].setStock(fastfoods[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 4:
+                for(int j = 0; j < barbqs.size(); j++){
+                    if(orderItems[i].getCode() == barbqs[j].getItemCode()){
+                        barbqs[j].setStock(barbqs[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 5:
+                for(int j = 0; j < pakistanis.size(); j++){
+                    if(orderItems[i].getCode() == pakistanis[j].getItemCode()){
+                        pakistanis[j].setStock(pakistanis[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 6:
+                for(int j = 0; j < chineses.size(); j++){
+                    if(orderItems[i].getCode() == chineses[j].getItemCode()){
+                        chineses[j].setStock(chineses[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 7:
+                for(int j = 0; j < internationals.size(); j++){
+                    if(orderItems[i].getCode() == internationals[j].getItemCode()){
+                        internationals[j].setStock(internationals[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 8:
+                for(int j = 0; j < seafoods.size(); j++){
+                    if(orderItems[i].getCode() == seafoods[j].getItemCode()){
+                        seafoods[j].setStock(seafoods[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 9:
+                for(int j = 0; j < desserts.size(); j++){
+                    if(orderItems[i].getCode() == desserts[j].getItemCode()){
+                        desserts[j].setStock(desserts[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 10:
+                for(int j = 0; j < cakes.size(); j++){
+                    if(orderItems[i].getCode() == cakes[j].getItemCode()){
+                        cakes[j].setStock(cakes[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+
+            case 11:
+                for(int j = 0; j < beverages.size(); j++){
+                    if(orderItems[i].getCode() == beverages[j].getItemCode()){
+                        beverages[j].setStock(beverages[j].getStock() - orderItems[i].getQuantity());
+                    }
+                }
+                break;
+            
+            default:
+                break;
+            }
+        }
+    }
+
     int confirmOrder(ORDER &_order){
-        cout << _order.getIsPaid() << endl;
         vector<ORDERITEM> orderItems = _order.getOrderItems();
         for(int i = 0; i < orderItems.size(); i++){
-            cout << orderItems[i].getQuantity() << ",";
             int foodIndex = (stoi(orderItems[i].getCode().substr(5, 3)) - 1);
             switch(orderItems[i].getCuisine()){
             case 0:
@@ -1914,12 +2069,24 @@ public:
                 break;
             }
         }
-        cout << "Big Pass" << endl;
         _order.setIsApproved(true);
-        //_order.se
-        restRevenue += _order.getBill();
-        restOrders.push_back(_order);
-        return (_order.getBill() * (-1));
+        changeStock(orderItems);
+        tm _time = newTime1();
+        _order.setOrderTime(_time);
+        if(freeDelivery == true && _order.getBill() <= minimumOrder){
+            restRevenue += _order.getBill();
+            _order.setDeliveryCharges(0);
+            restOrders.push_back(_order);
+            return (_order.getBill());
+        } else{
+            restRevenue += (_order.getBill() + deliveryCharges);
+            _order.setDeliveryCharges(deliveryCharges);
+            restOrders.push_back(_order);
+            return (_order.getBill() + deliveryCharges);
+        }
+        //restRevenue += _order.getBill();
+        //restOrders.push_back(_order);
+        //return (_order.getBill());
     }
 
     int getLimit(int _cuisine, int _index){
@@ -2033,7 +2200,6 @@ public:
     }
 
     showAllOrders(){
-        int record = 0;
         int titleSize[9] = {13, 15, 13, 15, 12, 12, 6, 10, 15};
         cout << "\t" << char(218);
         for(int i = 0; i < 9; i++){
@@ -2045,13 +2211,48 @@ public:
         }
         cout << "\b" << char(180);
         for(int i = 0; i < restOrders.size(); i++){
-            restOrders[i].showOrderDetails();
+            restOrders[i].showOrderDetails('R');
+            if((i % 32) == 0 && i != 0 && i != (restOrders.size() - 1)){
+                cout << "\n\t" << char(192);
+                for(int i = 0; i < 10; i++){
+                    cout << string(titleSize[i], char(196)) << char(193);
+                }
+                cout << "\b" << char(217) << endl;
+                setMessage("More....");
+                setContinue();
+                cleanArea(2, 10, 143, 44);
+                gotoxy(2, 9);
+            }
         }
         cout << "\n\t" << char(192);
         for(int i = 0; i < 9; i++){
             cout << string(titleSize[i], char(196)) << char(193);
         }
         cout << "\b" << char(217);
+    }
+
+    showOrder(string _orderNumber){
+        int titleSize[9] = {13, 15, 13, 15, 12, 12, 6, 10, 15};
+        cout << "\t" << char(218);
+        for(int i = 0; i < 9; i++){
+            cout << string(titleSize[i], char(196)) << char(194);
+        }
+        cout << "\b" << char(191) << "\n\t" << char(179) << setw(titleSize[0]) << "ORDER NUMBER " << char(179) << setw(titleSize[1]) << "ITEMS ORDERED " << char(179) << setw(titleSize[2]) << "TOTAL PRICE " << char(179) << setw(titleSize[3]) << "DELIVERY TIME " << char(179) << setw(titleSize[4]) << "ORDER DATE" << char(179) << setw(titleSize[5]) << "ORDER TIME " << char(179) << setw(titleSize[6]) << "PAID " << char(179) << setw(titleSize[7]) << "APPROVED " << char(179) << setw(titleSize[8]) << "CUSTOMER CODE " << char(179) << "\n\t" << char(195);
+        for(int i = 0; i < 9; i++){
+            cout << string(titleSize[i], char(196)) << char(197);
+        }
+        cout << "\b" << char(180);
+        for(int i = 0; i < restOrders.size(); i++){
+            if(restOrders[i].getOrderNumber() == _orderNumber){
+                restOrders[i].showOrderDetails('R');
+                cout << "\n\t" << char(192);
+                for(int j = 0; j < 9; j++){
+                    cout << string(titleSize[j], char(196)) << char(193);
+                }
+                cout << "\b" << char(217) << endl;
+                restOrders[i].showOrder();
+            }
+        }
     }
 };
 
@@ -2137,8 +2338,8 @@ public:
     string getEmailAddress(){return emailAddress;}
     string getContactNumber(){return custContactNumber;} 
     string getAddress(){return custAddress;}
-    //int getArea(){return custArea;}
-    //int getCity(){return custCity;}
+    int getAreaInt(){return custArea;}
+    int getCityInt(){return custCity;}
     string getCity(){return cities[custCity][0];}
     string getArea(){return cities[custCity][custArea];}
     double getWalletAmount(){return walletAmount;}
@@ -2154,9 +2355,16 @@ public:
         vouchers.push_back(_voucher);
     }
 
-    string chargeWallet(int _value){
+    string chargeWallet(int _value, string _vCode){
         if(_value > 0){
             walletAmount += _value;
+            for(int i = 0; i < vouchers.size(); i++){
+                if(vouchers[i] == _vCode){
+                    pastVouchers.push_back(vouchers[i]);
+                    vouchers.erase(vouchers.begin() + i);
+                    break;
+                }
+            }
             return ("Wallet ReCharge Successful! Amount is " + to_string(_value));
         } else if(_value < 0){
             return "Wallet ReCharge Unsuccessful! Voucher Expired!";
@@ -2166,11 +2374,23 @@ public:
     }
 
     string payOrder(int _value){
-        walletAmount += _value;
-        if(_value < 0){
-            return "Order Completed Successfully!";
+        //walletAmount -= _value;
+        if(_value > 0){
+            if(_value > walletAmount){
+                custOrders.pop_back();
+                return "Insufficient Funds to Pay Delivery Charges!";
+            } else if(_value <= walletAmount){
+                tm _time = newTime1();
+                custOrders[custOrders.size()-1].setIsApproved(true);
+                custOrders[custOrders.size()-1].setOrderTime(_time);
+                custOrders[custOrders.size() - 1].setDeliveryCharges(_value - custOrders[custOrders.size() - 1].getBill());
+                walletAmount -= _value;
+                return "Order Completed Successfully!";
+            }
         } else if(_value == 0){
-            return "Insufficient Item ";
+            custOrders.pop_back();
+            //custOrders[custOrders.size()-1].setIsPaid(false);
+            return "Insufficient Stock/Limit ";
         } else{
             return "Something went wrong!";
         }
@@ -2211,15 +2431,71 @@ public:
             cout << "\t\t No Order Found!";
         }
     }
+
+    showAllOrders(){
+        int titleSize[9] = {13, 15, 13, 15, 12, 12, 6, 10, 17};
+        cout << "\t" << char(218);
+        for(int i = 0; i < 9; i++){
+            cout << string(titleSize[i], char(196)) << char(194);
+        }
+        cout << "\b" << char(191) << "\n\t" << char(179) << setw(titleSize[0]) << "ORDER NUMBER " << char(179) << setw(titleSize[1]) << "ITEMS ORDERED " << char(179) << setw(titleSize[2]) << "TOTAL PRICE " << char(179) << setw(titleSize[3]) << "DELIVERY TIME " << char(179) << setw(titleSize[4]) << "ORDER DATE" << char(179) << setw(titleSize[5]) << "ORDER TIME " << char(179) << setw(titleSize[6]) << "PAID " << char(179) << setw(titleSize[7]) << "APPROVED " << char(179) << setw(titleSize[8]) << "RESTAURANT CODE " << char(179) << "\n\t" << char(195);
+        for(int i = 0; i < 9; i++){
+            cout << string(titleSize[i], char(196)) << char(197);
+        }
+        cout << "\b" << char(180);
+        for(int i = 0; i < custOrders.size(); i++){
+            custOrders[i].showOrderDetails('C');
+            if((i % 32) == 0 && i != 0 && i != (custOrders.size() - 1)){
+                cout << "\n\t" << char(192);
+                for(int i = 0; i < 10; i++){
+                    cout << string(titleSize[i], char(196)) << char(193);
+                }
+                cout << "\b" << char(217) << endl;
+                setMessage("More....");
+                setContinue();
+                cleanArea(2, 10, 143, 44);
+                gotoxy(2, 9);
+            }
+        }
+        cout << "\n\t" << char(192);
+        for(int i = 0; i < 9; i++){
+            cout << string(titleSize[i], char(196)) << char(193);
+        }
+        cout << "\b" << char(217);
+    }
+
+    showOrder(string _orderNumber){
+        int titleSize[9] = {13, 15, 13, 15, 12, 12, 6, 10, 17};
+        cout << "\t" << char(218);
+        for(int i = 0; i < 9; i++){
+            cout << string(titleSize[i], char(196)) << char(194);
+        }
+        cout << "\b" << char(191) << "\n\t" << char(179) << setw(titleSize[0]) << "ORDER NUMBER " << char(179) << setw(titleSize[1]) << "ITEMS ORDERED " << char(179) << setw(titleSize[2]) << "TOTAL PRICE " << char(179) << setw(titleSize[3]) << "DELIVERY TIME " << char(179) << setw(titleSize[4]) << "ORDER DATE" << char(179) << setw(titleSize[5]) << "ORDER TIME " << char(179) << setw(titleSize[6]) << "PAID " << char(179) << setw(titleSize[7]) << "APPROVED " << char(179) << setw(titleSize[8]) << "RESTAURANT CODE " << char(179) << "\n\t" << char(195);
+        for(int i = 0; i < 9; i++){
+            cout << string(titleSize[i], char(196)) << char(197);
+        }
+        cout << "\b" << char(180);
+        for(int i = 0; i < custOrders.size(); i++){
+            if(custOrders[i].getOrderNumber() == _orderNumber){
+                custOrders[i].showOrderDetails('C');
+                cout << "\n\t" << char(192);
+                for(int j = 0; j < 9; j++){
+                    cout << string(titleSize[j], char(196)) << char(193);
+                }
+                cout << "\b" << char(217) << endl;
+                custOrders[i].showOrder();
+            }
+        }
+    }
 };
 
 
 class ADMINISTRATOR{
     const string userName;
     const string passWord;
-    bool isOpen;
-    int openTimeAdmin;
-    int closeTimeAdmin;
+    //bool isOpen;
+    //int openTimeAdmin;
+    //int closeTimeAdmin;
     double revenue;
     double tax;
     vector<string> vouchers;
@@ -2234,9 +2510,9 @@ class ADMINISTRATOR{
 
 public:
     ADMINISTRATOR(string _userName, string _passWord) : userName(_userName), passWord(_passWord){
-        isOpen = false;
-        openTimeAdmin = 0;
-        closeTimeAdmin = 0;
+        //isOpen = false;
+        //openTimeAdmin = 0;
+        //closeTimeAdmin = 0;
         revenue = 0;
         tax = 0;
     }
@@ -2244,26 +2520,27 @@ public:
     string getUserName(){return userName;}
     string getPassWord(){return passWord;}
     //bool getIsOpen(){return isOpen;}
-    bool getIsOpen(){
-        newTime();
+    /*bool getIsOpen(){
+        tm tempTime = newTime1();
         if(openTimeAdmin == closeTimeAdmin){
             return true;
         } else if(openTimeAdmin > closeTimeAdmin){
-            if(((hours >= openTimeAdmin) && (hours > closeTimeAdmin)) || ((hours < openTimeAdmin) && (hours <= closeTimeAdmin))){
+            if(((tempTime.tm_hour >= openTimeAdmin) && (tempTime.tm_hour > closeTimeAdmin)) || ((tempTime.tm_hour < openTimeAdmin) && (tempTime.tm_hour <= closeTimeAdmin))){
                 return true;
              } else{
                 return false;
             }
         } else{
-            if((hours >= openTimeAdmin) && (hours <= closeTimeAdmin)){
+            if((tempTime.tm_hour >= openTimeAdmin) && (tempTime.tm_hour <= closeTimeAdmin)){
                 return true;
             } else{
                 return false;
             }
         }
-    }
-    int getOpenTime(){return openTimeAdmin;}
-    int getCloseTime(){return closeTimeAdmin;}
+    }*/
+
+    //int getOpenTime(){return openTimeAdmin;}
+    //int getCloseTime(){return closeTimeAdmin;}
     //double revenue;
     //double tax;
     int getRestaurantSize(){return restaurants.size();}
@@ -2341,9 +2618,9 @@ public:
         }
     }
 
-    void setIsOpen(bool _isOpen){isOpen = _isOpen;}
-    void setOpenTime(int _openTime){openTimeAdmin = _openTime;}
-    void setCloseTime(int _closeTime){closeTimeAdmin = _closeTime;}
+    //void setIsOpen(bool _isOpen){isOpen = _isOpen;}
+    //void setOpenTime(int _openTime){openTimeAdmin = _openTime;}
+    //void setCloseTime(int _closeTime){closeTimeAdmin = _closeTime;}
 
     /*void setRestaurantCode(){
         if((restaurants.size() + 1) < 10){
@@ -2453,6 +2730,17 @@ public:
                 }
             }
             cout << setw(title[15]) << restaurants[j].getTime() << char(179);
+            if((j % 32) == 0 && j != 0 && j != (restaurants.size() - 1)){
+                cout << "\n\t" << char(192);
+                for(int i = 0; i < 10; i++){
+                    cout << string(title[i], char(196)) << char(193);
+                }
+                cout << "\b" << char(217) << endl;
+                setMessage("More....");
+                setContinue();
+                cleanArea(2, 10, 143, 44);
+                gotoxy(2, 9);
+            }
         }
         cout << "\n\t" << char(192);
         for(int i = 0; i < 16; i++){
@@ -2489,6 +2777,17 @@ public:
                         }
                         cout << setw(title[15]) << restaurants[j].getTime() << char(179);
                         recordCount++;
+                        if((recordCount % 32) == 0 && recordCount != 0){
+                            cout << "\n\t" << char(192);
+                            for(int i = 0; i < 10; i++){
+                                cout << string(title[i], char(196)) << char(193);
+                            }
+                            cout << "\b" << char(217) << endl;
+                            setMessage("More....");
+                            setContinue();
+                            cleanArea(2, 10, 143, 44);
+                            gotoxy(2, 9);
+                        }
                     }
                 }
             }
@@ -2561,7 +2860,7 @@ public:
     void showRestWithCuisine(string _cuisine){
         int recordCount = 0;
         int title[16] = {5, 16, 25, 10, 10, 12, 12, 6, 1, 1, 1, 1, 1, 1, 1, 8};
-        cout << "\n\t" << char(218);
+        cout << "\t" << char(218);
         for(int i = 0; i < 16; i++){
             cout << string(title[i], char(196)) << char(194);
         }
@@ -2582,6 +2881,18 @@ public:
                     }
                 }
                 cout << setw(title[15]) << restaurants[j].getTime() << char(179);
+                recordCount++;
+                if((recordCount % 32) == 0 && recordCount != 0){
+                    cout << "\n\t" << char(192);
+                    for(int i = 0; i < 10; i++){
+                        cout << string(title[i], char(196)) << char(193);
+                    }
+                    cout << "\b" << char(217) << endl;
+                    setMessage("More....");
+                    setContinue();
+                    cleanArea(2, 10, 143, 44);
+                    gotoxy(2, 9);
+                }
             }
         }
         cout << "\n\t" << char(192);
@@ -2622,6 +2933,18 @@ public:
                     }
                 }
                 cout << setw(title[15]) << restaurants[j].getTime() << char(179);
+                recordCount++;
+                if((recordCount % 32) == 0 && recordCount != 0){
+                    cout << "\n\t" << char(192);
+                    for(int i = 0; i < 10; i++){
+                        cout << string(title[i], char(196)) << char(193);
+                    }
+                    cout << "\b" << char(217) << endl;
+                    setMessage("More....");
+                    setContinue();
+                    cleanArea(2, 10, 143, 44);
+                    gotoxy(2, 9);
+                }
             }
         }
         cout << "\n\t" << char(192);
@@ -2676,7 +2999,7 @@ public:
 
     string blockVoucher(string _voucher){
         if(voucherValueLink[_voucher] > 0){
-            voucherValueLink[_voucher] = -1;
+            voucherValueLink[_voucher] = 0;
             return "Voucher Blocked!";
         } else if(voucherValueLink[_voucher] == -1){
             return "Voucher already Expired!";
@@ -2717,6 +3040,13 @@ public:
                 cout << setw(13) << voucherValueLink[vouchers[i]] << " ";
             }
             cout << char(179);
+            if((i % 32) == 0 && i != 0 && i != (vouchers.size()-1)){
+                cout << "\n\t" << char(192) << string(10, char(196)) << char(193) << string(14, char(196)) << char(217);
+                setMessage("More....");
+                setContinue();
+                cleanArea(2, 10, 143, 44);
+                gotoxy(2, 9);
+            }
         }
         cout << "\n\t" << char(192) << string(10, char(196)) << char(193) << string(14, char(196)) << char(217);
         if(vouchers.size() > 0){
@@ -2741,6 +3071,13 @@ public:
                 }
                 cout << char(179);
                 count++;
+                if((count % 32) == 0 && count != 0){
+                    cout << "\n\t" << char(192) << string(10, char(196)) << char(193) << string(14, char(196)) << char(217);
+                    setMessage("More....");
+                    setContinue();
+                    cleanArea(2, 10, 143, 44);
+                    gotoxy(2, 9);
+                }
             }
         }
         cout << "\n\t" << char(192) << string(10, char(196)) << char(193) << string(14, char(196)) << char(217);
@@ -2763,7 +3100,15 @@ public:
                 cout << setw(13) << voucherValueLink[_vouchers[i]] << " ";
             }
             cout << char(179);
+            if((i % 32) == 0 && i != 0 && i != (_vouchers.size() - 1)){
+                cout << "\n\t" << char(192) << string(10, char(196)) << char(193) << string(14, char(196)) << char(217);
+                setMessage("More....");
+                setContinue();
+                cleanArea(2, 10, 143, 44);
+                gotoxy(2, 9);
+            }
         }
+        cout << "\n\t" << char(192) << string(10, char(196)) << char(193) << string(14, char(196)) << char(217);
     }
 
     string showVouchers(int _choice){
@@ -2782,6 +3127,13 @@ public:
                     }
                     cout << char(179);
                     count++;
+                    if((count % 32) == 0 && count != 0){
+                        cout << "\n\t" << char(192) << string(10, char(196)) << char(193) << string(14, char(196)) << char(217);
+                        setMessage("More....");
+                        setContinue();
+                        cleanArea(2, 10, 143, 44);
+                        gotoxy(2, 9);
+                    }
                 }
             } else{
                 if(voucherValueLink[vouchers[i]] == _choice){
@@ -2795,6 +3147,13 @@ public:
                     }
                     cout << char(179);
                     count++;
+                    if((count % 32) == 0 && count != 0){
+                        cout << "\n\t" << char(192) << string(10, char(196)) << char(193) << string(14, char(196)) << char(217);
+                        setMessage("More....");
+                        setContinue();
+                        cleanArea(2, 10, 143, 44);
+                        gotoxy(2, 9);
+                    }
                 }
             }
         }
@@ -2880,8 +3239,9 @@ public:
     }
 
     void showCustomer(){
+        //int record = 0;
         int title[10] = {6, 14, 14, 25, 15, 10, 11, 9, 6, 7};
-        cout << "\n\t" << char(218);
+        cout << "\t" << char(218);
         for(int i = 0; i < 10; i++){
             cout << string(title[i], char(196)) << char(194);
         }
@@ -2893,6 +3253,17 @@ public:
         cout << "\b" << char(180);
         for(int j = 0; j < customers.size(); j++){
             cout << "\n\t" << char(179) << setw(title[0]) << customers[j].getCustomerCode() << char(179) << setw(title[1]) << customers[j].getFirstName() << char(179) << setw(title[2]) << customers[j].getLastName() << char(179) << setw(title[3]) << customers[j].getEmailAddress() << char(179) << setw(title[4]) << customers[j].getContactNumber() << char(179) << setw(title[5]) << customers[j].getArea() << char(179) << setw(title[6]) << customers[j].getCity() << char(179) << setw(title[7]) << customers[j].getWalletAmount() << char(179) << setw(title[8]) << customers[j].getOrderCount() << char(179) << setw(title[9]) << customers[j].getIsActive() << char(179);
+            if((j % 32) == 0 && j != 0 && j != (customers.size() - 1)){
+                cout << "\n\t" << char(192);
+                for(int i = 0; i < 10; i++){
+                    cout << string(title[i], char(196)) << char(193);
+                }
+                cout << "\b" << char(217) << endl;
+                setMessage("More Records Found...");
+                setContinue();
+                cleanArea(2, 10, 143, 44);
+                gotoxy(2, 9);
+            }
         }
         cout << "\n\t" << char(192);
         for(int i = 0; i < 10; i++){
@@ -2957,6 +3328,17 @@ public:
             if((customers[j].getCity() == cities[_city][0]) && (customers[j].getArea() == cities[_city][_area])){
                 cout << "\n\t" << char(179) << setw(title[0]) << customers[j].getCustomerCode() << char(179) << setw(title[1]) << customers[j].getFirstName() << char(179) << setw(title[2]) << customers[j].getLastName() << char(179) << setw(title[3]) << customers[j].getEmailAddress() << char(179) << setw(title[4]) << customers[j].getContactNumber() << char(179) << setw(title[5]) << customers[j].getArea() << char(179) << setw(title[6]) << customers[j].getCity() << char(179) << setw(title[7]) << customers[j].getWalletAmount() << char(179) << setw(title[8]) << customers[j].getOrderCount() << char(179) << setw(title[9]) << customers[j].getIsActive() << char(179);
                 record++;
+                if((record % 32) == 0 && record != 0){
+                    cout << "\n\t" << char(192);
+                    for(int i = 0; i < 10; i++){
+                        cout << string(title[i], char(196)) << char(193);
+                    }
+                    cout << "\b" << char(217) << endl;
+                    setMessage("More Records Found...");
+                    setContinue();
+                    cleanArea(2, 10, 143, 44);
+                    gotoxy(2, 9);
+                }
             }
         }
         cout << "\n\t" << char(192);
@@ -3034,13 +3416,7 @@ public:
     }
 
     void showSummary(){
-        cout << "\tAdmin:\t\t>\t" << userName << "\n\n\tIs Open:\t>\t";
-        if(getIsOpen() == true){
-            cout << "YES";
-        } else{
-            cout << "NO";
-        }
-        cout << "\n\n\tTimings:\t>\t" << openTimeAdmin << " - " << closeTimeAdmin << "\n\n\tRevenue:\t>\t" << revenue << "\n\n\tTax:\t\t>\t" << tax << "\n\n\tVouchers Used:\t>\t" << calcVouchers("Used") << "\n\n\tVouchers Unused:\t" << calcVouchers("Unused") << "\n\n\tRestaurants Active:\t" << calcRestaurants("Active") << "\n\n\tRestaurants Closed:\t" << calcRestaurants("Closed") << "\n\n\tCustomers Active:\t" << calcCustomers("Active") << "\n\n\tCustomers Removed:\t" << calcCustomers("Removed") << "\n\n\tOrders Completed:\t" << calcOrders("Completed") << "\n\n\tOrders Pending:\t>\t" << calcOrders("Pending") << "\n\n\tOrders Cancelled:\t" << calcOrders("Cancelled") << endl;
+        cout << "\tAdmin:\t\t>\t" << userName << "\n\n\tIs Open:\t>\tYES" << "\n\n\tRevenue:\t>\t" << revenue << "\n\n\tTax:\t\t>\t" << tax << "\n\n\tVouchers Used:\t>\t" << calcVouchers("Used") << "\n\n\tVouchers Unused:\t" << calcVouchers("Unused") << "\n\n\tRestaurants Active:\t" << calcRestaurants("Active") << "\n\n\tRestaurants Closed:\t" << calcRestaurants("Closed") << "\n\n\tCustomers Active:\t" << calcCustomers("Active") << "\n\n\tCustomers Removed:\t" << calcCustomers("Removed") << "\n\n\tOrders Completed:\t" << calcOrders("Completed") << "\n\n\tOrders Pending:\t>\t" << calcOrders("Pending") << "\n\n\tOrders Cancelled:\t" << calcOrders("Cancelled") << endl;
     }
 
 };
@@ -3059,6 +3435,7 @@ class TAXDEPARTMENT{
 
 int main(){
     stringstream ss;
+    tm mainTime;
     string inputString, choiceString, inputItem, inputItemSub, inputItems = "", strVecInput;
     string managerID, managerPassword, restaurantCode, title, description, contactNumber, address, openTime, closeTime, freeDelivery, restDiscount, minimumOrder, deliveryCharges;
     string firstName, lastName, customerCode, custPassword, emailAddress, custContactNumber, custAddress;
@@ -3101,7 +3478,7 @@ int main(){
     do{
         setMessage("Font Size is " + to_string(fontSize));
         gotoxy(25, 7);
-        cout << "Can you See complete Double-:Lined Border inlined with you screen? (y/n): ";
+        cout << "Can you See complete Double-:Lined Border inlined with you screen? (n-No): ";
         if(tolower(getche()) == 'n'){
             gotoxy(25, 9);
             cout << "You want it bigger or smaller? (b/s): ";
@@ -3137,7 +3514,10 @@ int main(){
     getline(cin, userName);
     gotoxy(36, 9);
     cout << "Administrator Password: ";
+    hideInput(true);
     getline(cin, passWord);
+    cout << string(passWord.length(), '*');
+    hideInput(false);
     adminFile.open("admin.dat", ios::out | ios::app | ios::binary);
     adminFile << userName << endl << passWord << endl;
     adminFile.close();
@@ -3188,7 +3568,10 @@ int main(){
         getline(cin, userName);
         gotoxy(36, 9);
         cout << "Administrator Password: ";
+        hideInput(true);
         getline(cin, passWord);
+        cout << string(passWord.length(), '*');
+        hideInput(false);
         if(userName == adminOb.getUserName() && passWord == adminOb.getPassWord()){
             setMessage("Administrator Authentication Successfull!");
             menuIndex = 1;
@@ -3197,6 +3580,7 @@ int main(){
             menuIndex = 0;
             choiceString = "";
         }
+        setContinue();
         goto MENU;
         break;
     
@@ -3273,7 +3657,7 @@ int main(){
         cleanArea(2, 6, 143, 44);
         setTitle("Show Vouchers");
         gotoxy(2, 7);
-        cout << "\t1> Show All\n\n\t2> Find Voucher by Code\n\n\t3> Show Unused\n\n\t4> Show Expired\n\n\t5> Show Blocked\n\n\tChoice:\t";
+        cout << "\t1> Show All\n\n\t2> Find Voucher by Code\n\n\t3> Show Unused\n\n\t4> Show Expired\n\n\t5> Show Blocked\n\n\t0> Go Back\n\n\tChoice:\t";
         cin >> intInput;
         cin.clear();
         cin.ignore();
@@ -3294,7 +3678,9 @@ int main(){
         } else if(intInput == 5){
             setMessage(adminOb.showVouchers(0));
         }
-        setContinue();
+        if(intInput > 0 && intInput < 6){
+            setContinue();
+        }
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -3308,7 +3694,10 @@ int main(){
             getline(cin, managerID);
             gotoxy(36, 9);
             cout << "Manager Password: ";
+            hideInput(true);
             getline(cin, managerPassword);
+            cout << string(managerPassword.length(), '*');
+            hideInput(false);
             restIndex = (adminOb.checkManager(managerID) - 1);
             if((restIndex >= 0) && (adminOb.getRestPassword(restIndex) == managerPassword)){
                 setMessage("Manager Authentication Successfull!");
@@ -3342,11 +3731,14 @@ int main(){
         setTitle("CHANGING PASSWORD");
         gotoxy(2, 7);
         cout << "\tOld Password:\t\t";
+        hideInput(true);
         getline(cin, inputItem);
-        cout << "\n\tNew Password:\t";
+        cout << string(inputItem.length(), '*') << "\n\tNew Password:\t\t";
         getline(cin, managerPassword);
-        cout << "\n\tRetype New Password:\t";
+        cout << string(managerPassword.length(), '*') << "\n\tRetype New Password:\t";
         getline(cin, passWord);
+        cout << string(passWord.length(), '*');
+        hideInput(false);
         if(passWord == managerPassword){
             if(restOB->getManagerPassword() == inputItem){
                 restOB->setManagerPassword(passWord);
@@ -3357,12 +3749,13 @@ int main(){
         } else{
             setMessage("Password does not match!");
         }
+        setContinue();
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
 
     case 23: //Manager > Restaurant Open/Close
-        if(restOB->getIsRestOpen() == false){
+        if(restOB->getIsRestOpenR() == false){
             restOB->setIsRestOpen(true);
             setMessage("Restaurant Open");
         } else{
@@ -3693,7 +4086,7 @@ int main(){
                 pizzaOB->setSize(strVec);
                 pizzaOB->setPrice(floatVecPrice);
                 setMessage("Menu Item '" + inputItem + "' Modified!");
-            } else if((inputItem[3] == '0' && (inputItem[4] > 48 && inputItem[4] < 58)) || inputItem == "10" || inputItem == "11"){
+            } else if((inputItem[3] == '0' && (inputItem[4] > 48 && inputItem[4] < 58)) || inputItem.substr(3, 2) == "10" || inputItem.substr(3, 2) == "11"){
                 cout << "\n\n\tOld Price:\n\tNew Price:";
                 FOOD * foodOB = new FOOD(stoi(inputItem.substr(3, 2)));
                 if(inputItem.substr(3, 2) == "01"){
@@ -3831,13 +4224,26 @@ int main(){
         gotoxy(2, 7);
         cout << "\t1> Show All\n\n\t2> Show Order\n\n\t0> Go Back\n\n\t\tChoice:\t";
         getline(cin, inputItem);
+        cleanArea(2, 6, 143, 44);
         if(inputItem == "1"){
-            cleanArea(2, 6, 143, 44);
             setTitle("ORDERS (ALL)");
             gotoxy(2, 7);
             restOB->showAllOrders();
+        } else if(inputItem == "2"){
+            setTitle("ORDER (CODE)");
+            gotoxy(2, 7);
+            cout << "\tOrder Number:\t";
+            getline(cin, orderNumber);
+            if(orderNumber.length() == 10 && orderNumber.substr(0, 3) == restOB->getCode()){
+                cleanArea(2, 6, 143, 44);
+                setTitle("ORDER (" + orderNumber + ")");
+                gotoxy(2, 7);
+                restOB->showOrder(orderNumber);
+            } else{
+                setMessage("Invalid Order Code!");
+            }
         } else if(inputItem != "0"){
-            setMessage("Invalid Code");
+            setMessage("Invalid Choice!");
         }
         setContinue();
         choiceString = choiceString.substr(0, (choiceString.length()-1));
@@ -3879,12 +4285,18 @@ int main(){
         cout << "\n\tLast Name:\t";
         getline(cin, lastName);
         cout << "\n\tPassword:\t";
+        hideInput(true);
         getline(cin, passWord);
-        {
+        cout << string(passWord.length(), '*');
+        hideInput(false);
+        if(emailAddress.length() != 0 && contactNumber.length() != 0 && passWord.length() != 0 && (city >= 0 && city < 6) && (area > 0 && area <= cities[city].size())){
             CUSTOMER custOb(firstName, lastName, passWord, emailAddress, contactNumber, address, area, city);
             adminOb.addCustomer(custOb);
+            setMessage("Customer Added Successfully");
+        } else{
+            setMessage("Mandatory Fields cannot be left empty OR Invalid City/Area option!");
         }
-        system("pause");
+        setContinue();
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -3898,7 +4310,10 @@ int main(){
             getline(cin, emailAddress);
             gotoxy(36, 9);
             cout << "Customer Password: ";
+            hideInput(true);
             getline(cin, passWord);
+            cout << string(passWord.length(), '*');
+            hideInput(false);
             custIndex = (adminOb.checkCustomer(emailAddress) - 1);
             if((custIndex >= 0) && (adminOb.getCustPassword(custIndex) == passWord)){
                 setMessage("Customer Authentication Successfull!");
@@ -3937,14 +4352,15 @@ int main(){
         gotoxy(1, 7);
         if(inputItem == "1"){
             cout << "\tOld Password:\t\t";
+            hideInput(true);
             getline(cin, passWord);
-            cout << "\n\tNew Password:\t\t";
+            cout << string(passWord.length(), '*') << "\n\tNew Password:\t\t";
             getline(cin, managerPassword);
-            cout << "\n\tRetype New Password:\t";
+            cout << string(managerPassword.length(), '*') << "\n\tRetype New Password:\t";
             getline(cin, inputItemSub);
+            cout << string(inputItemSub.length(), '*');
+            hideInput(false);
             if(managerPassword == inputItemSub){
-                cout << "passWord: " << passWord << "\tcust: " << custOB->getCustPassword();
-                system("pause");
                 if(passWord == custOB->getCustPassword()){
                     custOB->setCustPassword(inputItemSub);
                     setMessage("Password Change Successful!");
@@ -3956,7 +4372,10 @@ int main(){
             }
         } else if(inputItem == "2"){
             cout << "\tPassword:\t";
+            hideInput(true);
             getline(cin, passWord);
+            cout << string(passWord.length(), '*');
+            hideInput(false);
             if(passWord == custOB->getCustPassword()){
                 cout << "\n\tNew Email Address:\t";
                 getline(cin, emailAddress);
@@ -3966,7 +4385,10 @@ int main(){
             }
         } else if(inputItem == "3"){
             cout << "\tPassword:\t";
+            hideInput(true);
             getline(cin, passWord);
+            cout << string(passWord.length(), '*');
+            hideInput(false);
             if(passWord == custOB->getCustPassword()){
                 cout << "\n\tNew Contact Number:\t";
                 getline(cin, contactNumber);
@@ -3995,9 +4417,8 @@ int main(){
             custOB->setCustArea(area);
             custOB->setCustAddress(address);
             setMessage("Customer Location Changed!");
-        } else{
-            setMessage("");
         }
+        setContinue();
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -4089,9 +4510,9 @@ int main(){
         if(restaurantCode.length() == 3){
             cuisineIndex = -1;
             restIndex = (stoi(restaurantCode) - 1);
-            if(restIndex < adminOb.getRestaurantSize()){
+            if(restIndex > -1 && restIndex < adminOb.getRestaurantSize()){
                 restOB = adminOb.getRestaurant(restIndex);
-                if(custOB->getCity() == restOB->getCity()){
+                if(custOB->getCity() == restOB->getCity() && restOB->getIsRestActive() == true && restOB->getIsRestOpen() == true){
                     ORDER tempOrder;
                     custOB->addOrder(tempOrder, restOB->getCode());
                     orderOB = custOB->getNewOrder();
@@ -4111,7 +4532,7 @@ int main(){
                                 goto ORDEREND;
                             } else{
                                 restOB->displayRestMenu(cuisineIndex);
-                                cout << "\n\n\t\t\t\tChoice:\t";
+                                cout << "\n\n\t\t\t\tItem Code:\t";
                                 getline(cin, itemCode);
                                 foodIndex = (stoi(itemCode.substr(5, 3)) - 1);
                             }
@@ -4135,7 +4556,12 @@ int main(){
                                 if(cuisineIndex == 0){
                                     PIZZA * pizzaOB = new PIZZA;
                                     pizzaOB = restOB->getPizza(foodIndex);
-                                    ORDERITEM tempOrderItemOB(0, pizzaOB->getItemCode(), pizzaOB->getTitle(), pizzaOB->getSize(sizeIndex), pizzaOB->getPrice(sizeIndex), pizzaOB->getDiscount(), pizzaOB->getPrepTime(), quantity);
+                                    if(pizzaOB->getDiscount() > restOB->getRestDiscount()){
+                                        discount = pizzaOB->getDiscount();
+                                    } else{
+                                        discount = restOB->getRestDiscount();
+                                    }
+                                    ORDERITEM tempOrderItemOB(0, pizzaOB->getItemCode(), pizzaOB->getTitle(), pizzaOB->getSize(sizeIndex), pizzaOB->getPrice(sizeIndex), discount, pizzaOB->getPrepTime(), quantity);
                                     orderItemOB = tempOrderItemOB;
                                 } else{
                                     FOOD * foodOB = new FOOD(cuisineIndex);
@@ -4162,7 +4588,12 @@ int main(){
                                     } else if(cuisineIndex == 11){
                                         foodOB = restOB->getBeverage(foodIndex);
                                     }
-                                    ORDERITEM tempOrderItemOB(cuisineIndex, foodOB->getItemCode(), foodOB->getTitle(), "", foodOB->getPrice(), foodOB->getDiscount(), foodOB->getPrepTime(), quantity);
+                                    if(foodOB->getDiscount() > restOB->getRestDiscount()){
+                                        discount = foodOB->getDiscount();
+                                    } else{
+                                        discount = restOB->getRestDiscount();
+                                    }
+                                    ORDERITEM tempOrderItemOB(cuisineIndex, foodOB->getItemCode(), foodOB->getTitle(), "", foodOB->getPrice(), discount, foodOB->getPrepTime(), quantity);
                                     orderItemOB = tempOrderItemOB;
                                 }
                                 cout << "\n\t\t\t\tEnter \"+\" to add more Items OR \"q\" to Quit OR \"c\" to Confirm:\t";
@@ -4170,39 +4601,36 @@ int main(){
                                 if(inputItem[0] == '+'){
                                     orderOB->addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
                                 } else if(inputItem[0] == 'c'){
-                                    cout << "pass1" << endl;
-                                    system("pause");
                                     orderOB->addOrderItem(restOB->getCode(), custOB->getCustomerCode(), orderItemOB);
-                                    cout << "pass2" << endl;
-                                    system("pause");
                                     if(custOB->getWalletAmount() >= orderOB->getBill()){
-                                        cout << "pass3" << endl;
-                                        system("pause");
                                         orderOB->setIsPaid(true);
-                                        cout << "pass4" << endl;
-                                        system("pause");
+                                        orderOB->setDeliveryTime(custOB->getCityInt(), custOB->getAreaInt(), restOB->getAreaInt());
                                         setMessage(custOB->payOrder(restOB->confirmOrder(*orderOB)));
-                                        cout << "pass5" << endl;
-                                        system("pause");
                                     } else{
                                         setMessage("Insufficient Funds to Complete Order! Please Recharge & Reorder.");
                                     }
                                     cuisineIndex = 12;
                                 } else if(inputItem[0] == 'q'){
+                                    custOB->deleteLastOrder();
                                     cuisineIndex = 12;
                                     setMessage("Exit.");
                                 }
                             } else{
                                 setMessage("Order Quantity Exceeds Stock/Limit!");
                             }
+                        } else{
+                            custOB->deleteLastOrder();
                         }
                         ORDEREND:
                         if(cuisineIndex == -1){
                             setMessage("Restaurant does not offer this Cuisine");
                         }
                     } while(cuisineIndex >= 0 && cuisineIndex < 12);
+                    /*if(cuisineIndex < 0 && cuisineIndex > 11){
+                        custOB->deleteLastOrder();
+                    }*/
                 } else{
-                    setMessage("Restaurant: " + restOB->getTitle() + "do not offer services in " + custOB->getCity());
+                    setMessage("Restaurant: " + restOB->getTitle() + "is Closed now OR it dows not offer service in your City");
                 }
             } else{
                 setMessage("Invalid Restaurant Code: " + restaurantCode);
@@ -4210,7 +4638,41 @@ int main(){
         } else{
             setMessage("You Entered Invalid Restaurant Code!");
         }
-        system("pause");
+        setContinue();
+        choiceString = choiceString.substr(0, (choiceString.length()-1));
+        goto MENU;
+        break;
+
+    case 324:
+        setTitle("CUSTOMER > Sign In > Order Food > Order Details");
+        cleanArea(2, 6, 143, 44);
+        gotoxy(2, 7);
+        cout << "\t1> Show All\n\n\t2> Show Order\n\n\t0> Go Back\n\n\t\tChoice:\t";
+        getline(cin, inputItem);
+        cleanArea(2, 6, 143, 44);
+        if(inputItem == "1"){
+            setTitle("ORDERS (ALL)");
+            gotoxy(2, 7);
+            custOB->showAllOrders();
+        } else if(inputItem == "2"){
+            setTitle("ORDER (CODE)");
+            gotoxy(2, 7);
+            cout << "\tOrder Number:\t";
+            getline(cin, orderNumber);
+            if(orderNumber.length() == 10 && orderNumber.substr(0, 3) == restOB->getCode()){
+                cleanArea(2, 6, 143, 44);
+                setTitle("ORDER (" + orderNumber + ")");
+                gotoxy(2, 7);
+                custOB->showOrder(orderNumber);
+            } else{
+                setMessage("Invalid Order Code!");
+            }
+        } else if(inputItem != "0"){
+            setMessage("Invalid Choice!");
+        }
+        if(inputItem != "0"){
+            setContinue();
+        }
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -4233,7 +4695,7 @@ int main(){
         }else if(inputItem == "2"){
             adminOb.showVouchersCust(custOB->getVoucherUsed());
         }
-        system("pause");
+        setContinue();
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -4244,7 +4706,8 @@ int main(){
         gotoxy(1, 7);
         cout << "\tVoucher Code:\t";
         getline(cin, inputItem);
-        setMessage(custOB->chargeWallet(adminOb.cashVoucher(inputItem)));
+        setMessage(custOB->chargeWallet(adminOb.cashVoucher(inputItem), inputItem));
+        setContinue();
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -4354,7 +4817,10 @@ int main(){
             getline(cin, managerID);
         }while(adminOb.checkManager(managerID) != -1);
         cout << "\tManager Password:\t";
+        hideInput(true);
         getline(cin, managerPassword);
+        cout << string(managerPassword.length(), '*');
+        hideInput(false);
         cout << "\n\tCities:\n";
         for(int i = 0; i < cities.size(); i++){
             cout << "\t\t" << i << ") " << cities[i][0] << endl;
@@ -4467,7 +4933,7 @@ int main(){
         } else{
             setMessage("Invalid Cuisine!");
         }
-        system("pause");
+        setContinue();
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -4502,7 +4968,7 @@ int main(){
         }
         cin.clear();
         cin.ignore();
-        system("pause");
+        setContinue();
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -4538,7 +5004,7 @@ int main(){
         }
         cin.clear();
         cin.ignore();
-        system("pause");
+        setContinue();
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -4598,10 +5064,10 @@ int main(){
             setTitle("ADMINISTRATOR > Restaurant Management > Find > Manager ID");
             gotoxy(2, 7);
             cout << "\tManager ID:\t";
-            getline(cin, inputItem);
+            getline(cin, inputItemSub);
             cleanArea(2, 6, 143, 44);
             gotoxy(2, 7);
-            adminOb.findRestWithManager(inputItem);
+            adminOb.findRestWithManager(inputItemSub);
             //setContinue();
         } else if(inputItem == "2"){
             setTitle("ADMINISTRATOR > Restaurant Management > Find > Restaurant Code");
@@ -4627,9 +5093,7 @@ int main(){
         }
         if(inputItem != "0"){
             setContinue();
-            //system("pause");
         }
-        setMessage("");
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -4672,7 +5136,6 @@ int main(){
         if(inputItem != "0"){
             setContinue();
         }
-        setMessage("");
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -4708,12 +5171,18 @@ int main(){
         cout << "\n\tLast Name:\t";
         getline(cin, lastName);
         cout << "\n\tPassword:\t";
+        hideInput(true);
         getline(cin, passWord);
-        {
+        cout << string(passWord.length(), '*');
+        hideInput(false);
+        if(emailAddress.length() != 0 && contactNumber.length() != 0 && passWord.length() != 0 && (city >= 0 && city < 6) && (area > 0 && area <= cities[city].size())){
             CUSTOMER custOb(firstName, lastName, passWord, emailAddress, contactNumber, address, area, city);
             adminOb.addCustomer(custOb);
-            setMessage("New Customer Registered");
+            setMessage("New Customer Registered Successfuly!");
+        } else{
+            setMessage("New Customer Registeration Unsuccessful!");
         }
+        setContinue();
         choiceString = choiceString.substr(0, (choiceString.length()-1));
         goto MENU;
         break;
@@ -4750,7 +5219,14 @@ void clearMain(){
 }
 
 //Sets Message at bottom
+/*
 void setMessage(string message){
+    cleanArea(12, 46, 143, 46);
+    gotoxy(12, 46);
+    cout << message;
+} */
+
+template<class T> void setMessage(T message){
     cleanArea(12, 46, 143, 46);
     gotoxy(12, 46);
     cout << message;
@@ -4760,6 +5236,7 @@ void setContinue(){
     //cleanArea(12, 46, 143, 46);
     gotoxy(110, 46);
     system("pause");
+    setMessage("");
 }
 
 void setTitle(string message){

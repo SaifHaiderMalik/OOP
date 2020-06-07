@@ -7,3 +7,15 @@ void setConsoleSize(int cols, int lines)
 	system(consoleT);
 	//system("COLOR F0");
 }
+
+void hideInput(bool b){
+    HANDLE hStdin = ::GetStdHandle(STD_INPUT_HANDLE); 
+    DWORD mode = 0;
+    ::GetConsoleMode(hStdin, &mode);
+    if(b){
+        mode &= ~ENABLE_ECHO_INPUT;
+    } else{
+		mode |= ENABLE_ECHO_INPUT;
+    }
+    ::SetConsoleMode(hStdin, mode);
+}
