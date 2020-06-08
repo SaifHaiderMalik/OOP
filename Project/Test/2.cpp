@@ -3152,7 +3152,7 @@ public:
 
 // Shows Customer by Email Address
     void showCustomerByEmail(string _email){
-        if(custEmailLink[_email].length() != 0){
+        if(custEmailLink[_email].length() != 0 && custEmailLink[_email] != "0000"){
             showCustomer(custEmailLink[_email]);
         } else{
             setMessage("Customer Not Found!");
